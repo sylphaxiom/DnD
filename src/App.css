@@ -1,0 +1,31 @@
+body {
+  place-items: start;
+}
+
+#app-root #title-root {
+  position:relative;
+  top: 0;
+  left: 0;
+  max-height: 200px;
+}
+
+#title-root #disp-head::first-letter {
+  font-size-adjust: 0.25;
+}
+
+.wh200 {
+  width: 200px;
+  height: 200px;
+  aspect-ratio: 1/1;
+}
+
+svg{
+  width:100%;
+  position:relative;
+}
+
+.almendra-sc-regular {
+  font-family: "Almendra SC", serif;
+  font-weight: 400;
+  font-style: normal;
+}
