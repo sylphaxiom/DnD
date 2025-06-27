@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# One DnD site to rule them all...
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description:
 
-Currently, two official plugins are available:
+This application is something I have been wanting to do for a long time now. I want a singular platform that all of my players can come to where they can see everything for my campaign. I want them to be able to keep their own lore, character sheets, documents, everything relating to their character on their page. Yes, I want them to have their own page so they can manage their characters and knowledge. I want to have a knowledge base where I can restrict information to someone in a GM role or a Player role. Might want something in between as well for people who assist with GMing or who are doing special or other things. I would like to be able to post information about games and have a game schedule board I can post. I would like for most aspects to be interactive. I would actually like this to eventually be able to take the place of DnDBeyond for managing our campaign and repository. It would be nice also to host games on the site, but I think that would have issues and would be best to keep with Roll20. However, some APIs to Roll20 would be a great addition to integrate information into the VTT as we play. Perhaps we could set up an API that allowed Roll20 to pull information from my world repository in the website. I want to build this with scale in mind so I want things to be modular. That means multiple worlds, characters, players, roles, and games.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Frameworks and Components:
 
-## Expanding the ESLint configuration
+- React.js 19.1.0
+- Typescript 5.8.3
+- Bootstrap 5.3.7
+- eslint 9.29.0
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Planning Documentation:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Pages
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+#### Home (index)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Sign-in
+- Quick Calendar
+- Anouncements
+- Public Links
+  - World information (public version)
+  - Open games
+  - Request registration link
+  - Contact
+  - Public character/party info
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### Sign-in
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Sign in
+- Password reset
+- Request registration link
+- Sign in as GM or Player
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+#### Profile
+
+- All your characters
+  - Possibly set up as tabs or cards
+- All your game schedules
+  - collapsing card for upcoming game sessions
+- Options to edit characters
+  - Certain edits will need GM approval
+- All your documents
+- Links
+  - Lore Library
+  - Game Central
+  - Homebrewery
+  - Community board
+  - Personal Notes/Info
+
+#### Lore Library
+
+- World information (per world)
+  - Limited to user permission level
+  - Character view to see what information different characters might know
+  - Organize by subjects
