@@ -3,8 +3,9 @@
 const Title = () => {
   return (
     <div
-      className="mx-auto text-left row bg-info bg-gradient almendra-sc-regular"
+      className="mx-auto text-left row bg-info-subtle almendra-sc-regular"
       id="title-root"
+      data-bs-theme="light"
     >
       <h1 className="col-9 display-1 text-center my-auto" id="disp-head">
         Welcome to Kothis
