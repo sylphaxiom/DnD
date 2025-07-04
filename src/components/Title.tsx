@@ -3,20 +3,22 @@
 const Title = () => {
   return (
     <div
-      className="mx-auto text-left row bg-info-subtle almendra-sc-regular"
-      id="title-root"
+      className="m-3 text-left row almendra-sc-regular"
+      id="titleRoot"
       data-bs-theme="light"
     >
-      <h1 className="col-9 display-1 text-center my-auto" id="disp-head">
-        Welcome to Kothis
-      </h1>
       <img
         src="https://tinyurl.com/26y887s6"
         alt="spinning globe with a scared face and a butt"
-        className="rounded-circle col-3 text-align-right wh200 px-0"
+        className="rounded-circle text-align-right wh200 px-0 d-none d-md-block"
         width="200px"
         height="200px"
       ></img>
+      <h1 className="col display-3 text-left my-auto px-4" id="disp-head">
+        <span className="minor">Welcome to</span>
+        <br />
+        <span className="major">Kothis</span>
+      </h1>
     </div>
   );
 };

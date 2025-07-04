@@ -2,17 +2,24 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
-import IndexCards from "./components/IndexCards";
+import { useState } from "react";
 
 function App() {
+  const [page, setPage] = useState("home");
+  const handleSelect = (pg: string) => {
+    setPage(pg);
+  };
+
   return (
     <>
-      <div id="app-root" className="flex-fill align-content-start">
-        <Title />
-        <Navbar />
-        <IndexCards title="Enter" />
-        <IndexCards title="Explore" />
-        <IndexCards title="Request" />
+      <div id="appRoot" className="flex-fill align-content-start row ht-fill">
+        <div className="col-2 ht-fill" id="sideNav">
+          <Navbar currentPG={page} onChange={handleSelect} />
+        </div>
+        <div className="col-6" id="centerContent">
+          <Title />
+        </div>
+        <div className="col-3" id="sideUtils"></div>
       </div>
     </>
   );
