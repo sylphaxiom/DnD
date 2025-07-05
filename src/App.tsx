@@ -12,7 +12,10 @@ function App() {
 
   return (
     <>
-      <div id="appRoot" className="flex-fill align-content-start row ht-fill">
+      <div
+        id="appRoot"
+        className="align-content-start container-fluid row ht-fill"
+      >
         <div className="col-2 ht-fill" id="sideNav">
           <Navbar currentPG={page} onChange={handleSelect} />
         </div>
