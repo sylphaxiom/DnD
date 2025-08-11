@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+test.afterEach(async ({ page}) => {
+  await page.close();
+});
+
 test('has title', async ({ page }) => {
   await page.goto('/');
 
