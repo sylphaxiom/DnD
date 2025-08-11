@@ -58,3 +58,14 @@ span.major {
   font-weight: 400;
   font-style: normal;
 }
+
+span#sideRibbon {
+  width: 20px;
+  border: 1px solid black;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-image: url(/src/assets/ribbon_bg.jpg);
+}

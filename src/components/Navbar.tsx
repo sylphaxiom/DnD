@@ -38,6 +38,7 @@ const Navbar = ({ currentPG, onChange }: Props) => {
               </Nav.Item>
             </Row>
           ))}
+          <span id="sideRibbon" />
         </Col>
       </Nav>
     </>
