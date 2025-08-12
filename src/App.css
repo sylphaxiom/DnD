@@ -14,6 +14,7 @@
   background-color: tan;
   border: 1px, solid, lightslategrey;
   border-radius: 15px;
+  /* z-index: 1; */
 }
 
 .row.active {
@@ -67,5 +68,13 @@ span#sideRibbon {
   position: fixed;
   left: 0;
   top: 0;
+  background-image: url(/src/assets/ribbon_bg.jpg);
+  /* z-index: 1; */
+}
+
+#footRoot {
+  position: absolute;
+  height: 50px;
+  /* z-index: 0; */
   background-image: url(/src/assets/ribbon_bg.jpg);
 }

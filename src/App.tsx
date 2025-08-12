@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { useState } from "react";
 
 function App() {
@@ -23,6 +24,11 @@ function App() {
           <Title />
         </div>
         <div className="col-3" id="sideUtils"></div>
+      </div>
+      <div className="row">
+        <div className="col" id="footer">
+          <Footer />
+        </div>
       </div>
     </>
   );
