@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 
 });
 
-test.afterEach(async ({ page}) => {
+test.afterAll(async ({ page}) => {
 
   // Close out the page
   await page.close();
