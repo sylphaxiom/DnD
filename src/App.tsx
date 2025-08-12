@@ -25,11 +25,11 @@ function App() {
         </div>
         <div className="col-3" id="sideUtils"></div>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <div className="col" id="footer">
           <Footer />
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
