@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+//import Footer from "./components/Footer";
 import { useState } from "react";
 
 function App() {
