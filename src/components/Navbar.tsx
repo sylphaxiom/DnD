@@ -50,6 +50,7 @@ export default function Navigation({ current, onChange }: Props) {
             LinkComponent={"a"}
             label={firstUpper(page)}
             value={page}
+            aria-controls={page}
             key={"tab" + index}
             id={"tab" + index}
             href={"#" + page}

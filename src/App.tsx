@@ -3,15 +3,22 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
 // import Footer from "./components/Footer";
+
+function firstUpper(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function App() {
   const [page, setPage] = React.useState("home");
   const handleSelect = (pg: string) => {
     setPage(pg);
   };
+
+  const content = firstUpper(page);
 
   return (
     <>
@@ -25,7 +32,9 @@ function App() {
               <Navbar current={page} onChange={handleSelect} />
             </Grid>
             <Grid size={7}>
-              <Title />
+              <Stack>
+                <Title />
+              </Stack>
             </Grid>
             <Grid size={3}></Grid>
           </Grid>
