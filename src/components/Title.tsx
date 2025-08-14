@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 const Title = () => {
   return (
-    <Grid container direction={"row"}>
+    <Grid container direction={"row"} px={3} py={1}>
       <Grid size={4}>
         <Avatar
           alt="Spinning globe with a butt"
@@ -15,7 +15,11 @@ const Title = () => {
         ></Avatar>
       </Grid>
       <Grid size={8} my={3}>
-        <Stack>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={{ xs: 0, md: 3 }}
+          py={{ md: 2 }}
+        >
           <Typography
             variant="h3"
             align="center"
@@ -27,7 +31,7 @@ const Title = () => {
             variant="h1"
             align="center"
             fontFamily={"Almendra SC, serif"}
-            lineHeight={0.8}
+            lineHeight={{ md: 0.8 }}
           >
             Kothis
           </Typography>

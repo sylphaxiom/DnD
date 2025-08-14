@@ -15,17 +15,16 @@ function App() {
 
   return (
     <>
-      <Box
-        sx={{ height: "100%", minWidth: "100vw" }}
-        position={"fixed"}
-        top={0}
-      >
-        <Container disableGutters sx={{ mx: 0, minWidth: "100vw" }}>
+      <Box sx={{ height: "100%", minWidth: "100vw" }} position="fixed" top={0}>
+        <Container
+          disableGutters
+          sx={{ mx: 0, minWidth: "100vw", height: "100%" }}
+        >
           <Grid container spacing={0}>
             <Grid size={2}>
-              {/* <Navbar currentPG={page} onChange={handleSelect} /> */}
+              <Navbar current={page} onChange={handleSelect} />
             </Grid>
-            <Grid size="grow">
+            <Grid size={7}>
               <Title />
             </Grid>
             <Grid size={3}></Grid>

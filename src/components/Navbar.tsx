@@ -1,12 +1,18 @@
-//import React from 'react'
-//import { animate } from "animejs";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 interface Props {
-  currentPG: string;
+  current: string;
   onChange: (pg: string) => void;
 }
 
-const Navbar = ({ currentPG, onChange }: Props) => {
+function firstUpper(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export default function Navigation({ current, onChange }: Props) {
   const pages = [
     "home",
     "characters",
@@ -18,30 +24,39 @@ const Navbar = ({ currentPG, onChange }: Props) => {
   ];
 
   return (
-    <>
-      <Nav activeKey={currentPG} className="vert-Nav">
-        <Col>
-          {pages.map((page, index) => (
-            <Row
-              key={index}
-              className={!(page === currentPG) ? "inactive" : "active"}
-            >
-              <Nav.Item>
-                <Nav.Link
-                  eventKey={page}
-                  href={"#" + page}
-                  onClick={() => onChange(page)}
-                >
-                  {page.replace(page[0], page[0].toUpperCase())}
-                </Nav.Link>
-              </Nav.Item>
-            </Row>
-          ))}
-          <span id="sideRibbon" />
-        </Col>
-      </Nav>
-    </>
+    <Box
+      sx={{
+        height: "100%",
+        minWidth: "15%",
+        position: "fixed",
+        left: 0,
+      }}
+    >
+      <Tabs
+        aria-label="nav tabs"
+        role="navigation"
+        id="navTabRoot"
+        orientation="vertical"
+        indicatorColor="secondary"
+        onChange={(event: React.SyntheticEvent, nxtPg) => {
+          event.preventDefault;
+          onChange(nxtPg);
+        }}
+        value={current}
+        centered
+      >
+        {pages.map((page, index) => (
+          <Tab
+            LinkComponent={"a"}
+            label={firstUpper(page)}
+            value={page}
+            key={"tab" + index}
+            id={"tab" + index}
+            href={"#" + page}
+            sx={{ height: "13.5vh" }}
+          />
+        ))}
+      </Tabs>
+    </Box>
   );
-};
-
-export default Navbar;
+}
