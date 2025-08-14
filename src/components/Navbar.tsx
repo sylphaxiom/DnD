@@ -1,5 +1,4 @@
 //import React from 'react'
-import { Nav, Col, Row } from "react-bootstrap";
 //import { animate } from "animejs";
 
 interface Props {

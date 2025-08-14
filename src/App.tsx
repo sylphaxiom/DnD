@@ -1,35 +1,37 @@
-import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
 // import Footer from "./components/Footer";
-import { useState } from "react";
 
 function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = React.useState("home");
   const handleSelect = (pg: string) => {
     setPage(pg);
   };
 
   return (
     <>
-      <div
-        id="appRoot"
-        className="align-content-start container-fluid row ht-fill"
+      <Box
+        sx={{ height: "100%", minWidth: "100vw" }}
+        position={"fixed"}
+        top={0}
       >
-        <div className="col-2 ht-fill" id="sideNav">
-          <Navbar currentPG={page} onChange={handleSelect} />
-        </div>
-        <div className="col-6" id="centerContent">
-          <Title />
-        </div>
-        <div className="col-3" id="sideUtils"></div>
-      </div>
-      {/* <div className="row">
-        <div className="col" id="footer">
-          <Footer />
-        </div>
-      </div> */}
+        <Container disableGutters sx={{ mx: 0, minWidth: "100vw" }}>
+          <Grid container spacing={0}>
+            <Grid size={2}>
+              {/* <Navbar currentPG={page} onChange={handleSelect} /> */}
+            </Grid>
+            <Grid size="grow">
+              <Title />
+            </Grid>
+            <Grid size={3}></Grid>
+          </Grid>
+        </Container>
+      </Box>
     </>
   );
 }
