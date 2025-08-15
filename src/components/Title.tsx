@@ -1,25 +1,43 @@
-//import React from "react";
+//import * as React from "react"
+import Grid from "@mui/material/Grid";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 const Title = () => {
   return (
-    <div
-      className="m-3 text-left row almendra-sc-regular"
-      id="titleRoot"
-      data-bs-theme="light"
-    >
-      <img
-        src="https://tinyurl.com/26y887s6"
-        alt="spinning globe with a scared face and a butt"
-        className="rounded-circle text-align-right wh200 px-0 d-none d-md-block"
-        width="200px"
-        height="200px"
-      ></img>
-      <h1 className="col display-3 text-left my-auto px-4" id="disp-head">
-        <span className="minor">Welcome to</span>
-        <br />
-        <span className="major">Kothis</span>
-      </h1>
-    </div>
+    <Grid container direction={"row"} px={3} py={1}>
+      <Grid size={4}>
+        <Avatar
+          alt="Spinning globe with a butt"
+          src="https://tinyurl.com/26y887s6"
+          sx={{ width: 200, height: 200 }}
+        ></Avatar>
+      </Grid>
+      <Grid size={8} my={3}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={{ xs: 0, md: 3 }}
+          py={{ md: 2 }}
+        >
+          <Typography
+            variant="h3"
+            align="center"
+            fontFamily={"Almendra SC, serif"}
+          >
+            Welcome to
+          </Typography>
+          <Typography
+            variant="h1"
+            align="center"
+            fontFamily={"Almendra SC, serif"}
+            lineHeight={{ md: 0.8 }}
+          >
+            Kothis
+          </Typography>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 };
 

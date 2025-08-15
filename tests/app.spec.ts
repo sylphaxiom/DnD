@@ -19,8 +19,8 @@ test.afterEach(async ({ page }) => {
 
 test('is home page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Home', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Home', exact: true }).click();
 
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#home');
@@ -29,8 +29,8 @@ test('is home page', async ({ page }) => {
 
 test('is characters page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Characters', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Characters', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#characters');
@@ -39,8 +39,8 @@ test('is characters page', async ({ page }) => {
 
 test('is campaigns page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Campaigns', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Campaigns', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#campaigns');
@@ -49,8 +49,8 @@ test('is campaigns page', async ({ page }) => {
 
 test('is notebook page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Notebook', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Notebook', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#notebook');
@@ -59,8 +59,8 @@ test('is notebook page', async ({ page }) => {
 
 test('is world page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'World', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'World', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#world');
@@ -69,8 +69,8 @@ test('is world page', async ({ page }) => {
 
 test('is lore page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Lore', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Lore', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#lore');
@@ -79,8 +79,8 @@ test('is lore page', async ({ page }) => {
 
 test('is homebrew page', async ({ page }) => {
   
-  // Click nav link 
-  await page.getByRole('link', { name: 'Homebrew', exact: true }).click();
+  // Click nav tab 
+  await page.getByRole('tab', { name: 'Homebrew', exact: true }).click();
   
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('#homebrew');
