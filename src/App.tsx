@@ -6,19 +6,13 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
-
-function firstUpper(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+import Footer from "./components/Footer";
 
 function App() {
   const [page, setPage] = React.useState("home");
   const handleSelect = (pg: string) => {
     setPage(pg);
   };
-
-  const content = firstUpper(page);
 
   return (
     <>
@@ -38,6 +32,7 @@ function App() {
             </Grid>
             <Grid size={3}></Grid>
           </Grid>
+          <Footer />
         </Container>
       </Box>
     </>
