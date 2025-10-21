@@ -21,7 +21,7 @@ export const dark: ThemeOptions = {
     divider: '#512da8',
   },
   typography: {
-    fontFamily: 'Livvic',
+    fontFamily: "Almendra SC, serif",
     h1: {
       fontWeight: 500,
     },
@@ -53,7 +53,7 @@ export const light: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: 'Livvic',
+    fontFamily: "Almendra SC, serif",
     h1: {
       fontWeight: 500,
     },

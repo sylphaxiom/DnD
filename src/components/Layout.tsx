@@ -1,13 +1,12 @@
-import "./App.css";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Title from "./components/Title";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Announcements from "./components/Announcements";
+import Title from "./Title";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import Announcements from "./Announcements";
 
 function App() {
   const [page, setPage] = React.useState("home");
