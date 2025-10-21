@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-.ret
 dist
 dist-ssr
 *.local
@@ -32,3 +31,11 @@ DnD-app.code-workspace
 /playwright/.cache/
 tests-examples
 tests/example.spec.ts
+
+# Custom stuff
+.ret/
+.react-router/
+*.d.ts
+build/
+src/api/v1/bucket.php
+src/api/v1/DB_make.sql
