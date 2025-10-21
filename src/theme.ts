@@ -21,17 +21,17 @@ export const dark: ThemeOptions = {
     divider: '#512da8',
   },
   typography: {
-    fontFamily: "Almendra SC, serif",
+    fontFamily: "'Macondo', cursive",
     h1: {
       fontWeight: 500,
     },
     h2: {
       fontWeight: 500,
     },
-    fontWeightLight: 400,
-    fontWeightRegular: 500,
-    fontWeightMedium: 600,
-    fontWeightBold: 900,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 800,
     fontSize: 16,
   },
 };
@@ -53,17 +53,17 @@ export const light: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: "Almendra SC, serif",
+    fontFamily: "'Macondo', cursive",
     h1: {
       fontWeight: 500,
     },
     h2: {
       fontWeight: 500,
     },
-    fontWeightLight: 400,
-    fontWeightRegular: 500,
-    fontWeightMedium: 600,
-    fontWeightBold: 900,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 800,
     fontSize: 16,
   },
 };

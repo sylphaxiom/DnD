@@ -1,0 +1,3 @@
+.dark img.svg, svg {
+  filter: hue-rotate(180deg) invert() contrast(90%)
+}

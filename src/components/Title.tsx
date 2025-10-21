@@ -4,9 +4,9 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-const Title = () => {
+export default function Title() {
   return (
-    <Grid container direction={"row"} px={3} py={1}>
+    <Grid container px={3} width={1} py={1}>
       <Grid size={4}>
         <Avatar
           alt="Spinning globe with a butt"
@@ -39,6 +39,4 @@ const Title = () => {
       </Grid>
     </Grid>
   );
-};
-
-export default Title;
+}
