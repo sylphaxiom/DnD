@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import Title from "./components/Title";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Announcements from "./components/Announcements";
 
 function App() {
   const [page, setPage] = React.useState("home");
@@ -30,7 +31,11 @@ function App() {
                 <Title />
               </Stack>
             </Grid>
-            <Grid size={3}></Grid>
+            <Grid size={3}>
+              <Stack>
+                <Announcements />
+              </Stack>
+            </Grid>
           </Grid>
           <Footer />
         </Container>
