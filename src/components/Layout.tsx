@@ -1,10 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Title from "./Title";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import Announcements from "./Announcements";
+import Title from "./layouts/Title";
+import Navbar from "./layouts/Navbar";
+import Footer from "./layouts/Footer";
+import Announcements from "./utils/Announcements";
 import { Outlet } from "react-router";
 import type { Route } from "./+types/Layout";
 

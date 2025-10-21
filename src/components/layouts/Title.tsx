@@ -8,10 +8,15 @@ export default function Title() {
   return (
     <Grid container px={3} width={1} py={1}>
       <Grid size={4}>
-        <Avatar
+        {/* <Avatar
           alt="Spinning globe with a butt"
           src="https://tinyurl.com/26y887s6"
           sx={{ width: 200, height: 200 }}
+        ></Avatar> */}
+        <Avatar
+          alt="Emblem of Kothis"
+          src="kothis.svg"
+          sx={{ width: 300, height: 300 }}
         ></Avatar>
       </Grid>
       <Grid size={8} my={3}>

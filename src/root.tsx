@@ -11,7 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/sylphaxiom_web_512x.svg" />
+        <link rel="icon" type="image/svg+xml" href="/kothis.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="preconnect"
@@ -41,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           type="text/css"
           charSet="utf-8"
         />
-        <title>Sylphaxiom Creations</title>
+        <title>World of Kothis</title>
       </head>
       <body>
         <InitColorSchemeScript attribute="class" />
