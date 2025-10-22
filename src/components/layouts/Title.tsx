@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 export default function Title() {
   return (
-    <Grid container px={3} width={1} py={1}>
+    <Grid container px={3} width={1} py={1} maxHeight={300}>
       <Grid size={4}>
         {/* <Avatar
           alt="Spinning globe with a butt"

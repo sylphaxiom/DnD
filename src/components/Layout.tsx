@@ -6,19 +6,6 @@ import Navbar from "./layouts/Navbar";
 import Footer from "./layouts/Footer";
 import Announcements from "./utils/Announcements";
 import { Outlet } from "react-router";
-import type { Route } from "./+types/Layout";
-
-export async function clientLoader({
-  params,
-  request,
-}: Route.ClientLoaderArgs) {
-  // temporary placeholder for potential need for a loader
-  console.log(
-    "Layout.tsx => clientLoader():\nparams: %s\nrequest: %s",
-    JSON.stringify(params),
-    JSON.stringify(request)
-  );
-}
 
 export default function App() {
   return (
