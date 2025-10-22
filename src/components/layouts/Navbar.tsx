@@ -1,22 +1,18 @@
-import * as React from "react";
+// import * as React from "react";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { NavLink } from "react-router";
+import { useLocation } from "react-router";
 
-interface Props {
-  current: string;
-  onChange: (pg: string) => void;
-}
+export async function clientLoader() {}
 
-function firstUpper(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export default function Navigation({ current, onChange }: Props) {
+export default function Navigation() {
+  let location = useLocation();
   const pages = [
     "home",
-    "characters",
-    "campaigns",
+    "character",
+    "campaign",
     "notebook",
     "world",
     "lore",
@@ -38,22 +34,20 @@ export default function Navigation({ current, onChange }: Props) {
         id="navTabRoot"
         orientation="vertical"
         indicatorColor="secondary"
-        onChange={(event: React.SyntheticEvent, nxtPg) => {
-          event.preventDefault;
-          onChange(nxtPg);
-        }}
-        value={current}
+        value={
+          location.pathname === "/" ? "home" : location.pathname.substring(1)
+        }
         centered
       >
         {pages.map((page, index) => (
           <Tab
-            LinkComponent={"a"}
-            label={firstUpper(page)}
+            component={NavLink}
+            label={page}
             value={page}
+            to={page === "home" ? "/" : page}
             aria-controls={page}
-            key={"tab" + index}
-            id={"tab" + index}
-            href={"#" + page}
+            key={"tab-" + index}
+            id={"tab-" + index}
             sx={{ height: "13.5vh" }}
           />
         ))}
