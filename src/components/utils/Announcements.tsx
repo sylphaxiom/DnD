@@ -71,6 +71,7 @@ export default function Announcements() {
             expandIcon={<ExpandMoreIcon />}
             aria-controls={id}
             id={id + "-header"}
+            key={id + "-header"}
           >
             <Avatar children={dm} sx={{ bgcolor: "purple", marginRight: 2 }} />
             <Stack>
@@ -97,7 +98,7 @@ export default function Announcements() {
       />
       <CardContent sx={{ maxHeight: 250, overflowY: "scroll" }}>
         {announcements.map((ann, index) => (
-          <List>
+          <List key={"li-" + index}>
             {listMaker(
               index,
               ann.title,
