@@ -4,15 +4,22 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { NavLink } from "react-router";
 import { useLocation } from "react-router";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+interface Props {
+  bps: {
+    sm: boolean;
+    md: boolean;
+    lg: boolean;
+    xl: boolean;
+  };
+}
 
 export async function clientLoader() {}
 
-export default function Navigation() {
+export default function Navigation({ bps }: Props) {
   let location = useLocation();
   const [navAnchorEl, setNavAnchorEl] = React.useState<null | HTMLElement>(
     null
@@ -23,7 +30,15 @@ export default function Navigation() {
   const handleNavClose = () => {
     setNavAnchorEl(null);
   };
-  let mdBP = useMediaQuery("(min-width: 1200px)");
+  const tabSX = {
+    height: "100%",
+    minWidth: "15%",
+    position: "fixed",
+    left: 0,
+  };
+  const menuSX = {
+    mx: "auto",
+  };
 
   const pages = [
     "home",
@@ -36,15 +51,8 @@ export default function Navigation() {
   ];
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        minWidth: "15%",
-        position: "fixed",
-        left: 0,
-      }}
-    >
-      {mdBP ? (
+    <Box sx={bps.lg ? tabSX : menuSX}>
+      {bps.lg ? (
         <Tabs
           aria-label="nav tabs"
           role="navigation"
@@ -73,13 +81,14 @@ export default function Navigation() {
         <>
           <IconButton
             size="large"
+            sx={{}}
             aria-label="navigation"
-            aria-controls="menu-appbarNav"
+            aria-controls="menu-navigation"
             aria-haspopup="true"
             onClick={handleNavMenu}
             color="inherit"
           >
-            <MenuOutlinedIcon />
+            <MenuOutlinedIcon fontSize="large" />
           </IconButton>
           <Menu
             id="menu-navigation"
@@ -99,10 +108,11 @@ export default function Navigation() {
             {pages.map((page, index) => (
               <MenuItem
                 component={NavLink}
+                children={page}
                 to={page === "home" ? "/" : page}
                 key={"menu-" + index}
                 id={"menu-" + index}
-                sx={{ height: "13.5vh" }}
+                sx={{}}
               />
             ))}
           </Menu>

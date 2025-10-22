@@ -1,34 +1,44 @@
 import * as React from "react";
-import { motion } from "motion/react";
 import Avatar from "@mui/material/Avatar";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import List from "@mui/material/List";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Stack from "@mui/material/Stack";
-import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import IconButton from "@mui/material/IconButton";
+import CardContent from "@mui/material/CardContent";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import { motion } from "motion/react";
+import List from "@mui/material/List";
+import Collapse from "@mui/material/Collapse";
+import Announcement from "@mui/icons-material/Announcement";
+interface Props {
+  bps: {
+    sm: boolean;
+    md: boolean;
+    lg: boolean;
+    xl: boolean;
+  };
+}
 
-export default function Announcements() {
-  const [expanded, setExpanded] = React.useState<string | false>("panel1");
-  const [isChip, setIsChip] = React.useState<Boolean>(true);
-
+export default function Announcements({ bps }: Props) {
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const handleChange =
     (item: string) => (event: React.SyntheticEvent, newExp: boolean) => {
       event.preventDefault;
       setExpanded(newExp ? item : false);
     };
-  const handleChip = () => {
-    setIsChip(!isChip);
+  const handleOpen = () => {
+    setIsOpen(!isOpen);
   };
 
+  // Temporary until DB connection is implemented.
   const announcements = [
     {
       title: "New Date",
@@ -60,7 +70,8 @@ export default function Announcements() {
   ];
   const theme = useTheme();
   const aCount = announcements.length;
-
+  const icon = <Announcement fontSize="large" />;
+  const str = "Announcements";
   function listMaker(
     index: number,
     title: string,
@@ -103,41 +114,30 @@ export default function Announcements() {
 
   return (
     <motion.div layout style={{ width: "100%", textAlign: "center" }}>
-      {isChip ? (
-        <Chip
-          avatar={<Avatar sx={{}} children={aCount} />}
-          label="Announcements"
-          size="medium"
-          color="secondary"
-          variant="outlined"
-          sx={{ scale: 1.5, my: 4, width: 0.6 }}
-          onClick={handleChip}
+      <Card variant="outlined" sx={{ minWidth: "80%", m: 3, borderRadius: 10 }}>
+        <CardHeader
+          slotProps={{
+            title: { fontSize: "1.6em", color: theme.palette.secondary.main },
+          }}
+          title={!bps.xl ? icon : str}
+          avatar={
+            <Avatar
+              sx={{ bgcolor: theme.palette.secondary.main }}
+              children={aCount}
+            />
+          }
+          children={aCount}
+          action={
+            <IconButton aria-label="close" onClick={handleOpen}>
+              {isOpen ? (
+                <ExpandMore color="secondary" />
+              ) : (
+                <ExpandLess color="secondary" />
+              )}
+            </IconButton>
+          }
         />
-      ) : (
-        <Card
-          variant="outlined"
-          sx={{ minWidth: "80%", m: 3, borderRadius: 10 }}
-        >
-          <CardHeader
-            slotProps={{
-              title: { fontSize: "1.6em", color: theme.palette.secondary.main },
-            }}
-            title="Announcements"
-            avatar={
-              <Avatar
-                sx={{
-                  bgcolor: theme.palette.secondary.main,
-                }}
-                children={aCount}
-              />
-            }
-            children={aCount}
-            action={
-              <IconButton aria-label="close" onClick={handleChip}>
-                <CloseIcon />
-              </IconButton>
-            }
-          />
+        <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <CardContent sx={{ maxHeight: 250, overflowY: "scroll" }}>
             {announcements.map((ann, index) => (
               <List key={"li-" + index}>
@@ -151,8 +151,8 @@ export default function Announcements() {
               </List>
             ))}
           </CardContent>
-        </Card>
-      )}
+        </Collapse>
+      </Card>
     </motion.div>
   );
 }
