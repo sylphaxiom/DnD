@@ -24,12 +24,6 @@ export default function Navigation({ bps }: Props) {
   const [navAnchorEl, setNavAnchorEl] = React.useState<null | HTMLElement>(
     null
   );
-  const handleNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setNavAnchorEl(event.currentTarget);
-  };
-  const handleNavClose = () => {
-    setNavAnchorEl(null);
-  };
   const tabSX = {
     height: "100%",
     minWidth: "15%",
@@ -85,10 +79,12 @@ export default function Navigation({ bps }: Props) {
             aria-label="navigation"
             aria-controls="menu-navigation"
             aria-haspopup="true"
-            onClick={handleNavMenu}
+            onClick={(event: React.MouseEvent<HTMLElement>) => {
+              setNavAnchorEl(event.currentTarget);
+            }}
             color="inherit"
           >
-            <MenuOutlinedIcon fontSize="large" />
+            <MenuOutlinedIcon fontSize="large" color="secondary" />
           </IconButton>
           <Menu
             id="menu-navigation"
@@ -99,11 +95,13 @@ export default function Navigation({ bps }: Props) {
             }}
             keepMounted
             transformOrigin={{
-              vertical: "bottom",
+              vertical: "top",
               horizontal: "left",
             }}
             open={Boolean(navAnchorEl)}
-            onClose={handleNavClose}
+            onClose={() => {
+              setNavAnchorEl(null);
+            }}
           >
             {pages.map((page, index) => (
               <MenuItem

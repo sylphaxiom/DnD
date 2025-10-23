@@ -13,10 +13,13 @@ import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import { motion } from "motion/react";
 import List from "@mui/material/List";
 import Collapse from "@mui/material/Collapse";
 import Announcement from "@mui/icons-material/Announcement";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
 interface Props {
   bps: {
     sm: boolean;
@@ -34,10 +37,10 @@ export default function Announcements({ bps }: Props) {
       event.preventDefault;
       setExpanded(newExp ? item : false);
     };
-  const handleOpen = () => {
-    setIsOpen(!isOpen);
-  };
 
+  const [annAnchorEl, setAnnAnchorEl] = React.useState<null | HTMLElement>(
+    null
+  );
   // Temporary until DB connection is implemented.
   const announcements = [
     {
@@ -73,19 +76,23 @@ export default function Announcements({ bps }: Props) {
   const icon = <Announcement fontSize="large" />;
   const str = "Announcements";
   function listMaker(
-    index: number,
-    title: string,
-    dm: string,
-    content: string,
-    date: Date
+    ann: {
+      title: string;
+      dm: string;
+      content: string;
+      date: Date;
+    },
+    index: number
   ) {
+    const title = ann.title;
     const id = "ann" + index;
-    const strDate = date.toDateString();
+    const strDate = ann.date.toDateString();
     return (
       <React.Fragment key={index}>
         <Accordion
           expanded={expanded === id}
           onChange={handleChange(id.toString())}
+          sx={{ maxWidth: "100%" }}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -94,7 +101,7 @@ export default function Announcements({ bps }: Props) {
             key={id + "-header"}
           >
             <Avatar
-              children={dm}
+              children={ann.dm.charAt(0)}
               sx={{ bgcolor: theme.palette.secondary.main, marginRight: 2 }}
             />
             <Stack>
@@ -104,8 +111,8 @@ export default function Announcements({ bps }: Props) {
               </Typography>
             </Stack>
           </AccordionSummary>
-          <AccordionDetails>
-            <Typography>{content}</Typography>
+          <AccordionDetails sx={{ textWrap: "wrap" }}>
+            <Typography>{ann.content}</Typography>
           </AccordionDetails>
         </Accordion>
       </React.Fragment>
@@ -113,46 +120,109 @@ export default function Announcements({ bps }: Props) {
   }
 
   return (
-    <motion.div layout style={{ width: "100%", textAlign: "center" }}>
-      <Card variant="outlined" sx={{ minWidth: "80%", m: 3, borderRadius: 10 }}>
-        <CardHeader
-          slotProps={{
-            title: { fontSize: "1.6em", color: theme.palette.secondary.main },
+    <Box
+      sx={{
+        width: "100%",
+        textAlign: "center",
+        alignSelf: "center",
+      }}
+    >
+      {bps.xl ? (
+        <Card
+          variant="outlined"
+          sx={{
+            minWidth: "150px",
+            m: 3,
+            borderRadius: 10,
           }}
-          title={!bps.xl ? icon : str}
-          avatar={
-            <Avatar
-              sx={{ bgcolor: theme.palette.secondary.main }}
-              children={aCount}
-            />
-          }
-          children={aCount}
-          action={
-            <IconButton aria-label="close" onClick={handleOpen}>
-              {isOpen ? (
-                <ExpandMore color="secondary" />
-              ) : (
-                <ExpandLess color="secondary" />
-              )}
-            </IconButton>
-          }
-        />
-        <Collapse in={isOpen} timeout="auto" unmountOnExit>
-          <CardContent sx={{ maxHeight: 250, overflowY: "scroll" }}>
-            {announcements.map((ann, index) => (
-              <List key={"li-" + index}>
-                {listMaker(
-                  index,
-                  ann.title,
-                  ann.dm.charAt(0),
-                  ann.content,
-                  ann.date
+        >
+          <CardHeader
+            slotProps={{
+              title: {
+                fontSize: "1.6em",
+                color: theme.palette.secondary.main,
+              },
+            }}
+            title={!bps.xl ? icon : str}
+            avatar={
+              <Avatar
+                sx={{ bgcolor: theme.palette.secondary.main }}
+                children={aCount}
+              />
+            }
+            children={aCount}
+            action={
+              <IconButton
+                aria-label="close"
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+              >
+                {isOpen ? (
+                  <ExpandMore color="secondary" />
+                ) : (
+                  <ExpandLess color="secondary" />
                 )}
-              </List>
+              </IconButton>
+            }
+          />
+          <Collapse in={isOpen} timeout="auto" unmountOnExit>
+            <CardContent
+              sx={{ maxHeight: 250, overflowY: "scroll", padding: 0 }}
+            >
+              {announcements.map((ann, index) => (
+                <List sx={{ padding: 0 }} key={"li-" + index}>
+                  {listMaker(ann, index)}
+                </List>
+              ))}
+            </CardContent>
+          </Collapse>
+        </Card>
+      ) : (
+        <>
+          <IconButton
+            size="large"
+            sx={{}}
+            aria-label="announcements"
+            aria-controls="announcements"
+            aria-haspopup="true"
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
+              setAnnAnchorEl(e.currentTarget);
+            }}
+            color="secondary"
+          >
+            <Badge badgeContent={aCount} color="primary">
+              <Announcement fontSize="large" />
+            </Badge>
+          </IconButton>
+          <Menu
+            id="announcements"
+            anchorEl={annAnchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(annAnchorEl)}
+            onClose={() => {
+              setAnnAnchorEl(null);
+            }}
+          >
+            {announcements.map((ann, index) => (
+              <MenuItem
+                key={"li-" + index}
+                sx={{ padding: 0, maxWidth: "400px" }}
+              >
+                {listMaker(ann, index)}
+              </MenuItem>
             ))}
-          </CardContent>
-        </Collapse>
-      </Card>
-    </motion.div>
+          </Menu>
+        </>
+      )}
+    </Box>
   );
 }

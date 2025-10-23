@@ -29,7 +29,12 @@ export default function App() {
               <Title />
               <Outlet />
             </Grid>
-            <Grid container size={{ xs: 1, lg: 2, xl: 3 }} id="rightUtils">
+            <Grid
+              container
+              size={{ xs: 1, lg: 2, xl: 3 }}
+              sx={{ alignContent: "flex-start", marginTop: 5 }}
+              id="rightUtils"
+            >
               <Announcements bps={bps} />
             </Grid>
           </Grid>
@@ -49,9 +54,9 @@ export default function App() {
                 </Grid>
                 <Grid
                   container
-                  size={{ xs: 2, xl: 3 }}
+                  size={{ xs: 2, lg: 3 }}
                   id="rightUtils"
-                  sx={{ alignContent: "center", justifyItems: "center" }}
+                  sx={{ alignContent: "center", justifyItems: "baseline" }}
                 >
                   <Announcements bps={bps} />
                 </Grid>
