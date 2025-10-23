@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <Typography variant="h1" sx={{ textAlign: "center", width: 1 }}>
-      Home
+      What is Kothis?
     </Typography>
   );
 }
