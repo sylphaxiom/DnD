@@ -15,6 +15,7 @@ export default [
         route("world", "./components/World.tsx"),
         route("lore", "./components/Lore.tsx"),
         route("homebrew", "./components/Homebrew.tsx"),
+        route("wildlands", "./components/Wildlands.tsx")
     ]),
     route("*?", "./components/Loading.tsx", {id:"catchall"}),
 ] satisfies RouteConfig
