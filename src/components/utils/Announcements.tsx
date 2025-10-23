@@ -198,6 +198,11 @@ export default function Announcements({ bps }: Props) {
           <Menu
             id="announcements"
             anchorEl={annAnchorEl}
+            slotProps={{
+              list: {
+                disablePadding: true,
+              },
+            }}
             anchorOrigin={{
               vertical: "bottom",
               horizontal: "right",
