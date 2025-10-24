@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <>
-      <Box sx={{ height: "100%", minWidth: "100vw" }} position="fixed" top={0}>
+      <Box sx={{ height: "100%", minWidth: "100vw" }}>
         {bps.lg ? (
           <Grid container spacing={0}>
             <Grid size={{ xs: 1, lg: 2 }} id="leftNav">
@@ -32,7 +32,12 @@ export default function App() {
             <Grid
               container
               size={{ xs: 1, lg: 2, xl: 3 }}
-              sx={{ alignContent: "flex-start", marginTop: 5 }}
+              sx={{
+                alignContent: "flex-start",
+                marginTop: 5,
+                overflowY: "auto",
+                height: "100vh",
+              }}
               id="rightUtils"
             >
               <Announcements bps={bps} />

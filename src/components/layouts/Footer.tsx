@@ -16,7 +16,7 @@ export default function Footer() {
       id="footRoot"
       sx={{
         minWidth: "100vw",
-        position: "absolute",
+        position: "fixed",
         bottom: 0,
         left: 0,
         paddingTop: 1,

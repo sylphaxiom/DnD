@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite && react-router dev",
     "kill": "npx kill-port 5173",
+    "clean": "tsc -b --clean",
     "demo": "tsc -b && vite build --base=/test/",
     "build": "tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app",
     "api": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --API",

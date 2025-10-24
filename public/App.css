@@ -1,3 +1,8 @@
 .dark img.svg {
   filter: hue-rotate(180deg) invert() contrast(90%)
 }
+
+svg#kothisWorld {
+  width:100%;
+  height:auto;
+}
