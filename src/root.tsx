@@ -49,9 +49,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <ThemeProvider disableTransitionOnChange={false} noSsr theme={theme}>
             <CssBaseline enableColorScheme />
             {children}
-            <ScrollRestoration />
           </ThemeProvider>
         </React.Fragment>
+        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

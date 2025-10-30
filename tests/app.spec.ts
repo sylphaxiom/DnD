@@ -24,7 +24,7 @@ test('is home page', async ({ page }) => {
 
   // Expect url to become the set page. Additional tests to follow.
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole("heading", {name: 'Home'})).toContainText(/Home/)
+  await expect(page.getByRole("heading", {name: 'What is Kothis?'})).toContainText('What is Kothis?')
 
 });
 

@@ -38,4 +38,3 @@ tests/example.spec.ts
 *.d.ts
 build/
 src/api/v1/bucket.php
-src/api/v1/DB_make.sql
