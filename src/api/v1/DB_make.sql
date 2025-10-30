@@ -87,6 +87,63 @@ CREATE TABLE IF NOT EXISTS `background_tools` (
     CONSTRAINT `FK_tool_bg` FOREIGN KEY (`tool`) REFERENCES `tools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE IF NOT EXISTS `campaign` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `title` varchar(50) NOT NULL,
+    `dm` varchar(25) NOT NULL COMMENT 'FK player.username',
+    `start_date` date NOT NULL,
+    `current_session` int NOT NULL,
+    `open` tinyint(1) NOT NULL,
+    `max_players` int NOT NULL,
+    `description` text NOT NULL,
+    `world` int NOT NULL COMMENT 'FK world.id',
+    `theme` varchar(50) NOT NULL,
+    `trig_warnings` text,
+    `abuse_flag` enum(
+        'clean',
+        'caution',
+        'warning',
+        'flagged',
+        'evaluated'
+    ) NOT NULL COMMENT 'used for safety card system',
+    `anon_feedback` text,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `UNIQUE_title` (`title`),
+    KEY `start_date` (`start_date`),
+    KEY `FK_campaign_player` (`dm`),
+    KEY `FK_campaign_world` (`world`),
+    CONSTRAINT `FK_campaign_player` FOREIGN KEY (`dm`) REFERENCES `player` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_campaign_world` FOREIGN KEY (`world`) REFERENCES `world` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `city` (
+    `name` varchar(25) NOT NULL,
+    `local_govt` int NOT NULL,
+    `ruler` int DEFAULT NULL COMMENT 'FK npc.id',
+    `ruler_title` varchar(50) NOT NULL,
+    `description` text NOT NULL,
+    `size` enum(
+        'tiny',
+        'small',
+        'medium',
+        'large',
+        'huge',
+        'gargantuan'
+    ) NOT NULL DEFAULT 'medium',
+    `known_for` varchar(50) NOT NULL,
+    `tags` text,
+    PRIMARY KEY (`name`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `city_org` (
+    `city` varchar(25) NOT NULL COMMENT 'FK city.name',
+    `organization` int NOT NULL COMMENT 'FK organization.id',
+    PRIMARY KEY (`city`, `organization`),
+    KEY `FK_org_city` (`organization`),
+    CONSTRAINT `FK_city_org` FOREIGN KEY (`city`) REFERENCES `city` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_org_city` FOREIGN KEY (`organization`) REFERENCES `organization` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `class` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(25) NOT NULL,
@@ -137,6 +194,15 @@ CREATE TABLE IF NOT EXISTS `class_skill` (
     CONSTRAINT `FK_skill_cls` FOREIGN KEY (`skill`) REFERENCES `skills` (`skill`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE IF NOT EXISTS `class_spell_list` (
+    `class` int NOT NULL COMMENT 'FK class.id',
+    `spell` int NOT NULL COMMENT 'FK spell.id',
+    PRIMARY KEY (`class`, `spell`),
+    KEY `FK_spell_class` (`spell`),
+    CONSTRAINT `FK_class_spell` FOREIGN KEY (`class`) REFERENCES `class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_spell_class` FOREIGN KEY (`spell`) REFERENCES `spell` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `class_tools` (
     `class` int NOT NULL COMMENT 'FK class.id',
     `tool` int NOT NULL COMMENT 'FK tool.id',
@@ -155,12 +221,76 @@ CREATE TABLE IF NOT EXISTS `class_weapon` (
     CONSTRAINT `FK_weapon_cls` FOREIGN KEY (`weapon`) REFERENCES `weapon_types` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE IF NOT EXISTS `continent` (
+    `name` varchar(25) NOT NULL,
+    `description` text NOT NULL,
+    `map` blob,
+    `world` int NOT NULL COMMENT 'FK world.id',
+    PRIMARY KEY (`name`),
+    KEY `FK_continent_world` (`world`),
+    CONSTRAINT `FK_continent_world` FOREIGN KEY (`world`) REFERENCES `world` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `deities` (
+    `name` varchar(25) NOT NULL,
+    `prime_domain` varchar(50) NOT NULL,
+    `category` enum(
+        'enoreth',
+        'diathesia',
+        'abstraction',
+        'demi-god'
+    ) NOT NULL,
+    `affiliations` text NOT NULL,
+    `alignment` enum(
+        'lawful good',
+        'lawful neutral',
+        'lawful evil',
+        'neutral good',
+        'true neutral',
+        'neutral evil',
+        'chaotic good',
+        'chaotic neutral',
+        'chaotic evil'
+    ) NOT NULL,
+    `alt_names` text NOT NULL,
+    `description` text NOT NULL,
+    `player_comments` text,
+    `dm_comments` text,
+    `parents` text NOT NULL,
+    `children` text,
+    `world` int NOT NULL COMMENT 'FK world.id',
+    PRIMARY KEY (`name`),
+    KEY `FK_deities_world` (`world`),
+    CONSTRAINT `FK_deities_world` FOREIGN KEY (`world`) REFERENCES `world` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `feats` (
     `name` varchar(25) NOT NULL,
     `description` text NOT NULL,
     `requirements` varchar(200) NOT NULL,
     `tags` text COMMENT 'array of string tags.',
     PRIMARY KEY (`name`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `homebrew_mech` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `title` varchar(25) NOT NULL,
+    `description` text NOT NULL,
+    `type` enum(
+        'class',
+        'subclass',
+        'species',
+        'background',
+        'world',
+        'combat',
+        'social',
+        'other'
+    ) NOT NULL,
+    `creator` varchar(25) NOT NULL COMMENT 'FK player.username',
+    `dm_approved` tinyint(1) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`),
+    KEY `FK_hbmech_player` (`creator`),
+    CONSTRAINT `FK_hbmech_player` FOREIGN KEY (`creator`) REFERENCES `player` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
 CREATE TABLE IF NOT EXISTS `item` (
@@ -204,6 +334,98 @@ CREATE TABLE IF NOT EXISTS `languages` (
     `language` varchar(25) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 20 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `nation` (
+    `name` varchar(25) NOT NULL,
+    `map` blob,
+    `government` varchar(50) NOT NULL,
+    `ruler_title` varchar(50) NOT NULL,
+    `capital` varchar(25) NOT NULL COMMENT 'FK city.name',
+    `continent` varchar(25) NOT NULL COMMENT 'FK continent.name',
+    `description` text NOT NULL,
+    `prime_export` varchar(25) DEFAULT NULL,
+    `prime_import` varchar(25) DEFAULT NULL,
+    PRIMARY KEY (`name`),
+    KEY `FK_nation_capital` (`capital`),
+    KEY `FK_nation_continent` (`continent`),
+    CONSTRAINT `FK_nation_capital` FOREIGN KEY (`capital`) REFERENCES `city` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_nation_continent` FOREIGN KEY (`continent`) REFERENCES `continent` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `npc` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) NOT NULL,
+    `species` int NOT NULL COMMENT 'FK species.id',
+    `profession` varchar(50) NOT NULL,
+    `origin` varchar(25) DEFAULT NULL COMMENT 'FK city.name',
+    `world` int NOT NULL COMMENT 'FK world.id',
+    `background` text NOT NULL,
+    `appearance` text NOT NULL,
+    `personality` text NOT NULL,
+    `alignment` enum(
+        'lawful good',
+        'lawful neutral',
+        'lawful evil',
+        'neutral good',
+        'true neutral',
+        'neutral evil',
+        'chaotic good',
+        'chaotic neutral',
+        'chaotic evil'
+    ) NOT NULL,
+    `class` int DEFAULT NULL COMMENT 'FK class.id',
+    `age` int DEFAULT NULL,
+    `player_comments` text,
+    `dm_comments` text,
+    `pc_story_npc` tinyint(1) NOT NULL DEFAULT '0',
+    `living` enum(
+        'alive',
+        'dead',
+        'presumed dead',
+        'undead',
+        'unknown',
+        'magical fuckery'
+    ) NOT NULL DEFAULT 'unknown',
+    `ruler_of` varchar(25) DEFAULT NULL COMMENT 'FK nation.name',
+    PRIMARY KEY (`id`),
+    KEY `FK_npc_species` (`species`),
+    KEY `FK_npc_city` (`origin`),
+    KEY `FK_npc_world` (`world`),
+    KEY `FK_npc_class` (`class`),
+    KEY `FK_npc_nation` (`ruler_of`),
+    CONSTRAINT `FK_npc_city` FOREIGN KEY (`origin`) REFERENCES `city` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_npc_class` FOREIGN KEY (`class`) REFERENCES `class` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_npc_nation` FOREIGN KEY (`ruler_of`) REFERENCES `nation` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_npc_species` FOREIGN KEY (`species`) REFERENCES `species` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_npc_world` FOREIGN KEY (`world`) REFERENCES `world` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `organization` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `title` varchar(50) NOT NULL,
+    `description` text NOT NULL,
+    `ideology` varchar(200) NOT NULL,
+    `alignment` enum(
+        'lawful good',
+        'lawful neutral',
+        'lawful evil',
+        'neutral good',
+        'true neutral',
+        'neutral evil',
+        'chaotic good',
+        'chaotic neutral',
+        'chaotic evil'
+    ) NOT NULL,
+    `patron` varchar(25) DEFAULT NULL COMMENT 'FK deities.name',
+    `hierarchy` text,
+    `current_leader` int DEFAULT NULL COMMENT 'FK npc.id',
+    `status` varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `FK_org_npc` (`current_leader`),
+    KEY `FK_org_deities` (`patron`),
+    CONSTRAINT `FK_org_deities` FOREIGN KEY (`patron`) REFERENCES `deities` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `FK_org_npc` FOREIGN KEY (`current_leader`) REFERENCES `npc` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
 CREATE TABLE IF NOT EXISTS `pc` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -297,6 +519,15 @@ CREATE TABLE IF NOT EXISTS `pc_skills` (
     CONSTRAINT `FK_skill_pc` FOREIGN KEY (`skill`) REFERENCES `skills` (`skill`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE IF NOT EXISTS `pc_spell_list` (
+    `pc` int NOT NULL COMMENT 'FK pc.id',
+    `spell` int NOT NULL COMMENT 'FK spell.id',
+    PRIMARY KEY (`pc`, `spell`),
+    KEY `FK_spell_pc` (`spell`),
+    CONSTRAINT `FK_pc_spell` FOREIGN KEY (`pc`) REFERENCES `pc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_spell_pc` FOREIGN KEY (`spell`) REFERENCES `spell` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `pc_subclass` (
     `pc` int NOT NULL COMMENT 'FK pc.id',
     `subclass` varchar(25) NOT NULL COMMENT 'FK subclass_features.subclass',
@@ -332,6 +563,20 @@ CREATE TABLE IF NOT EXISTS `player` (
     `preferences` text COMMENT 'string dict of user preferences.',
     PRIMARY KEY (`username`),
     UNIQUE KEY `UNIQUE_email` (`email`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `session` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `campaign` int NOT NULL COMMENT 'FK campaign.id',
+    `date` date NOT NULL,
+    `title` varchar(50) NOT NULL,
+    `recap` text,
+    `preview` text,
+    `player_comments` text,
+    `dm_comments` text,
+    PRIMARY KEY (`id`),
+    KEY `FK_session_campaign` (`campaign`),
+    CONSTRAINT `FK_session_campaign` FOREIGN KEY (`campaign`) REFERENCES `campaign` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
 CREATE TABLE IF NOT EXISTS `skills` (
@@ -400,6 +645,59 @@ CREATE TABLE IF NOT EXISTS `species_abilities` (
     CONSTRAINT `FK_species_ability` FOREIGN KEY (`species`) REFERENCES `species` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE IF NOT EXISTS `spell` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) NOT NULL,
+    `level` enum(
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9'
+    ) NOT NULL,
+    `casting_time` enum(
+        'action',
+        'bonus action',
+        'reaction',
+        '1 minute',
+        '10 minutes',
+        '1 hour',
+        '8 hours',
+        '12 hours',
+        '24 hours'
+    ) NOT NULL,
+    `range_val` int DEFAULT NULL,
+    `area` varchar(25) DEFAULT NULL,
+    `verbal` tinyint(1) NOT NULL,
+    `somatic` tinyint(1) NOT NULL,
+    `material` tinyint(1) NOT NULL,
+    `school` enum(
+        'abjuration',
+        'conjuration',
+        'divination',
+        'enchantment',
+        'evocation',
+        'illusion',
+        'necromancy',
+        'transmutation'
+    ) NOT NULL,
+    `self` tinyint(1) NOT NULL,
+    `higher_levels` varchar(50) DEFAULT NULL,
+    `description` text NOT NULL,
+    `save_dc` varchar(25) NOT NULL,
+    `atk_roll` tinyint(1) NOT NULL,
+    `tags` text,
+    `ritual` tinyint(1) NOT NULL,
+    `concentration` tinyint(1) NOT NULL,
+    `duration` varchar(25) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `subclass_feature` (
     `name` varchar(25) NOT NULL,
     `description` text NOT NULL,
@@ -457,4 +755,16 @@ CREATE TABLE IF NOT EXISTS `weapon_weapon_props` (
     KEY `FK_weap_prop_weap` (`properties`),
     CONSTRAINT `FK_weap_prop_weap` FOREIGN KEY (`properties`) REFERENCES `weapon_properties` (`prop`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_weap_weap_prop` FOREIGN KEY (`weapon`) REFERENCES `weapon_types` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE IF NOT EXISTS `world` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `world_name` varchar(50) NOT NULL,
+    `description` text NOT NULL,
+    `dm_comments` text,
+    `player_comments` text,
+    `creator` varchar(25) NOT NULL COMMENT 'FK player.username',
+    PRIMARY KEY (`id`),
+    KEY `FK_world_player` (`creator`),
+    CONSTRAINT `FK_world_player` FOREIGN KEY (`creator`) REFERENCES `player` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
