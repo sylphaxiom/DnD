@@ -8,6 +8,7 @@ import Announcements from "./utils/Announcements";
 import { Outlet } from "react-router";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import AppBar from "@mui/material/AppBar";
+import Login from "./utils/Login";
 
 export default function App() {
   let bps = {
@@ -41,6 +42,7 @@ export default function App() {
               id="rightUtils"
             >
               <Announcements bps={bps} />
+              <Login />
             </Grid>
           </Grid>
         ) : (

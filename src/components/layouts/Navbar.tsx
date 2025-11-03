@@ -54,7 +54,7 @@ export default function Navigation({ bps }: Props) {
           orientation="vertical"
           indicatorColor="secondary"
           value={
-            location.pathname === "/" ? "home" : location.pathname.substring(1)
+            location.pathname === "/" ? "home" : location.pathname.split("/")[1]
           }
           centered
         >

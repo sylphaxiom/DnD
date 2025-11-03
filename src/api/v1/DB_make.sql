@@ -15,6 +15,20 @@ CREATE TABLE IF NOT EXISTS `abilities` (
     PRIMARY KEY (`name`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
+CREATE TABLE `announcements` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `poster` varchar(25) NOT NULL COMMENT 'FK player.username',
+    `campaign` int NOT NULL COMMENT 'FK campaign.id',
+    `title` varchar(25) NOT NULL,
+    `content` varchar(200) NOT NULL,
+    `comments` text,
+    PRIMARY KEY (`id`),
+    KEY `FK_ann_player` (`poster`),
+    KEY `FK_ann_campaign` (`campaign`),
+    CONSTRAINT `FK_ann_campaign` FOREIGN KEY (`campaign`) REFERENCES `campaign` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_ann_player` FOREIGN KEY (`poster`) REFERENCES `player` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
 CREATE TABLE IF NOT EXISTS `armor_types` (
     `type` varchar(25) NOT NULL,
     `ac` varchar(10) NOT NULL COMMENT 'number or like 12+DEX',

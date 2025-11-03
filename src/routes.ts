@@ -11,7 +11,9 @@ export default [
         index("./components/Home.tsx"),
         route("character", "./components/Character.tsx"),
         route("campaign", "./components/Campaign.tsx"),
-        route("notebook", "./components/Notebook.tsx"),
+        route("notebook", "./components/Notebook.tsx", [
+            route("profile", "./components/notebook/Profile.tsx")
+        ]),
         route("world", "./components/World.tsx", [
             route("borodir", "./components/world/Borodir.tsx"),
             route("draconia", "./components/world/Draconia.tsx"),
