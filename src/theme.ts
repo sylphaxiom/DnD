@@ -28,6 +28,11 @@ export const dark: ThemeOptions = {
     h2: {
       fontWeight: 500,
     },
+    subtitle1:{
+      fontFamily: "'Kings', cursive",
+      fontStyle: "italic",
+      fontSize: "3em",
+    },
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
@@ -60,11 +65,16 @@ export const light: ThemeOptions = {
     h2: {
       fontWeight: 500,
     },
+    subtitle1:{
+      fontFamily: "'Kings', cursive",
+      letterSpacing: 1.5,
+      fontSize: "2rem",
+    },
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 800,
-    fontSize: 16,
+    fontSize: 18,
   },
 };
 
