@@ -38,7 +38,7 @@ export function SignUpButton() {
 export function LogoutButton() {
   const { logout } = useAuth0();
   const handleLogout = async () => {
-    await logout({ logoutParams: { returnTo: "http://localhost:5173/" } });
+    await logout({ logoutParams: { returnTo: "/" } });
   };
   return (
     <button onClick={handleLogout} className="button logout">

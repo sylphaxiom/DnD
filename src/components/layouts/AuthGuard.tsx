@@ -5,17 +5,17 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Title from "./Title";
 import Navbar from "./Navbar";
-// import useMediaQuery from "@mui/material/useMediaQuery";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Announcements from "../utils/Announcements";
 import Login from "../utils/Login";
 import AppBar from "@mui/material/AppBar";
 
 export function WaitLayout() {
   let bps = {
-    sm: true,
-    md: true,
-    lg: true,
-    xl: true,
+    sm: useMediaQuery("(min-width: 600px)"),
+    md: useMediaQuery("(min-width: 900px)"),
+    lg: useMediaQuery("(min-width: 1200px)"),
+    xl: useMediaQuery("(min-width: 1536px)"),
   };
 
   return (
@@ -28,7 +28,7 @@ export function WaitLayout() {
             </Grid>
             <Grid container size={{ xs: 9, lg: 8, xl: 7 }} id="centerBody">
               <Title />
-              <CircularProgress />
+              <CircularProgress color="secondary" sx={{ mx: "auto" }} />
             </Grid>
             <Grid
               container
@@ -66,10 +66,11 @@ export function WaitLayout() {
                   sx={{ alignContent: "center", justifyItems: "baseline" }}
                 >
                   <Announcements bps={bps} />
+                  {/* <Login> goes here but need to fix UI so it works in dropdown.sks */}
                 </Grid>
               </Grid>
             </AppBar>
-            <CircularProgress />
+            <CircularProgress color="secondary" sx={{ mx: "auto" }} />
           </>
         )}
       </Box>
