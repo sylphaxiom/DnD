@@ -1,25 +1,21 @@
-// import * as React from "react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Title from "./layouts/Title";
-import Navbar from "./layouts/Navbar";
-import Footer from "./layouts/Footer";
-import Announcements from "./utils/Announcements";
-import { Outlet } from "react-router";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import Title from "./Title";
+import Navbar from "./Navbar";
+// import useMediaQuery from "@mui/material/useMediaQuery";
+import Announcements from "../utils/Announcements";
+import Login from "../utils/Login";
 import AppBar from "@mui/material/AppBar";
-import Login from "./utils/Login";
-import { useAuth0 } from "@auth0/auth0-react";
-import CircularProgress from "@mui/material/CircularProgress";
 
-export default function App() {
-  const { isLoading, isAuthenticated } = useAuth0();
-
+export function WaitLayout() {
   let bps = {
-    sm: useMediaQuery("(min-width: 600px)"),
-    md: useMediaQuery("(min-width: 900px)"),
-    lg: useMediaQuery("(min-width: 1200px)"),
-    xl: useMediaQuery("(min-width: 1536px)"),
+    sm: true,
+    md: true,
+    lg: true,
+    xl: true,
   };
 
   return (
@@ -32,11 +28,7 @@ export default function App() {
             </Grid>
             <Grid container size={{ xs: 9, lg: 8, xl: 7 }} id="centerBody">
               <Title />
-              {isLoading && isAuthenticated ? (
-                <CircularProgress color="secondary" />
-              ) : (
-                <Outlet />
-              )}
+              <CircularProgress />
             </Grid>
             <Grid
               container
@@ -77,15 +69,18 @@ export default function App() {
                 </Grid>
               </Grid>
             </AppBar>
-            {isLoading && isAuthenticated ? (
-              <CircularProgress color="secondary" />
-            ) : (
-              <Outlet />
-            )}
+            <CircularProgress />
           </>
         )}
-        <Footer />
       </Box>
     </>
   );
 }
+
+export const AuthGuard = (component: React.ComponentType) => {
+  const Component = withAuthenticationRequired(component, {
+    onRedirecting: () => <WaitLayout />,
+  });
+
+  return <Component />;
+};

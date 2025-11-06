@@ -1,7 +1,8 @@
 import Typography from "@mui/material/Typography";
 import { Outlet } from "react-router";
+import type { Route } from "./+types/Notebook";
 
-export async function clientLoader() {
+export async function clientLoader({}: Route.ClientLoaderArgs) {
   // Notebook page loader
 }
 

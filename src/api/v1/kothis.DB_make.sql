@@ -573,7 +573,6 @@ CREATE TABLE IF NOT EXISTS `player` (
     ) NOT NULL DEFAULT 'player',
     `pwd` char(128) NOT NULL,
     `init_ts` int NOT NULL COMMENT 'Unix timestamp of original record creation.',
-    `lockout` tinyint(1) NOT NULL DEFAULT '0',
     `preferences` text COMMENT 'string dict of user preferences.',
     PRIMARY KEY (`username`),
     UNIQUE KEY `UNIQUE_email` (`email`)

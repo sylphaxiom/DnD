@@ -1,6 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import type { Route } from "./+types/Profile";
 
-const Profile = () => {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+  console.log(JSON.stringify(params));
+}
+
+export default function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
@@ -51,6 +56,4 @@ const Profile = () => {
       </div>
     </div>
   ) : null;
-};
-
-export default Profile;
+}

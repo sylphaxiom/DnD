@@ -1,8 +1,8 @@
 <?php
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Max-Age:3600');
-header('Access-Control-Allow-Headers:Content-type,Rain');
-header('Access-Control-Allow-Methods:PUT,OPTIONS');
+header('Access-Control-Allow-Headers:Content-type,Sage');
+header('Access-Control-Allow-Methods:POST,OPTIONS');
 if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     die();
@@ -48,63 +48,111 @@ switch($method) {
         // POST info like updates and creations (requiring navigation and feedback)
 
         /* Grab resource selection */
+        $username = $input['username'];
+        $first_name = $input['fname'];
+        $last_name = $input['lname'];
+        $email = $input['email'];
+        $role = $input['role'];
+
+        /* check for username & pull user if found.*/
+        if(!isset($username)) {
+            http_response_code(400);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"username is required"
+            ]);
+            exit(1);
+        } elseif (isset($email)){
+            /* query for input username */
+            $query = $conn->prepare("SELECT first_name,last_name 
+                                    FROM player 
+                                    WHERE username = ? OR email = ?");
+            $query->bind_param('ss', $username, $email);
+            try {
+                $query->execute();
+                $query->bind_result($resp_fname,$resp_lname);
+                $result = $query->fetch();
+            } catch (mysqli_sql_exception $e) {
+                http_response_code(400);
+                echo json_encode([
+                    "result"=>"failure",
+                    "message"=>"a SQL error occurred",
+                    "error"=>var_dump($e)
+                ]);
+            } finally {
+                /* if successful, return user */
+                if($result){
+                    http_response_code(200);
+                    echo json_encode([
+                        "result"=>"found",
+                        "message"=>"username found",
+                        "user"=>$resp_fname.';'.$resp_lname
+                    ]);
+                } // else no email or username match
+            }
+        }
+        if(!isset($first_name)) {
+            http_response_code(400);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"first name is required"
+            ]);
+            exit(1);
+        }elseif(!isset($last_name)) {
+            http_response_code(400);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"last name is required"
+            ]);
+            exit(1);
+        }elseif(!isset($role)) {
+            http_response_code(400);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"role is required"
+            ]);
+            exit(1);
+        }
+            try {
+                $stmt = $conn->prepare("INSERT INTO player
+                                        (username,first_name,last_name,email,role)
+                                        VALUES(?,?,?,?,?)");
+                $stmt->bind_param('sssss',$username,$first_name,$last_name,$email,$role);
+                $stmt->execute();
+                $query = $conn->prepare("SELECT first_name,last_name 
+                                        FROM player 
+                                        WHERE username = ? OR email = ?");
+                $query->bind_param('ss', $username, $email);
+                $query->execute();
+                $query->bind_result($resp_fname,$resp_lname);
+                $result = $query->fetch();
+            } catch (mysqli_sql_exception $e) {
+                http_response_code(400);
+                echo json_encode([
+                    "result"=>"failure",
+                    "message"=>"a SQL error occurred",
+                    "error"=>$e
+                ]);
+            }
+            /* if successful, return user */
+            if($result){
+                http_response_code(200);
+                echo json_encode([
+                    "result"=>"found",
+                    "message"=>"username found",
+                    "user"=>$resp_fname.';'.$resp_lname
+                ]);
+            } else {
+                http_response_code(404);
+                echo json_encode([
+                    "result"=>"failure", 
+                    "message"=>"Something went wrong and a result wasn\'t found"
+                ]);
+            }
         break;     
 
     case 'PUT':
         // PUT info like email drop or info storage that doesn't require feedback
-        // /* Set vars from input stream */
-        // $name = $input['name'];
-        // $subject = $name . " - " . $input['subject'];
-        // $who = $input['who'];
-        // $email = $input['email'];
-        // $message = $input['message'];
-		// $to = $input['recipient'];
-        // $headers = array(
-        //     'From' => $name.' <'.$email.'>',
-        //     'Reply-To' => $email,
-        //     'X-Mailer' => 'PHP/'.phpversion(),
-        //     'Content-type' => 'text/plain',
-        //     'MIME-Version' => '1.0',
-        //     'Access-Control-Allow-Origin'=>'https://api.sylphaxiom.com*',
-        // );
-
-        // /* Prepare, bind, and execute statement */
-        // try {
-		//     $sent = mail($to,$subject,$message,$headers);
-        //     $stmt = $conn->prepare('INSERT INTO web_form(name, subject, target, email, message) VALUES(?, ?, ?, ?, ?)');
-        //     $stmt->bind_param("sssss", $name, $subject, $who, $email, $message);
-        //     $stmt->execute();
-        //     $retID = $conn->insert_id;
-        // } catch (mysqli_sql_exception $e) {
-        //     http_response_code(404);
-        //     echo json_encode(['result'=>'failure', 'message'=>"An unknown error has occurred: $e"]);
-        //     break;
-        // }
-        // if(!$sent) {
-        //     $eTo = "webmaster@sylphaxiom.com";
-        //     $eSubj = "An error sending an email occurred on sylphaxiom.com";
-        //     $eMsg = "Looks like there was an error on the sylphaxiom.com website at ".date(DATE_COOKIE).
-        //         ". Take a look at the mail logs to see if there is actually an issue. Here is the output from the site just in case: \n\nTo: ".$to.
-        //         "\nFrom: ".$email.
-        //         "\nSubject: ".$subject.
-        //         "\nMessage: ".$message.
-        //         "\nHeaders: ".var_dump($headers).
-        //         "\nDB submission ID: ".$retID;
-        //     $eHeaders = array(
-        //         'From' => $name.' <'.$email.'>',
-        //         'Reply-To' => $email,
-        //         'X-Mailer' => 'PHP/'.phpversion(),
-        //         'Content-type' => 'text/plain',
-        //         'MIME-Version' => '1.0',
-        //         'Access-Control-Allow-Origin'=>'https://api.sylphaxiom.com*',
-        //     );
-        //     $eSend = mail($eTo,$eSubj,$eMsg,$eHeaders);
-        //     http_response_code(207);
-        //     echo json_encode(["result"=>"failure", "message"=>"There was an issue sending the email, but a message was sent to the webmaster so it should be resolved soon!", "id"=>$retID]);
-        // } else {
-        //     http_response_code(200);
-        //     echo json_encode(["result"=>"success", "message"=>"Email sent successfully", "id"=>$retID]);
-        // }
         break;
         
     case 'DELETE':
@@ -114,6 +162,9 @@ switch($method) {
     default:
         // Throw an error probably
         http_response_code(400);
-        echo json_encode(["result"=>"error", "message" =>"method or request was invalid, please check documentation and try again or contact the webmaster."]);
+        echo json_encode([
+            "result"=>"error",
+            "message" =>"method or request was invalid, please check documentation and try again or contact the webmaster."
+        ]);
 }
 ?>

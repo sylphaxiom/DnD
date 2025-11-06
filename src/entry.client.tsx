@@ -1,7 +1,12 @@
 import * as React from "react";
 import ReactDom from "react-dom/client";
 import { HydratedRouter } from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, type AppState } from "@auth0/auth0-react";
+import { redirectDocument } from "react-router";
+
+const onRedirectCallback = (appState: AppState) => {
+  return redirectDocument(appState?.returnTo || window.location.pathname);
+};
 
 ReactDom.hydrateRoot(
   document,
@@ -10,7 +15,10 @@ ReactDom.hydrateRoot(
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
-        redirect_uri: "http://localhost:5173/",
+        redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL,
+      }}
+      onRedirectCallback={() => {
+        onRedirectCallback;
       }}
     >
       <HydratedRouter
