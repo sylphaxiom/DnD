@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Max-Age:3600');
 header('Access-Control-Allow-Headers:Content-type,Sage');
-header('Access-Control-Allow-Methods:POST,OPTIONS');
+header('Access-Control-Allow-Methods:POST,GET,OPTIONS');
 if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     die();
@@ -41,7 +41,47 @@ $input = json_decode(file_get_contents('php://input'), true);
 switch($method) {
     case 'GET':
         // GET info like SELECT statements or queries go here
-
+        $search_term = $_GET['username'] ?? null;
+        $stmt = null;
+        if(!isset($search_term)) {
+            $stmt = $conn->prepare("SELECT * FROM player");
+        } else {
+            $stmt = $conn->prepare("SELECT * FROM player WHERE username = ?");
+            $stmt->bind_param('s', $search_term);
+        }
+        try {
+            $stmt->execute();
+            $stmt->bind_result($uname,$fname,$lname,$email,$role,$prefs);
+        } catch (mysqli_sql_exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"A SQL error occurred: ".$e,
+            ]);
+        }
+        while ($stmt->fetch()) {
+            $outArr[] = [
+                'username' => $uname, 
+                'first_name' => $fname, 
+                'last_name' => $lname, 
+                'email' => $email, 
+                'role' => $role, 
+                'preferences' => $prefs
+            ];
+        }
+        if(isset($outArr)){
+            http_response_code(200);
+            echo json_encode([
+                "result"=>"success",
+                "message" => $outArr,
+            ]);
+        } else {
+            http_response_code(200);
+            echo json_encode([
+                "result"=>"success",
+                "message"=>"no user matching the username ".$search_term." was found",
+            ]);
+        }
         break;
     
     case 'POST':
@@ -52,7 +92,6 @@ switch($method) {
         $first_name = $input['fname'];
         $last_name = $input['lname'];
         $email = $input['email'];
-        $role = $input['role'];
 
         /* check for username & pull user if found.*/
         if(!isset($username)) {
@@ -88,6 +127,7 @@ switch($method) {
                         "message"=>"username found",
                         "user"=>$resp_fname.';'.$resp_lname
                     ]);
+                    exit(0);
                 } // else no email or username match
             }
         }
@@ -105,48 +145,44 @@ switch($method) {
                 "message"=>"last name is required"
             ]);
             exit(1);
-        }elseif(!isset($role)) {
+        }
+        $submitted = false;
+        try {
+            $stmt = $conn->prepare("INSERT INTO player
+                                    (username,first_name,last_name,email)
+                                    VALUES(?,?,?,?)");
+            $stmt->bind_param('ssss',$username,$first_name,$last_name,$email);
+            $submitted = $stmt->execute();
+        } catch (mysqli_sql_exception $e) {
             http_response_code(400);
             echo json_encode([
                 "result"=>"failure",
-                "message"=>"role is required"
+                "message"=>"a SQL error occurred",
+                "error"=>$e
             ]);
-            exit(1);
+        } finally {
+            $query = $conn->prepare("SELECT first_name,last_name 
+                                    FROM player 
+                                    WHERE username = ? OR email = ?");
+            $query->bind_param('ss', $username, $email);
+            $query->execute();
+            $query->bind_result($resp_fname,$resp_lname);
+            $result = $query->fetch();
         }
-            try {
-                $stmt = $conn->prepare("INSERT INTO player
-                                        (username,first_name,last_name,email,role)
-                                        VALUES(?,?,?,?,?)");
-                $stmt->bind_param('sssss',$username,$first_name,$last_name,$email,$role);
-                $stmt->execute();
-                $query = $conn->prepare("SELECT first_name,last_name 
-                                        FROM player 
-                                        WHERE username = ? OR email = ?");
-                $query->bind_param('ss', $username, $email);
-                $query->execute();
-                $query->bind_result($resp_fname,$resp_lname);
-                $result = $query->fetch();
-            } catch (mysqli_sql_exception $e) {
-                http_response_code(400);
-                echo json_encode([
-                    "result"=>"failure",
-                    "message"=>"a SQL error occurred",
-                    "error"=>$e
-                ]);
-            }
             /* if successful, return user */
-            if($result){
+            if($result && $submitted){
                 http_response_code(200);
                 echo json_encode([
-                    "result"=>"found",
-                    "message"=>"username found",
+                    "result"=>"added",
+                    "message"=>"user successfully added.",
                     "user"=>$resp_fname.';'.$resp_lname
                 ]);
             } else {
                 http_response_code(404);
                 echo json_encode([
                     "result"=>"failure", 
-                    "message"=>"Something went wrong and a result wasn\'t found"
+                    "message"=>"Something went wrong and a result wasn\'t found",
+                    "error"=>"Submitted: ".$submitted."Result: ".$result 
                 ]);
             }
         break;     

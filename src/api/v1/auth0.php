@@ -40,16 +40,16 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 function get_access_token(){
     $curl = curl_init();
-
+    list($cid,$csec) = Bucket::getA0Client($sageHead);
     curl_setopt_array($curl, array(
-    CURLOPT_URL => "https://dev-t7637rzyxd0qsbu0.us.auth0.com/oauth/token",
+    CURLOPT_URL => "https://auth.kothis.sylphaxiom.com/oauth/token",
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => "",
     CURLOPT_MAXREDIRS => 10,
     CURLOPT_TIMEOUT => 30,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS => "{\"client_id\":\"fn1t6JgN0dV9De2zIQ77uDLXo2CMKwE4\",\"client_secret\":\"hkCMTl-karKA81zFbnQwkg2vHIVzUXMIdDiqNMlVir0v6EY0beo0QUPNvBKrRTGJ\",\"audience\":\"https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/\",\"grant_type\":\"client_credentials\"}",
+    CURLOPT_POSTFIELDS => "{\"client_id\":\"$cid\",\"client_secret\":\"$csec\",\"audience\":\"https://auth.kothis.sylphaxiom.com/api/v2/\",\"grant_type\":\"client_credentials\"}",
     CURLOPT_HTTPHEADER => array(
         "content-type: application/json"
     ),
@@ -70,7 +70,7 @@ function get_access_token(){
 function manage_endpoint() {
     $curl = curl_init();
     curl_setopt_array($curl, array(
-    CURLOPT_URL => "https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/<Management API Endpoint>",
+    CURLOPT_URL => "https://auth.kothis.sylphaxiom.com/api/v2/<Management API Endpoint>",
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => "",
     CURLOPT_MAXREDIRS => 10,
