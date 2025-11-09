@@ -64,14 +64,14 @@ export default function Home() {
                 <InteractiveKothis />
               </Grid>
               <Grid size={6}>
-                <Typography sx={{ textAlign: "justify", textIndent: "50px" }}>
+                <Typography sx={{ textAlign: "justify", textIndent: "3em" }}>
                   The nations of Kothis are each unique in their own way. From
                   the mountain dwellings of the dwarves in the Herzog Kingdom,
                   to the open plains of the Praetorian Empire, you will find
                   something for any adventurer.
                 </Typography>
                 <br />
-                <Typography sx={{ textAlign: "justify", textIndent: "50px" }}>
+                <Typography sx={{ textAlign: "justify", textIndent: "3em" }}>
                   The world itself has evolved as The Conundrums and Forgotten
                   Pasts campaigns continue their story. Each party member adding
                   something unique to the game and the world. We have homebrewed

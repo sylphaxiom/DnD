@@ -1,5 +1,5 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react";
-import React from "react";
+import * as React from "react";
+import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -9,6 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Announcements from "../utils/Announcements";
 import Login from "../utils/Login";
 import AppBar from "@mui/material/AppBar";
+import Loading from "../Loading";
 
 export function WaitLayout() {
   let bps = {
@@ -78,7 +79,48 @@ export function WaitLayout() {
   );
 }
 
-export const AuthGuard = (component: React.ComponentType) => {
+type PropsAreEqual<P> = (
+  prevProps: Readonly<P>,
+  nextProps: Readonly<P>
+) => boolean;
+
+export const AuthGuard = <P extends {}>(
+  component: {
+    (props: P): Exclude<React.ReactNode, undefined>;
+    displayName?: string;
+  },
+  propsAreEqual?: PropsAreEqual<P> | false,
+
+  componentName = component.displayName ?? component.name
+): {
+  (props: P): React.JSX.Element;
+  displayName: string;
+} => {
+  function WithSampleHoc(props: P) {
+    const { isAuthenticated } = useAuth0();
+    if (!isAuthenticated) {
+      return <Login />;
+    }
+    const Component = withAuthenticationRequired(component, {
+      onRedirecting: () => <Loading />,
+    });
+
+    return (<Component {...props} />) as React.JSX.Element;
+  }
+
+  WithSampleHoc.displayName = `withSampleHoC(${componentName})`;
+
+  let wrappedComponent =
+    propsAreEqual === false
+      ? WithSampleHoc
+      : React.memo(WithSampleHoc, propsAreEqual);
+
+  // copyStaticProperties(component, wrappedComponent);
+
+  return wrappedComponent as typeof WithSampleHoc;
+};
+
+export const Auth0Guard = (component: React.ComponentType) => {
   const Component = withAuthenticationRequired(component, {
     onRedirecting: () => <WaitLayout />,
   });

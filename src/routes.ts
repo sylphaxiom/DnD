@@ -14,7 +14,9 @@ export default [
         route("notebook","./components/Notebook.tsx", [
             route("profile", "./components/notebook/Profile.tsx"),
         ]),
-        route("world", "./components/World.tsx"),
+        route("world", "./components/World.tsx", [
+            route("secured", "./components/world/SecureBorodir.tsx")
+        ]),
         ...prefix("world", [
             route("borodir", "./components/world/Borodir.tsx"),
             route("draconia", "./components/world/Draconia.tsx"),
