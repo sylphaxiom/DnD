@@ -90,4 +90,13 @@ function manage_endpoint() {
     echo $response;
     }
 }
+
+switch($method) {
+    case 'GET':
+
+        break;
+    case 'POST':
+
+        break;
+}
 ?>

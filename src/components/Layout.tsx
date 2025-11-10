@@ -1,19 +1,54 @@
-// import * as React from "react";
+import * as React from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Title from "./layouts/Title";
 import Navbar from "./layouts/Navbar";
 import Footer from "./layouts/Footer";
-import Announcements from "./utils/Announcements";
 import { Outlet } from "react-router";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Utils from "./layouts/Utils";
+import Container from "@mui/material/Container";
 import AppBar from "@mui/material/AppBar";
-import Login from "./utils/Login";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
-import CircularProgress from "@mui/material/CircularProgress";
 
 export default function App() {
-  const { isLoading, isAuthenticated } = useAuth0();
+  // const { isLoading, isAuthenticated } = useAuth0();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { loginWithRedirect, logout } = useAuth0();
+  // const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogin = (_e: React.MouseEvent, clk: string) => {
+    console.log(clk);
+    switch (clk) {
+      case "Log In":
+        loginWithRedirect({
+          appState: { returnTo: location.pathname },
+        });
+        break;
+      case "Log Out":
+        logout();
+        break;
+      case "Sign Up":
+        loginWithRedirect({
+          appState: { returnTo: "/notebook/profile" },
+          authorizationParams: { screen_hint: "signup" },
+        });
+        break;
+      default:
+        console.log("Default reached, something probably went wrong.");
+    }
+  };
 
   let bps = {
     sm: useMediaQuery("(min-width: 600px)"),
@@ -24,68 +59,63 @@ export default function App() {
 
   return (
     <>
-      <Box sx={{ height: "100%", minWidth: "100vw" }}>
-        {bps.lg ? (
-          <Grid container spacing={0}>
-            <Grid size={{ xs: 1, lg: 2 }} id="leftNav">
+      {bps.lg ? (
+        <Box sx={{ height: "100%", width: 1, mx: "auto" }}>
+          <Container id="cont-main" sx={{ ml: "15vw" }}>
+            <Navbar bps={bps} />
+            <Title />
+            <Outlet />
+            <Utils />
+          </Container>
+          <Footer />
+        </Box>
+      ) : (
+        <>
+          <AppBar position="sticky">
+            <Toolbar>
               <Navbar bps={bps} />
-            </Grid>
-            <Grid container size={{ xs: 9, lg: 8, xl: 7 }} id="centerBody">
-              <Title />
-              {isLoading && isAuthenticated ? (
-                <CircularProgress color="secondary" />
-              ) : (
-                <Outlet />
-              )}
-            </Grid>
-            <Grid
-              container
-              size={{ xs: 1, lg: 2, xl: 3 }}
-              sx={{
-                alignContent: "flex-start",
-                marginTop: 5,
-                overflowY: "auto",
-                height: "100vh",
-              }}
-              id="rightUtils"
-            >
-              <Announcements bps={bps} />
-              <Login />
-            </Grid>
-          </Grid>
-        ) : (
-          <>
-            <AppBar position="sticky">
-              <Grid container spacing={0}>
-                <Grid
-                  size={2}
-                  id="leftNav"
-                  sx={{ alignContent: "center", justifyItems: "center" }}
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Kothis Portal
+              </Typography>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleClick}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem
+                  onClick={(e: React.MouseEvent) => {
+                    handleLogin(e, "Log In");
+                  }}
                 >
-                  <Navbar bps={bps} />
-                </Grid>
-                <Grid container size={{ xs: 8, lg: 8, xl: 7 }} id="centerBody">
-                  <Title />
-                </Grid>
-                <Grid
-                  container
-                  size={{ xs: 2, lg: 3 }}
-                  id="rightUtils"
-                  sx={{ alignContent: "center", justifyItems: "baseline" }}
-                >
-                  <Announcements bps={bps} />
-                </Grid>
-              </Grid>
-            </AppBar>
-            {isLoading && isAuthenticated ? (
-              <CircularProgress color="secondary" />
-            ) : (
-              <Outlet />
-            )}
-          </>
-        )}
-        <Footer />
-      </Box>
+                  Log In
+                </MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+          <Outlet />
+        </>
+      )}
     </>
   );
 }
