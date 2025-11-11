@@ -27,7 +27,7 @@ export default function Navigation({ bps }: Props) {
   const tabSX = {
     height: "100%",
     minWidth: "15%",
-    position: "absolute",
+    position: "fixed",
     left: 0,
   };
   const menuSX = {
