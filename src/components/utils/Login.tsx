@@ -18,7 +18,9 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const path = url.pathname;
   if (path === "/login") {
     console.log("redirecting...");
-    return redirectDocument("https://auth.kothis.sylphaxiom.com/authorize");
+    return redirectDocument(
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173/notebook/profile&state=favJIefnLGKEjifldsfaeVVEifn323849ndsava"
+    );
   }
 }
 

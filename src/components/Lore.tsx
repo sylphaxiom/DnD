@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicLore from "./nonAuth/PublicLore";
-import { AuthGuard } from "./layouts/AuthGuard";
+import { AuthGuard } from "./wrappers/AuthGuard";
 
 export async function clientLoader() {
   // World page loader

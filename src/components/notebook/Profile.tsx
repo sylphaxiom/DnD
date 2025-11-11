@@ -1,8 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import type { Route } from "./+types/Profile";
+import { redirectDocument } from "react-router";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  console.log(JSON.stringify(request.url));
+  const pathTail = request.url.split("/");
+  console.log(pathTail);
+  if (pathTail[pathTail.length - 1] === "profile") {
+    return redirectDocument("/login");
+  }
 }
 
 export default function Profile() {
