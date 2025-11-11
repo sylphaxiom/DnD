@@ -1,15 +1,24 @@
 import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Outlet } from "react-router";
+import PublicCharacter from "./nonAuth/PublicCharacter";
+import { AuthGuard } from "./layouts/AuthGuard";
 
 export async function clientLoader() {
-  // Character page loader
+  // World page loader
 }
 
-export default function Character() {
-  // Character page
-
+export default function World() {
+  const { isAuthenticated, user } = useAuth0();
+  const GuardedRoute = AuthGuard(Outlet);
+  console.log(JSON.stringify(user));
   return (
-    <Typography variant="h1" sx={{ textAlign: "center", width: 1 }}>
-      Character
-    </Typography>
+    <>
+      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
+        {isAuthenticated ? user?.name + "\'s " : "The Public\'s "} Character
+        Page
+      </Typography>
+      {isAuthenticated ? <GuardedRoute /> : <PublicCharacter />}
+    </>
   );
 }

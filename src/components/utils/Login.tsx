@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Route } from "./+types/Login";
-import { redirectDocument } from "react-router";
+import { redirectDocument, useLocation } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -16,12 +16,9 @@ import Avatar from "@mui/material/Avatar";
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const path = url.pathname;
-  console.log("pathname is: %s", path);
   if (path === "/login") {
     console.log("redirecting...");
-    return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?response_type=code&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173&scope=openid%20profile%20email&state="
-    );
+    return redirectDocument("https://auth.kothis.sylphaxiom.com/authorize");
   }
 }
 
@@ -29,6 +26,7 @@ export default function Login() {
   const { loginWithRedirect, logout } = useAuth0();
   const { isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
+  const location = useLocation();
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
@@ -67,8 +65,8 @@ export default function Login() {
 
   return (
     <SpeedDial
-      color={isAuthenticated ? "success" : "secondary"}
       ariaLabel="Login SpeedDial"
+      FabProps={{ color: isAuthenticated ? "success" : "secondary" }}
       sx={{
         position: "fixed",
         bottom: 24,
@@ -79,6 +77,7 @@ export default function Login() {
         isAuthenticated ? (
           <SpeedDialIcon
             sx={{ height: "30px" }}
+            color="success"
             icon={
               <Avatar
                 sx={{ width: 30, height: 30, scale: 1.5 }}
@@ -98,6 +97,7 @@ export default function Login() {
         ) : (
           <SpeedDialIcon
             sx={{ height: "30px" }}
+            color="secondary"
             icon={<NoAccountsIcon />}
             openIcon={<CloseIcon />}
           />

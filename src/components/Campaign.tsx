@@ -1,15 +1,23 @@
 import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Outlet } from "react-router";
+import PublicCampaign from "./nonAuth/PublicCampaign";
+import { AuthGuard } from "./layouts/AuthGuard";
 
 export async function clientLoader() {
-  // Campaign page loader
+  // World page loader
 }
 
 export default function Campaign() {
-  // Campaign page
-
+  const { isAuthenticated, user } = useAuth0();
+  const GuardedRoute = AuthGuard(Outlet);
+  console.log(JSON.stringify(user));
   return (
-    <Typography variant="h1" sx={{ textAlign: "center", width: 1 }}>
-      Campaign
-    </Typography>
+    <>
+      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
+        {isAuthenticated ? user?.name + "\'s " : "The Public\'s "} Campaign Page
+      </Typography>
+      {isAuthenticated ? <GuardedRoute /> : <PublicCampaign />}
+    </>
   );
 }

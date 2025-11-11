@@ -17,6 +17,7 @@ ReactDom.hydrateRoot(
       authorizationParams={{
         redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL,
       }}
+      useRefreshTokens={true}
       onRedirectCallback={() => {
         onRedirectCallback;
       }}

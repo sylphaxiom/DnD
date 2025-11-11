@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import type { Route } from "./+types/Profile";
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-  console.log(JSON.stringify(params));
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  console.log(JSON.stringify(request.url));
 }
 
 export default function Profile() {

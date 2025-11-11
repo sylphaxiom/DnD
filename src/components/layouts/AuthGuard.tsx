@@ -83,6 +83,7 @@ type PropsAreEqual<P> = (
   prevProps: Readonly<P>,
   nextProps: Readonly<P>
 ) => boolean;
+const pubPg = ["PublicWeb"];
 
 export const AuthGuard = <P extends {}>(
   component: {
@@ -96,7 +97,9 @@ export const AuthGuard = <P extends {}>(
   (props: P): React.JSX.Element;
   displayName: string;
 } => {
-  function WithSampleHoc(props: P) {
+  if (component.name in pubPg) {
+  }
+  function WithAuthHoC(props: P) {
     const { isAuthenticated } = useAuth0();
     if (!isAuthenticated) {
       return <Login />;
@@ -108,22 +111,14 @@ export const AuthGuard = <P extends {}>(
     return (<Component {...props} />) as React.JSX.Element;
   }
 
-  WithSampleHoc.displayName = `withSampleHoC(${componentName})`;
+  WithAuthHoC.displayName = `WithAuthHoC(${componentName})`;
 
   let wrappedComponent =
     propsAreEqual === false
-      ? WithSampleHoc
-      : React.memo(WithSampleHoc, propsAreEqual);
+      ? WithAuthHoC
+      : React.memo(WithAuthHoC, propsAreEqual);
 
   // copyStaticProperties(component, wrappedComponent);
 
-  return wrappedComponent as typeof WithSampleHoc;
-};
-
-export const Auth0Guard = (component: React.ComponentType) => {
-  const Component = withAuthenticationRequired(component, {
-    onRedirecting: () => <WaitLayout />,
-  });
-
-  return <Component />;
+  return wrappedComponent as typeof WithAuthHoC;
 };
