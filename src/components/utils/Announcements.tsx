@@ -167,9 +167,7 @@ export default function Announcements({ bps }: Props) {
             }
           />
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
-            <CardContent
-              sx={{ maxHeight: 250, overflowY: "scroll", padding: 0 }}
-            >
+            <CardContent sx={{ maxHeight: 250, padding: 0 }}>
               {announcements.map((ann, index) => (
                 <List sx={{ padding: 0 }} key={"li-" + index}>
                   {listMaker(ann, index)}

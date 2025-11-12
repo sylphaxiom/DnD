@@ -10,7 +10,7 @@ export default function Title() {
       <Grid size={{ xs: 0, lg: 3, xl: 4 }}>
         <Avatar
           alt="Emblem of Kothis"
-          src="kothis.svg"
+          src="/kothis.svg"
           sx={{ width: "75%", height: "auto" }}
         ></Avatar>
       </Grid>

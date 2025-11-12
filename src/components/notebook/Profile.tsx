@@ -1,0 +1,64 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import type { Route } from "./+types/Profile";
+import { redirectDocument } from "react-router";
+
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const pathTail = request.url.split("/");
+  console.log(pathTail);
+  if (pathTail[pathTail.length - 1] === "profile") {
+    return redirectDocument("/login");
+  }
+}
+
+export default function Profile() {
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div className="loading-text">Loading profile...</div>;
+  }
+
+  return isAuthenticated && user ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "1rem",
+      }}
+    >
+      {user.picture && (
+        <img
+          src={user.picture}
+          alt={user.preferred_username || "User"}
+          className="profile-picture"
+          style={{
+            width: "110px",
+            height: "110px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "3px solid #63b3ed",
+          }}
+        />
+      )}
+      <div style={{ textAlign: "center" }}>
+        <div
+          className="profile-name"
+          style={{
+            fontSize: "2rem",
+            fontWeight: "600",
+            color: "#f7fafc",
+            marginBottom: "0.5rem",
+          }}
+        >
+          {user.name}
+        </div>
+        <div
+          className="profile-email"
+          style={{ fontSize: "1.15rem", color: "#a0aec0" }}
+        >
+          {user.email}
+        </div>
+      </div>
+    </div>
+  ) : null;
+}

@@ -5,6 +5,7 @@ import Loading from "./components/Loading";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
+// import { WaitLayout } from "./components/layouts/AuthGuard";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
