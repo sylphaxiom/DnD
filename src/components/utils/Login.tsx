@@ -19,14 +19,13 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   if (path === "/login") {
     console.log("redirecting...");
     return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/notebook/profile"
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/notebook/profile"
     );
   }
 }
 
 export default function Login() {
-  const { loginWithRedirect, logout } = useAuth0();
-  const { isAuthenticated, user } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
 

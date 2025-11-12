@@ -29,7 +29,7 @@ export default function Profile() {
       {user.picture && (
         <img
           src={user.picture}
-          alt={user.name || "User"}
+          alt={user.preferred_username || "User"}
           className="profile-picture"
           style={{
             width: "110px",

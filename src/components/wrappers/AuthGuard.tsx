@@ -20,14 +20,24 @@ export const AuthGuard = <P extends {}>(
   (props: P): React.JSX.Element;
   displayName: string;
 } => {
-  const { isAuthenticated } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
+  console.log("AuthGuard called");
   function WithAuthHoC(props: P) {
-    if (!isAuthenticated) {
-      return <Login />;
-    }
+    React.useEffect(() => {
+      console.log("getting token");
+      getAccessTokenSilently({ authorizationParams: { prompt: "none" } })
+        .then(() => {
+          console.log("user found " + user?.name);
+        })
+        .catch((error) => {
+          console.log("an error occurred " + error);
+          return <Login />;
+        });
+    }, [getAccessTokenSilently]);
     const Component = withAuthenticationRequired(component, {
       onRedirecting: () => <Loading />,
     });
+    console.log("returning from WithAuthHoC");
 
     return (<Component {...props} />) as React.JSX.Element;
   }
