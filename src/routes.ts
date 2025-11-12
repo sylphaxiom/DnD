@@ -10,7 +10,7 @@ export default [
     layout("./components/Layout.tsx", [
         index("./components/Home.tsx"),
         route("character", "./components/Character.tsx", [
-            index("./components/nonAuth/PublicCharacter.tsx"),
+            index("./components/character/MyCharacters.tsx"),
         ]),
         route("campaign", "./components/Campaign.tsx", [
             index("./components/nonAuth/PublicCampaign.tsx"),
