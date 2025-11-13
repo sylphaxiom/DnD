@@ -41,13 +41,17 @@ $input = json_decode(file_get_contents('php://input'), true);
 switch($method) {
     case 'GET':
         // GET info like SELECT statements or queries go here
-        $search_term = $_GET['username'] ?? null;
+        $search_user = $_GET['username'] ?? null;
+        $search_email = $_GET['email'] ?? null;
         $stmt = null;
-        if(!isset($search_term)) {
-            $stmt = $conn->prepare("SELECT * FROM player");
-        } else {
+        if(isset($search_user)) {
             $stmt = $conn->prepare("SELECT * FROM player WHERE username = ?");
-            $stmt->bind_param('s', $search_term);
+            $stmt->bind_param('s', $search_user);
+        } elseif (isset($search_email)) {
+            $stmt = $conn->prepare("SELECT * FROM player WHERE email = ?");
+            $stmt->bind_param('s', $search_email);
+        } else {
+            $stmt = $conn->prepare("SELECT * FROM player");
         }
         try {
             $stmt->execute();
@@ -79,7 +83,7 @@ switch($method) {
             http_response_code(200);
             echo json_encode([
                 "result"=>"success",
-                "message"=>"no user matching the username ".$search_term." was found",
+                "message"=>"no user matching the username ".$search_user." was found",
             ]);
         }
         break;

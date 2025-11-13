@@ -2,6 +2,57 @@ import * as React from "react";
 import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
 import Login from "../utils/Login";
 import Loading from "../Loading";
+import axios from "axios";
+
+interface Player {
+  fname: string;
+  lname: string;
+  email: string;
+  uname: string;
+  role: string;
+  prefs?: string[];
+}
+
+export const ApplyUser = (): Player | void => {
+  const { user } = useAuth0();
+  const [player, setPlayer] = React.useState<Player>();
+  React.useEffect(() => {
+    if (user) {
+      // Form the API call and await the response
+      const username = user.preferred_username ?? "";
+      const email = user.email ?? "";
+
+      const API = axios.create({
+        baseURL: "https://kothis.sylphaxiom.com/api/v1/",
+        headers: {
+          Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
+        },
+      });
+
+      const params = new URLSearchParams();
+      params.append("username", username);
+      params.append("email", email);
+      API.get("player.php?username=" + username + "&email=" + email)
+        .then(function (response) {
+          if (response.data.result === "success") {
+            const msg: string = response.data.message;
+            if (msg.includes("no user matching")) {
+              throw "An error occurred: no user found in local DB.";
+            } else {
+              console.log("setting player as: " + JSON.parse(msg));
+              setPlayer(JSON.parse(msg));
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      console.log("This shouldn't happen, take a look at stuff");
+    }
+  }, [player]);
+  return player;
+};
 
 type PropsAreEqual<P> = (
   prevProps: Readonly<P>,
@@ -20,24 +71,32 @@ export const AuthGuard = <P extends {}>(
   (props: P): React.JSX.Element;
   displayName: string;
 } => {
-  const { user, getAccessTokenSilently } = useAuth0();
-  console.log("AuthGuard called");
+  const { getAccessTokenSilently, isLoading, isAuthenticated } = useAuth0();
   function WithAuthHoC(props: P) {
     React.useEffect(() => {
-      console.log("getting token");
       getAccessTokenSilently({ authorizationParams: { prompt: "none" } })
-        .then(() => {
-          console.log("user found " + user?.name);
-        })
+        .then(() => {})
         .catch((error) => {
           console.log("an error occurred " + error);
           return <Login />;
         });
-    }, [getAccessTokenSilently]);
+    }, [isLoading]);
+
     const Component = withAuthenticationRequired(component, {
       onRedirecting: () => <Loading />,
     });
-    console.log("returning from WithAuthHoC");
+
+    if (isAuthenticated) {
+      const storage = localStorage.getItem("player");
+      if (storage) {
+        console.log("Local player present.");
+      } else {
+        let localPlayer = ApplyUser();
+        if (localPlayer) {
+          localStorage.setItem("player", JSON.stringify(localPlayer));
+        }
+      }
+    }
 
     return (<Component {...props} />) as React.JSX.Element;
   }

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Title from "./layouts/Title";
 import Navbar from "./layouts/Navbar";
 import Footer from "./layouts/Footer";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Utils from "./layouts/Utils";
 import Container from "@mui/material/Container";
@@ -20,12 +20,16 @@ export default function App() {
   // const { isLoading, isAuthenticated } = useAuth0();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { loginWithRedirect, logout } = useAuth0();
+  const navigate = useNavigate();
   // const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleAcct = () => {
+    navigate("/notebook/profile");
   };
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
@@ -109,7 +113,7 @@ export default function App() {
                 >
                   Log In
                 </MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleAcct}>My account</MenuItem>
               </Menu>
             </Toolbar>
           </AppBar>
