@@ -15,7 +15,7 @@ export default function Landing() {
   return (
     <>
       <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated ? user?.name + "\'s " : "The Public "} Landing Page
+        {isAuthenticated ? user?.name : "The Public"}'s Landing Page
       </Typography>
       {isAuthenticated ? <GuardedRoute /> : <PublicHome />}
     </>

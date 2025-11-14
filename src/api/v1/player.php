@@ -44,10 +44,10 @@ switch($method) {
         $search_user = $_GET['username'] ?? null;
         $search_email = $_GET['email'] ?? null;
         $stmt = null;
-        if(isset($search_user)) {
+        if(isset($search_user) && $search_user != '') {
             $stmt = $conn->prepare("SELECT * FROM player WHERE username = ?");
             $stmt->bind_param('s', $search_user);
-        } elseif (isset($search_email)) {
+        } elseif (isset($search_email) && $search_email != '') {
             $stmt = $conn->prepare("SELECT * FROM player WHERE email = ?");
             $stmt->bind_param('s', $search_email);
         } else {
@@ -92,10 +92,10 @@ switch($method) {
         // POST info like updates and creations (requiring navigation and feedback)
 
         /* Grab resource selection */
-        $username = $input['username'];
-        $first_name = $input['fname'];
-        $last_name = $input['lname'];
-        $email = $input['email'];
+        $username = $input['username'] ?? '';
+        $first_name = $input['fname'] ?? '';
+        $last_name = $input['lname'] ?? '';
+        $email = $input['email'] ?? '';
 
         /* check for username & pull user if found.*/
         if(!isset($username)) {
