@@ -19,7 +19,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   if (path === "/login") {
     console.log("redirecting...");
     return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/notebook/profile"
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173/notebook/profile"
     );
   }
 }
@@ -28,6 +28,9 @@ export default function Login() {
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
+  const domain = "http://localhost:5173";
+  // const domain = "https://test.sylphaxiom.com"
+  // const domain = "https://kothis.sylphaxiom.com"
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
@@ -47,15 +50,17 @@ export default function Login() {
     switch (clk) {
       case "Log In":
         await loginWithRedirect({
-          appState: { returnTo: location.pathname },
+          appState: { returnTo: domain + location.pathname },
         });
         break;
       case "Log Out":
-        await logout();
+        await logout({
+          logoutParams: { returnTo: domain + location.pathname },
+        });
         break;
       case "Sign Up":
         await loginWithRedirect({
-          appState: { returnTo: "/notebook/profile" },
+          appState: { returnTo: domain + location.pathname },
           authorizationParams: { screen_hint: "signup" },
         });
         break;
