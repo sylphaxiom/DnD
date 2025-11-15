@@ -1,17 +1,59 @@
-import { ApplyUser } from "./wrappers/AuthGuard";
+// import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "./Loading";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+
+interface Player {
+  first_name: string;
+  last_name: string;
+  email: string;
+  username: string;
+  role: string;
+  prefs?: string[];
+}
+
+async function fetchPlayer(
+  username?: string,
+  email?: string
+): Promise<{
+  status: string;
+  message: Player;
+}> {
+  const response = await axios
+    .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
+      headers: {
+        Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
+      },
+      params: { username: username, email: email },
+    })
+    .catch((error) => {
+      console.log("An error occurred: %s", error);
+      throw error;
+    });
+  return response.data;
+}
 
 export async function clientLoader() {}
 
 export default function Home() {
-  const player = ApplyUser();
-  const fname = player?.first_name ?? "New";
-  const lname = player?.last_name ?? "Player";
-  const uname = player?.username ?? "AnonymousPlayer";
-  const email = player?.email ?? "Something_is_wrong@error.me";
-  const role = player?.role ?? "player";
-  console.log(JSON.stringify(player));
+  const { user } = useAuth0();
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["getPlayer", user?.preferred_username, user?.email],
+    queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
+  });
+  const fname = data?.message.first_name;
+  const lname = data?.message.last_name;
+  const uname = data?.message.username;
+  const email = data?.message.email;
+  const role = data?.message.role;
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+  }
   return (
     <Box>
       <Typography variant="h3">Welcome {fname + " " + lname}</Typography>
