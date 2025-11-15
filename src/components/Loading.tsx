@@ -7,8 +7,6 @@ import Typography from "@mui/material/Typography";
 import { useParams, Link } from "react-router";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-// import type { Route } from "./+types/Loading";
-// import Button from "@mui/material/Button";
 
 export default function Loading() {
   const [scope, animate] = motions.useAnimate();
@@ -23,12 +21,6 @@ export default function Loading() {
     subtitle = "Looks like you tried to go to /" + catchall;
     display = "flex";
   }
-  // if () {
-  //   title = "Hmm...";
-  //   subtitle =
-  //     "Something didn\'t work quite right there, perhaps you should give it another go...";
-  //   display = "none";
-  // }
 
   React.useEffect(() => {
     const bouncy = animate(
