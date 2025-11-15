@@ -20,7 +20,7 @@ async function fetchPlayer(
   email?: string
 ): Promise<{
   status: string;
-  message: Player;
+  message: Player[];
 }> {
   const response = await axios
     .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
@@ -44,11 +44,6 @@ export default function Home() {
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
   });
-  const fname = data?.message.first_name;
-  const lname = data?.message.last_name;
-  const uname = data?.message.username;
-  const email = data?.message.email;
-  const role = data?.message.role;
   if (isLoading) {
     return <Loading />;
   }
@@ -56,11 +51,17 @@ export default function Home() {
   }
   return (
     <Box>
-      <Typography variant="h3">Welcome {fname + " " + lname}</Typography>
-      <Typography variant="h6">I also know your username is {uname}</Typography>
-      <Typography variant="h3">your email address is {email}</Typography>
+      <Typography variant="h3">
+        Welcome {data?.message[0].first_name + " " + data?.message[0].last_name}
+      </Typography>
       <Typography variant="h6">
-        and the role you're assigned is {role}
+        I also know your username is {data?.message[0].username}
+      </Typography>
+      <Typography variant="h3">
+        your email address is {data?.message[0].email}
+      </Typography>
+      <Typography variant="h6">
+        and the role you're assigned is {data?.message[0].role}
       </Typography>
     </Box>
   );
