@@ -1,6 +1,11 @@
 import * as React from "react";
 import type { Route } from "./+types/Login";
-import { redirectDocument, useLocation } from "react-router";
+import {
+  Navigate,
+  redirectDocument,
+  useLocation,
+  useNavigate,
+} from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -28,6 +33,7 @@ export default function Login() {
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const domain = "http://localhost:5173";
   // const domain = "https://test.sylphaxiom.com"
   // const domain = "https://kothis.sylphaxiom.com"
@@ -63,6 +69,9 @@ export default function Login() {
           appState: { returnTo: domain + location.pathname },
           authorizationParams: { screen_hint: "signup" },
         });
+        break;
+      case "Profile":
+        navigate("/notebook/profile");
         break;
       default:
         console.log("Default reached, something probably went wrong.");
@@ -111,7 +120,7 @@ export default function Login() {
       }
       onClose={handleOpen}
       onOpen={handleClose}
-      open={open}
+      // open={open}
     >
       {actions.map((action) => (
         <SpeedDialAction

@@ -68,12 +68,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <CssBaseline enableColorScheme />
               {children}
             </ThemeProvider>
-            <button
+            {/* <button
               onClick={() => setIsOpen(!isOpen)}
             >{`${isOpen ? "Close" : "Open"} the devtools panel`}</button>
             {isOpen && (
               <ReactQueryDevtoolsPanel onClose={() => setIsOpen(false)} />
-            )}
+            )} */}
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </React.Fragment>
