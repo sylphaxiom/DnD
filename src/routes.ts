@@ -37,7 +37,7 @@ export default [
             index("./components/nonAuth/PublicLore.tsx"),
         ]),
         route("homebrew", "./components/Homebrew.tsx", [
-            index("./components/nonAuth/PublicHomebrew.tsx"),
+            index("./components/homebrew/VaultDoor.tsx"),
         ]),
     ]),
     route("login", "./components/utils/Login.tsx", {id:"login"}),
