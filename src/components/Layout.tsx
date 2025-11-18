@@ -16,6 +16,12 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
 import Avatar from "@mui/material/Avatar";
+interface bps {
+  sm: boolean;
+  md: boolean;
+  lg: boolean;
+  xl: boolean;
+}
 
 export default function Layout() {
   const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
@@ -63,7 +69,7 @@ export default function Layout() {
     }
   };
 
-  let bps = {
+  let bps: bps = {
     sm: useMediaQuery("(min-width: 600px)"),
     md: useMediaQuery("(min-width: 900px)"),
     lg: useMediaQuery("(min-width: 1200px)"),
@@ -107,7 +113,7 @@ export default function Layout() {
             <Toolbar>
               <Navbar bps={bps} />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Kothis Portal <span style={{ float: "right" }}>{page}</span>
+                Kothis Portal - <span style={{ float: "right" }}>{page}</span>
               </Typography>
               <IconButton
                 size="large"

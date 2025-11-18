@@ -47,13 +47,15 @@ export default function PublicHome() {
             >
               Kothis
             </span>{" "}
-            is a homebrewed world for Dungeons & Dragons 5th edition. Created by
-            Jacob Pell, and playtested by an amazing group of players, Kothis is
-            currntly home to 2 campaigns. This site will be the online
-            repository for all things in this world. As the application
-            progresses, I hope to add additional functionality for my players
-            and other DMs who wish to run a campaign in this, or another world
-            found within.{" "}
+            is a homebrewed, TTRPG world created by Jacob Pell, and playtested
+            by an amazing group of players, Kothis is currntly home to 2
+            campaigns with the hopes of having many more in the future! This
+            site will be the online repository for all things in this world. As
+            the application progresses, I hope to add additional functionality
+            for my players and other DMs who wish to run a campaign in this, or
+            another world found within. Some of those features will include:
+            Campaign scheduling/organization, Player tracking (for DMs),
+            Character creator, Homebrewery, and more.{" "}
           </Typography>
         </Grid>
         <Grid size={12} sx={{ marginTop: 5 }}>
