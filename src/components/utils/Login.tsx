@@ -19,7 +19,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   if (path === "/login") {
     console.log("redirecting...");
     return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173/notebook/profile"
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/"
     );
   }
 }
@@ -29,8 +29,8 @@ export default function Login() {
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const domain = "http://localhost:5173";
-  // const domain = "https://test.sylphaxiom.com"
+  // const domain = "http://localhost:5173";
+  const domain = "https://test.sylphaxiom.com";
   // const domain = "https://kothis.sylphaxiom.com"
 
   const handleOpen = () => setOpen(false);
