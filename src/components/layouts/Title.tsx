@@ -25,7 +25,7 @@ export default function Title() {
             align="center"
             fontFamily={"Almendra SC, serif"}
           >
-            Welcome to
+            Welcom To
           </Typography>
           <Typography
             variant="h1"

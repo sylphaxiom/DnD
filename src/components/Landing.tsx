@@ -2,18 +2,29 @@ import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicHome from "./nonAuth/PublicHome";
-
-export async function clientLoader() {
-  // World page loader
-}
+import { fetchPlayer } from "./calls/Queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "./Loading";
 
 export default function Landing() {
   const { isAuthenticated, user } = useAuth0();
-  console.log(JSON.stringify(user));
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["getPlayer", user?.preferred_username, user?.email],
+    queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
+  });
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    console.log(JSON.stringify(error));
+  }
+  const player = data?.message[0];
   return (
     <>
       <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated ? user?.name : "The Public"}'s Landing Page
+        {isAuthenticated
+          ? `Welcome Back, ${player?.username}`
+          : "The Public's Landing Page"}
       </Typography>
       {isAuthenticated ? <Outlet /> : <PublicHome />}
     </>

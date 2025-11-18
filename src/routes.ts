@@ -6,7 +6,6 @@ declare module "react-router"{
 }
 
 export default [
-    // Cover and default route
     layout("./components/Layout.tsx", [
         route('/',"./components/Landing.tsx",[
             index("./components/Home.tsx")
