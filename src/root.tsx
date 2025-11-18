@@ -5,14 +5,10 @@ import Loading from "./components/Loading";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import {
-  ReactQueryDevtools,
-  ReactQueryDevtoolsPanel,
-} from "@tanstack/react-query-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = React.useState(false);
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -68,13 +64,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <CssBaseline enableColorScheme />
               {children}
             </ThemeProvider>
-            {/* <button
-              onClick={() => setIsOpen(!isOpen)}
-            >{`${isOpen ? "Close" : "Open"} the devtools panel`}</button>
-            {isOpen && (
-              <ReactQueryDevtoolsPanel onClose={() => setIsOpen(false)} />
-            )} */}
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools
+              initialIsOpen={false}
+              buttonPosition="bottom-left"
+            />
           </QueryClientProvider>
         </React.Fragment>
         <ScrollRestoration />
