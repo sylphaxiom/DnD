@@ -1,11 +1,6 @@
 import * as React from "react";
 import type { Route } from "./+types/Login";
-import {
-  Navigate,
-  redirectDocument,
-  useLocation,
-  useNavigate,
-} from "react-router";
+import { redirectDocument, useLocation, useNavigate } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -120,7 +115,7 @@ export default function Login() {
       }
       onClose={handleOpen}
       onOpen={handleClose}
-      // open={open}
+      open={open}
     >
       {actions.map((action) => (
         <SpeedDialAction

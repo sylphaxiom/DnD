@@ -1,17 +1,15 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import type { Route } from "./+types/Profile";
-import { redirectDocument } from "react-router";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import Loading from "../Loading";
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const pathTail = request.url.split("/");
-  console.log(pathTail);
-  if (pathTail[pathTail.length - 1] === "profile") {
-    return redirectDocument("/login");
-  }
-}
+export default withAuthenticationRequired(Profile, {
+  onRedirecting: () => <Loading />,
+});
 
-export default function Profile() {
+export async function clientLoader() {}
+
+export function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
+  console.log("auth:" + isAuthenticated + "usr:" + user);
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>;
@@ -60,5 +58,7 @@ export default function Profile() {
         </div>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <div>This is wrong.</div>
+  );
 }
