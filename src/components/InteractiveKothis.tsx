@@ -226,7 +226,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="wildlandsLink" href="wildlands" title="wildlands">
+            <a id="wildlandsLink" href="world/wildlands" title="wildlands">
               <MapTooltip title="Wildlands" placement="right" followCursor>
                 <path
                   id="wildlands"
