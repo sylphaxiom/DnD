@@ -8,7 +8,7 @@ import Tooltip, {
 import { styled } from "@mui/material/styles";
 
 interface opacity {
-  borodir: number;
+  herzog: number;
   rokesh: number;
   faena: number;
   praetor: number;
@@ -37,7 +37,7 @@ const CityTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 export default function InteractiveKothis() {
   const [opacity, setOpacity] = React.useState<opacity>({
-    borodir: 0,
+    herzog: 0,
     rokesh: 0,
     faena: 0,
     praetor: 0,
@@ -77,10 +77,10 @@ export default function InteractiveKothis() {
               id="image1"
               style={{ display: "inline" }}
             />
-            <a id="borodirLink" href="world/borodir" title="borodir">
+            <a id="herzogLink" href="world/herzog" title="herzog">
               <MapTooltip title="Herzog Kingdom" placement="right" followCursor>
                 <path
-                  id="borodir"
+                  id="herzog"
                   style={{
                     fill: "cyan",
                     fillRule: "evenodd",
@@ -88,12 +88,12 @@ export default function InteractiveKothis() {
                     strokeWidth: 2,
                     strokeLinecap: "round",
                     strokeLinejoin: "round",
-                    fillOpacity: opacity.borodir,
+                    fillOpacity: opacity.herzog,
                   }}
                   onMouseOver={handleRef}
                   onMouseOut={handleRef}
                   d="M 159.08594 20.822266 L 154.08789 37.648438 L 148.0918 39.646484 L 140.76172 42.3125 L 137.09766 47.142578 L 136.92969 56.970703 L 130.59961 65.632812 L 129.93359 76.460938 L 113.27539 96.451172 L 113.60938 100.61523 L 121.27148 109.77734 L 122.4375 117.60742 L 120.10547 125.10352 L 109.61133 132.93164 L 106.61328 140.42969 L 118.10742 153.58789 L 116.77344 157.25391 L 102.94727 171.91211 L 99.449219 174.74414 L 100.61523 196.90039 L 95.951172 197.90039 L 86.289062 198.06641 L 80.958984 204.0625 L 83.291016 213.72461 L 80.292969 220.22266 L 66.298828 234.71484 L 55.804688 238.37891 L 51.806641 240.87695 L 49.308594 253.53906 L 42.3125 256.36914 L 39.146484 264.36523 L 39.646484 273.02734 L 42.478516 277.19336 L 43.644531 284.02344 L 40.978516 286.85547 L 36.980469 294.18359 L 39.146484 299.18164 L 46.976562 304.8457 L 49.974609 310.3418 L 50.640625 317.00586 L 54.306641 321.50391 L 62.134766 324.16992 L 64.966797 329.66602 L 71.296875 336.99609 L 81.791016 336.83008 L 86.457031 339.32812 L 89.787109 345.6582 L 96.285156 348.49023 L 102.94727 345.49219 L 113.10938 345.32422 L 118.77344 348.65625 L 120.43945 355.15234 L 122.77148 358.65234 L 129.43359 357.98438 L 135.76367 361.15039 L 140.26172 370.64453 L 139.0957 378.97461 L 137.59766 383.30664 L 143.42773 392.9668 L 142.76172 401.62891 L 135.09766 410.79102 L 127.10156 410.95898 L 122.10547 416.62305 L 122.77148 422.61914 L 119.60547 433.28125 L 112.44336 438.44531 L 105.11328 437.77734 L 96.285156 433.28125 L 90.455078 432.78125 L 87.123047 437.27734 L 86.623047 448.10547 L 82.791016 454.10352 L 74.962891 454.26953 L 68.632812 450.10547 L 62.300781 450.27148 L 58.636719 454.60352 L 59.136719 465.76367 L 47.308594 479.58984 L 32.816406 488.58594 L 31.318359 498.41406 L 36.980469 504.74414 L 45.476562 511.07422 L 46.476562 516.57227 L 38.814453 526.90039 L 37.314453 533.23047 L 40.478516 539.22656 L 49.808594 546.05664 L 51.640625 553.55273 L 62.800781 556.05078 L 68.464844 563.71484 L 69.130859 581.70508 L 58.136719 581.53906 L 50.974609 582.87109 L 48.474609 586.20312 L 31.484375 619.85156 L 25.654297 624.18359 L 21.322266 635.34375 L 24.154297 639.50977 L 36.980469 644.00586 L 42.978516 652.33594 L 42.644531 661.16406 L 36.482422 686.48438 L 50.974609 680.98828 L 70.464844 672.82617 L 88.289062 666.16211 L 101.78125 666.66211 L 125.10352 679.48828 L 146.92578 686.65234 L 167.08203 690.65039 L 195.90039 687.65234 L 222.88672 687.81836 L 261.03516 685.65234 L 295.68359 689.65039 L 318.50586 676.99023 L 316.67188 663.66406 L 321.33789 647.83789 L 321.83594 636.67773 L 314.00781 634.01172 L 311.8418 624.18359 L 304.01172 615.35547 L 294.35156 615.6875 L 281.02344 615.1875 L 279.02539 626.34961 L 283.02344 643.33984 L 279.35742 650.83594 L 270.5293 654.00195 L 254.37109 661.33203 L 239.71094 659 L 226.55273 655.50195 L 217.88867 647.67188 L 199.73242 642.00781 L 189.9043 641.00781 L 190.57031 627.18164 L 197.73242 618.35352 L 196.40039 610.68945 L 187.73828 609.85742 L 175.07812 619.68555 L 163.91602 620.68555 L 155.08789 624.34961 L 145.92578 647.67188 L 148.75781 656.5 L 146.0918 662.66406 L 127.93555 671.66016 L 119.60547 665.49609 L 119.60547 651.33594 L 121.4375 643.67383 L 119.43945 633.67969 L 123.4375 622.51758 L 136.26367 611.02344 L 141.0957 601.86133 L 130.76758 589.53516 L 126.60156 578.53906 L 119.10547 571.71094 L 107.44531 566.37891 L 111.44336 550.2207 L 123.9375 542.89062 L 126.93555 533.0625 L 133.09961 527.56641 L 143.59375 526.90039 L 155.42188 540.39258 L 163.41797 542.72461 L 168.91406 548.05469 L 168.58203 556.38477 L 159.08594 572.20898 L 159.58594 581.53906 L 162.58398 605.52539 L 173.91211 608.35742 L 181.9082 601.86133 L 199.39844 601.36133 L 208.06055 606.19336 L 208.22852 619.35352 L 203.39648 629.51367 L 217.55664 637.34375 L 229.05078 638.84375 L 236.38086 645.50586 L 255.03711 651.00391 L 269.69727 639.67578 L 267.03125 627.34766 L 274.69336 606.19336 L 297.51562 602.02734 L 313.8418 606.19336 L 319.67188 611.68945 L 328.83398 629.84766 L 336.16211 628.68164 L 336.66211 620.85156 L 338.49414 613.68945 L 334.49805 609.69141 L 331.99805 603.36133 L 336.66211 588.70117 L 345.1582 585.53711 L 350.48828 574.875 L 351.32227 565.21289 L 360.98438 568.21289 L 388.13672 558.88281 L 412.625 557.55078 L 420.12109 553.88672 L 442.77539 553.88672 L 445.94141 550.2207 L 441.10938 533.0625 L 444.27539 524.23438 L 466.09766 522.73438 L 487.91992 492.25 L 477.92383 485.41992 L 471.92773 472.92773 L 482.25586 456.76758 L 453.76953 426.2832 L 466.76367 414.28906 L 461.59961 402.29688 L 446.10742 401.96289 L 440.10938 397.63086 L 424.61719 399.96484 L 421.61914 393.80078 L 421.78711 382.97266 L 411.625 372.47852 L 411.625 365.98047 L 424.11914 352.32227 L 430.28125 351.6543 L 440.44336 356.81836 L 450.4375 354.32031 L 455.60156 347.49023 L 468.26172 346.82422 L 480.75586 342.66016 L 490.58398 337.66211 L 491.08398 333.16406 L 487.75195 316.00586 L 487.25391 300.18164 L 495.58203 280.02539 L 487.58594 279.52539 L 477.0918 283.85547 L 469.0957 278.35938 L 463.59766 265.36523 L 456.43555 241.37695 L 460.09961 231.88281 L 463.59766 225.88477 L 462.09961 215.22461 L 465.09766 207.0625 L 477.92383 199.56641 L 475.75977 193.23633 L 463.59766 185.57227 L 460.93359 173.91211 L 457.60156 171.41406 L 451.9375 164.91602 L 450.10547 155.42188 L 439.94336 149.25781 L 438.94336 143.25977 L 436.2793 139.42969 L 427.44922 133.76562 L 419.45312 131.26758 L 409.625 129.26758 L 397.79883 128.93555 L 386.63672 129.93359 L 380.30664 126.10352 L 373.81055 127.43555 L 369.8125 128.10156 L 362.81641 124.26953 L 358.31836 125.93555 L 351.98828 135.76367 L 351.48828 142.76172 L 346.99023 145.09375 L 337.66211 141.5957 L 328 147.0918 L 319.83789 145.09375 L 313.67383 138.26367 L 308.50977 139.0957 L 306.01172 145.92578 L 296.34961 151.25586 L 274.02734 153.42188 L 254.70508 160.25195 L 246.20898 158.08594 L 237.37891 151.42383 L 227.55078 153.92188 L 223.55273 150.92383 L 217.05664 141.42773 L 209.89453 139.26367 L 204.5625 136.92969 L 203.5625 131.59961 L 203.5625 122.60547 L 199.73242 118.60742 L 193.06836 117.93945 L 187.23828 116.10742 L 184.07422 112.10938 L 183.90625 104.7793 L 181.4082 98.117188 L 175.24414 97.617188 L 162.75 100.44922 L 163.08398 89.121094 L 163.75 72.130859 L 172.74609 72.796875 L 180.24219 69.964844 L 185.73828 66.632812 L 187.9043 61.134766 L 182.9082 52.806641 L 184.07422 42.8125 L 189.73633 36.482422 L 190.73633 30.152344 L 186.07227 25.486328 L 177.41016 28.318359 L 168.74805 27.152344 L 159.08594 20.822266 z M 285.52734 262.43945 L 297.30469 263.38086 L 306.25781 271.39062 L 325.33984 291.17969 L 330.05078 307.90625 L 343.95117 313.08984 L 343.00781 329.3457 L 332.4082 339.24023 L 336.17578 351.25391 L 330.75781 365.1543 L 325.57617 371.51367 L 320.15625 372.69141 L 320.15625 390.36133 L 313.79688 395.07227 L 304.84375 391.53906 L 297.30469 382.58594 L 300.60352 368.92188 L 308.84961 363.50391 L 314.03125 351.25391 L 309.55664 331.93555 L 300.60352 326.51758 L 291.65234 326.98828 L 282.22852 311.91211 L 273.51172 290.00195 L 277.04492 270.68555 L 285.52734 262.43945 z "
-                  xlinkTitle="borodir"
+                  xlinkTitle="herzog"
                 />
               </MapTooltip>
             </a>
@@ -117,7 +117,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="FaenaLink" href="world/faena" title="faena">
+            <a id="faenaLink" href="world/faena" title="faena">
               <MapTooltip title="Faena" placement="right" followCursor>
                 <path
                   style={{
@@ -137,7 +137,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="praetor" href="world/praetor" title="praetor">
+            <a id="praetorLink" href="world/praetor" title="praetor">
               <MapTooltip
                 title="Praetorian Empire"
                 placement="right"
@@ -161,7 +161,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="a8" href="world/draconia" title="draconia">
+            <a id="draconiaLink" href="world/draconia" title="draconia">
               <MapTooltip title="Draconia" placement="right" followCursor>
                 <path
                   style={{
@@ -181,7 +181,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="a9" href="world/elandir" title="elandir">
+            <a id="elandirLink" href="world/elandir" title="elandir">
               <MapTooltip title="Elandir" placement="right" followCursor>
                 <path
                   style={{
@@ -201,7 +201,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="a19" href="world/dramir" title="dramir">
+            <a id="dramirLink" href="world/dramir" title="dramir">
               <MapTooltip title="Dramir" placement="right" followCursor>
                 <path
                   id="dramir"
@@ -226,7 +226,7 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="wildlands" href="wildlands" title="wildlands">
+            <a id="wildlandsLink" href="wildlands" title="wildlands">
               <MapTooltip title="Wildlands" placement="right" followCursor>
                 <path
                   id="wildlands"
@@ -248,276 +248,326 @@ export default function InteractiveKothis() {
             </a>
           </g>
           <g mode="layer" id="locationLayer" xlinkTitle="Locations">
-            <CityTooltip followCursor placement="right" title="Pyrus">
-              <circle
-                style={{
-                  fill: "darkgreen",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="pyrus"
-                cx="1761.9238"
-                cy="1018.6602"
-                r="10"
-                xlinkTitle="pyrus"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Half-Hall">
-              <circle
-                style={{
-                  fill: "white",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="half-hall"
-                cx="1621"
-                cy="786"
-                r="10"
-                xlinkTitle="half-hall"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Schism">
-              <circle
-                style={{
-                  fill: "white",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="schism"
-                cx="1417.7595"
-                cy="706.87482"
-                r="10"
-                xlinkTitle="schism"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Seagate">
-              <circle
-                style={{
-                  fill: "white",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="seagate"
-                cx="1068.6693"
-                cy="845.66937"
-                r="10"
-                xlinkTitle="seagate"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Ta'Ishta">
-              <circle
-                style={{
-                  fill: "gold",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="ta_ishta"
-                cx="1269"
-                cy="1091"
-                r="10"
-                xlinkTitle="ta_ishta"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Valeus">
-              <circle
-                style={{
-                  fill: "gold",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="Valeus"
-                cx="1561"
-                cy="1303"
-                r="10"
-                xlinkTitle="Valeus"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Pon">
-              <circle
-                style={{
-                  fill: "purple",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="pon"
-                cx="660"
-                cy="1214"
-                r="10"
-                xlinkTitle="pon"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Lythe">
-              <circle
-                style={{
-                  fill: "lime",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="lythe"
-                cx="412.00003"
-                cy="1207"
-                r="10"
-                xlinkTitle="lythe"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Mak-Dur">
-              <circle
-                style={{
-                  fill: "red",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="mak-dur"
-                cx="139.00003"
-                cy="784"
-                r="10"
-                xlinkTitle="mak-dur"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="H&uuml;kschtein">
-              <circle
-                style={{
-                  fill: "cyan",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="hukschtein"
-                cx="335.00003"
-                cy="638"
-                r="10"
-                xlinkTitle="hukschtein"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Breitdecke">
-              <circle
-                style={{
-                  fill: "cyan",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="breitdecke"
-                cx="186.00003"
-                cy="597"
-                r="10"
-                xlinkTitle="breitdecke"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Durin-Hast">
-              <circle
-                style={{
-                  fill: "cyan",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="durin-hast"
-                cx="245.00003"
-                cy="510.00003"
-                r="10"
-                xlinkTitle="durin-hast"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Grummond">
-              <circle
-                style={{
-                  fill: "cyan",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="grummond"
-                cx="222.00003"
-                cy="254.00002"
-                r="10"
-                xlinkTitle="grummond"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Wither">
-              <circle
-                style={{
-                  fill: "lime",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="wither"
-                cx="283.00003"
-                cy="1030"
-                r="10"
-                xlinkTitle="wither"
-              />
-            </CityTooltip>
-            <CityTooltip followCursor placement="right" title="Promisory">
-              <circle
-                style={{
-                  fill: "white",
-                  fillOpacity: 1,
-                  fillRule: "evenodd",
-                  stroke: "#000000",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                }}
-                id="promisory"
-                cx="1297"
-                cy="565"
-                r="10"
-                xlinkTitle="promisory"
-              />
-            </CityTooltip>
+            <a id="pyrusLink" href="world/draconia/pyrus" title="pyrus">
+              <CityTooltip followCursor placement="right" title="Pyrus">
+                <circle
+                  style={{
+                    fill: "darkgreen",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="pyrus"
+                  cx="1761.9238"
+                  cy="1018.6602"
+                  r="10"
+                  xlinkTitle="pyrus"
+                />
+              </CityTooltip>
+            </a>
+            <a id="halfhallLink" href="world/praetor/halfhall" title="halfhall">
+              <CityTooltip followCursor placement="right" title="Half-Hall">
+                <circle
+                  style={{
+                    fill: "white",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="halfhall"
+                  cx="1621"
+                  cy="786"
+                  r="10"
+                  xlinkTitle="halfhall"
+                />
+              </CityTooltip>
+            </a>
+            <a id="schismLink" href="world/praetor/schism" title="schism">
+              <CityTooltip followCursor placement="right" title="Schism">
+                <circle
+                  style={{
+                    fill: "white",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="schism"
+                  cx="1417.7595"
+                  cy="706.87482"
+                  r="10"
+                  xlinkTitle="schism"
+                />
+              </CityTooltip>
+            </a>
+            <a id="seagateLink" href="world/praetor/seagate" title="seagate">
+              <CityTooltip followCursor placement="right" title="Seagate">
+                <circle
+                  style={{
+                    fill: "white",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="seagate"
+                  cx="1068.6693"
+                  cy="845.66937"
+                  r="10"
+                  xlinkTitle="seagate"
+                />
+              </CityTooltip>
+            </a>
+            <a id="taishtaLink" href="world/elandir/taishta" title="taishta">
+              <CityTooltip followCursor placement="right" title="Ta'Ishta">
+                <circle
+                  style={{
+                    fill: "gold",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="taishta"
+                  cx="1269"
+                  cy="1091"
+                  r="10"
+                  xlinkTitle="taishta"
+                />
+              </CityTooltip>
+            </a>
+            <a id="valeusLink" href="world/elandir/valeus" title="valeus">
+              <CityTooltip followCursor placement="right" title="Valeus">
+                <circle
+                  style={{
+                    fill: "gold",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="Valeus"
+                  cx="1561"
+                  cy="1303"
+                  r="10"
+                  xlinkTitle="Valeus"
+                />
+              </CityTooltip>
+            </a>
+            <a id="ponLink" href="world/wildlands/pon" title="pon">
+              <CityTooltip followCursor placement="right" title="Pon">
+                <circle
+                  style={{
+                    fill: "purple",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="pon"
+                  cx="660"
+                  cy="1214"
+                  r="10"
+                  xlinkTitle="pon"
+                />
+              </CityTooltip>
+            </a>
+            <a id="lytheLink" href="world/faena/lythe" title="lythe">
+              <CityTooltip followCursor placement="right" title="Lythe">
+                <circle
+                  style={{
+                    fill: "lime",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="lythe"
+                  cx="412.00003"
+                  cy="1207"
+                  r="10"
+                  xlinkTitle="lythe"
+                />
+              </CityTooltip>
+            </a>
+            <a id="makdurLink" href="world/rokesh/makdur" title="makdur">
+              <CityTooltip followCursor placement="right" title="Mak-Dur">
+                <circle
+                  style={{
+                    fill: "red",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="makdur"
+                  cx="139.00003"
+                  cy="784"
+                  r="10"
+                  xlinkTitle="makdur"
+                />
+              </CityTooltip>
+            </a>
+            <a
+              id="hukschteinLink"
+              href="world/herzog/hukschtein"
+              title="hukschtein"
+            >
+              <CityTooltip
+                followCursor
+                placement="right"
+                title="H&uuml;kschtein"
+              >
+                <circle
+                  style={{
+                    fill: "cyan",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="hukschtein"
+                  cx="335.00003"
+                  cy="638"
+                  r="10"
+                  xlinkTitle="hukschtein"
+                />
+              </CityTooltip>
+            </a>
+            <a
+              id="breitdeckeLink"
+              href="world/herzog/breitdecke"
+              title="breitdecke"
+            >
+              <CityTooltip followCursor placement="right" title="Breitdecke">
+                <circle
+                  style={{
+                    fill: "cyan",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="breitdecke"
+                  cx="186.00003"
+                  cy="597"
+                  r="10"
+                  xlinkTitle="breitdecke"
+                />
+              </CityTooltip>
+            </a>
+            <a
+              id="durinhastLink"
+              href="world/herzog/durinhast"
+              title="durinhast"
+            >
+              <CityTooltip followCursor placement="right" title="Durin-Hast">
+                <circle
+                  style={{
+                    fill: "cyan",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="durinhast"
+                  cx="245.00003"
+                  cy="510.00003"
+                  r="10"
+                  xlinkTitle="durinhast"
+                />
+              </CityTooltip>
+            </a>
+            <a id="grummondLink" href="world/herzog/grummond" title="grummond">
+              <CityTooltip followCursor placement="right" title="Grummond">
+                <circle
+                  style={{
+                    fill: "cyan",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="grummond"
+                  cx="222.00003"
+                  cy="254.00002"
+                  r="10"
+                  xlinkTitle="grummond"
+                />
+              </CityTooltip>
+            </a>
+            <a id="witherLink" href="world/faena/wither" title="wither">
+              <CityTooltip followCursor placement="right" title="Wither">
+                <circle
+                  style={{
+                    fill: "lime",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="wither"
+                  cx="283.00003"
+                  cy="1030"
+                  r="10"
+                  xlinkTitle="wither"
+                />
+              </CityTooltip>
+            </a>
+            <a
+              id="promisoryLink"
+              href="world/praetor/promisory"
+              title="promisory"
+            >
+              <CityTooltip followCursor placement="right" title="Promisory">
+                <circle
+                  style={{
+                    fill: "white",
+                    fillOpacity: 1,
+                    fillRule: "evenodd",
+                    stroke: "#000000",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                  id="promisory"
+                  cx="1297"
+                  cy="565"
+                  r="10"
+                  xlinkTitle="promisory"
+                />
+              </CityTooltip>
+            </a>
           </g>
         </svg>
         <Typography variant="caption" sx={{ mx: "auto" }}>

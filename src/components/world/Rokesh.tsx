@@ -11,7 +11,7 @@ export default function Rokesh() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Rokesh of Kothis
+        Rokesh of Kothis
       </Typography>
     </Box>
   );
