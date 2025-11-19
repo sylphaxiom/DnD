@@ -11,7 +11,7 @@ export default function Wither() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        Wither of Kothis
+        Wither of Faena
       </Typography>
     </Box>
   );
