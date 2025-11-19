@@ -226,7 +226,12 @@ export default function InteractiveKothis() {
                 />
               </MapTooltip>
             </a>
-            <a id="wildlandsLink" href="world/wildlands" title="wildlands">
+            <a
+              id="wildlandsLink"
+              href="world/wildlands"
+              style={{ zIndex: 100 }}
+              title="wildlands"
+            >
               <MapTooltip title="Wildlands" placement="right" followCursor>
                 <path
                   id="wildlands"
