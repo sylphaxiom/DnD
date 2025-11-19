@@ -2,16 +2,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export async function clientLoader() {
-  // Faena page loader
+  // Schism page loader
 }
 
-export default function Faena() {
-  // Faena page
+export default function Schism() {
+  // Schism page
 
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        Faena of Kothis
+        Schism of The Praetorian Empire
       </Typography>
     </Box>
   );

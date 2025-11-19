@@ -11,7 +11,7 @@ export default function Draconia() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Draconia of Kothis
+        Draconia of Kothis
       </Typography>
     </Box>
   );

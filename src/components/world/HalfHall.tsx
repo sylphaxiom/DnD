@@ -2,16 +2,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export async function clientLoader() {
-  // Faena page loader
+  // HalfHall page loader
 }
 
-export default function Faena() {
-  // Faena page
+export default function HalfHall() {
+  // HalfHall page
 
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        Faena of Kothis
+        Half-Hall of the Praetorian Empire
       </Typography>
     </Box>
   );

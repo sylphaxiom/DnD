@@ -11,7 +11,7 @@ export default function Elandir() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Elandir of Kothis
+        Elandir of Kothis
       </Typography>
     </Box>
   );

@@ -11,7 +11,7 @@ export default function Praetor() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Praetor of Kothis
+        The Praetorian Empire of Kothis
       </Typography>
     </Box>
   );

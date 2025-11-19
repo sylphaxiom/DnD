@@ -11,7 +11,7 @@ export default function Dramir() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Dramir of Kothis
+        Dramir of Kothis
       </Typography>
     </Box>
   );
