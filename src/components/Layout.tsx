@@ -113,7 +113,7 @@ export default function Layout() {
             <Toolbar>
               <Navbar bps={bps} />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Kothis Portal - <span style={{ float: "right" }}>{page}</span>
+                Kothis Portal<span style={{ float: "right" }}>{page}</span>
               </Typography>
               <IconButton
                 size="large"
