@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import type { Route } from "./+types/Result";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
