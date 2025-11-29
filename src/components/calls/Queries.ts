@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Player {
   first_name: string;
@@ -15,19 +16,22 @@ export async function fetchPlayer(
 ): Promise<{
   status: string;
   message: Player[];
-}> {
-  const response = await axios
-    .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
-      headers: {
-        Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
-      },
-      params: { username: username, email: email },
-    })
-    .catch((error) => {
-      console.log("An error occurred: %s", error);
-      throw error;
-    });
-  return response.data;
+} | undefined> {
+  const {isAuthenticated}= useAuth0()
+  if(isAuthenticated){
+    const response = await axios
+      .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
+        headers: {
+          Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
+        },
+        params: { username: username, email: email },
+      })
+      .catch((error) => {
+        console.log("An error occurred: %s", error);
+        throw error;
+      });
+    return response.data;
+  } else return
 }
 
 /* ^^^ Implementation ^^^ */

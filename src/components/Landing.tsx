@@ -12,11 +12,13 @@ export default function Landing() {
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
   });
-  if (isLoading) {
-    return <Loading />;
-  }
-  if (error) {
-    console.log(JSON.stringify(error));
+  if (isAuthenticated) {
+    if (isLoading) {
+      return <Loading />;
+    }
+    if (error) {
+      console.log(JSON.stringify(error));
+    }
   }
   const player = data?.message[0];
   return (
