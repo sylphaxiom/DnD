@@ -30,8 +30,6 @@ export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const domain = "http://localhost:5173";
-  // const domain = "https://test.sylphaxiom.com";
-  // const domain = "https://kothis.sylphaxiom.com"
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);

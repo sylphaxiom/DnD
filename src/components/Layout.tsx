@@ -40,8 +40,6 @@ export default function Layout() {
   };
 
   const domain = "http://localhost:5173";
-  // const domain = "https://test.sylphaxiom.com";
-  // const domain = "https://kothis.sylphaxiom.com"
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
     console.log(clk);
