@@ -41,3 +41,4 @@ src/api/v1/bucket.php
 .env
 .auth
 /secrets/
+*mods.json
