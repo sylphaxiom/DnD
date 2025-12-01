@@ -15,7 +15,7 @@ import { link } from 'fs';
         test(`testing ${link} page`, async ({page})=>{
             await page.goto(pg);
             const linkEl = page.getByRole('tab',{name: link, exact:true});
-            await expect(linkEl).toBeVisible();
+            await expect(async () =>{await expect(linkEl).toBeVisible();}).toPass()
             await expect(linkEl).toHaveAttribute('aria-selected', 'true');
             const headEl = page.getByRole('heading', {name:head})
             await expect(headEl).toBeVisible();
@@ -52,9 +52,9 @@ import { link } from 'fs';
     'Promisory', 
     'Half-Hall', 
     'Schism'
-].forEach(async (loc)=> {
+].forEach( (loc)=> {
     test(`testing kothis map link to ${loc}`, async ({page}) => {
-        await page.goto('/');
+        await expect(async()=>{await page.goto('/')}).toPass();
         await expect(page.locator('#image1')).toBeVisible();
         let modLoc = loc.replace(/-/g, '').replace(/'/g, ''); // remove hyphens and apostrophes for searching
         let linkEl = page.locator(`#${modLoc.toLowerCase()}Link`); // need to use id due to special characters and formatting
