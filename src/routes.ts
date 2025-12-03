@@ -72,4 +72,5 @@ export default [
     route("login", "./components/utils/Login.tsx", {id:"login"}),
     route("result", "./components/Result.tsx", {id:"result"}),
     route("*?", "./components/Loading.tsx", {id:"catchall"}),
+    route("error", "./components/Error.tsx", {id:"error"}),
 ] satisfies RouteConfig
