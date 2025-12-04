@@ -10,8 +10,8 @@
     "demo": "tsc -b && vite build --base=/test/",
     "build": "tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app",
     "api": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --API",
-    "prod": "tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --PROD",
-    "test": "tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --DEV",
+    "prod": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --PROD && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --PROD",
+    "test": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --DEV && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --DEV",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "react-router typegen && tsc"

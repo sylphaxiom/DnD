@@ -29,7 +29,7 @@ export function Home() {
     return <Loading />;
   }
   if (error) {
-    console.log(JSON.stringify(error));
+    console.log("Something went wrong here." + JSON.stringify(error));
   }
   return (
     <>
