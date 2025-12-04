@@ -65,6 +65,10 @@ export default [
         route("lore", "./components/Lore.tsx", [
             index("./components/nonAuth/PublicLore.tsx"),
         ]),
+        ...prefix("lore", [            
+            route("portal", "./components/lore/Portal.tsx"),
+            route("creators", "./components/lore/Creators.tsx"),
+        ]),
         route("homebrew", "./components/Homebrew.tsx", [
             index("./components/homebrew/VaultDoor.tsx"),
         ]),
