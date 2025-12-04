@@ -9,7 +9,7 @@ export default function Utils() {
     <Box
       sx={{
         height: "100%",
-        width: "15%",
+        minWidth: "15%",
         display: "flex",
         flexDirection: "column",
         position: "fixed",
