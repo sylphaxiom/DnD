@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDragon, faDiceD20 } from "@fortawesome/free-solid-svg-icons";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import { NavLink } from "react-router";
 
 export default function Footer() {
   return (
@@ -39,7 +40,7 @@ export default function Footer() {
           <Button startIcon={<Facebook />}>{"Kothis Players Page"}</Button>
         </Stack>
       </Grid>
-      <Grid size={8} sx={{ alignContent: "center" }}>
+      <Grid size={1.5} sx={{ alignContent: "center" }}>
         <Stack direction={"row"} sx={{ height: 1 }}>
           <Typography sx={{ alignSelf: "center", mr: 1 }}>Site Map</Typography>
           <Divider
@@ -73,6 +74,66 @@ export default function Footer() {
             sx={{ height: 0.05, my: "auto", mx: 0.5 }}
           />
         </Stack>
+      </Grid>
+      <Grid size={6}>
+        <Stack direction={"row"} sx={{ alignItems: "center", my: 1 }}>
+          <Typography variant="caption" sx={{ mr: 2 }}>
+            Useful Public Locations:
+          </Typography>
+          <NavLink to="/" style={{ marginRight: "1em" }}>
+            Home
+          </NavLink>
+          <NavLink to="/world" style={{ marginRight: "1em" }}>
+            World
+          </NavLink>
+          <NavLink to="/character" style={{ marginRight: "1em" }}>
+            Character
+          </NavLink>
+        </Stack>
+        <Stack direction={"row"} sx={{ alignItems: "center", my: 1 }}>
+          <Typography variant="caption" sx={{ mr: 2 }}>
+            Useful Authenticated Locations:
+          </Typography>
+          <NavLink to="/campaign" style={{ marginRight: "1em" }}>
+            Campaign
+          </NavLink>
+          <NavLink to="/notebook" style={{ marginRight: "1em" }}>
+            Notebook
+          </NavLink>
+          <NavLink to="/homebrew" style={{ marginRight: "1em" }}>
+            Homebrew
+          </NavLink>
+        </Stack>
+        <Stack direction={"row"} sx={{ alignItems: "center", my: 1 }}>
+          <Typography variant="caption" sx={{ mr: 2 }}>
+            Always Useful Locations:
+          </Typography>
+          <NavLink to="/lore/portal" style={{ marginRight: "1em" }}>
+            About
+          </NavLink>
+          <NavLink to="/lore/creators" style={{ marginRight: "1em" }}>
+            Contributors
+          </NavLink>
+          <NavLink
+            to="https://sylphaxiom.com/contact"
+            style={{ marginRight: "1em" }}
+          >
+            Contact
+          </NavLink>
+        </Stack>
+        <Typography>
+          Issues? Something missing? Just want to tell the developer he's
+          pretty?
+        </Typography>
+        <Typography>
+          Reach out and tell me! I'd love to hear about it!
+          <NavLink
+            to="https://sylphaxiom.com/contact"
+            style={{ marginLeft: "1em" }}
+          >
+            The Same Contact Button
+          </NavLink>
+        </Typography>
       </Grid>
       <Grid size={12}>
         <Typography align={"center"} fontSize={12}>

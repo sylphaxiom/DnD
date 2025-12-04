@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
+import Footer from "./layouts/Footer.tsx";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -76,6 +77,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
   const [bounce, setBounce] = React.useState(true);
   const [timer, setTimer] = React.useState(10);
   const [ignored, setIgnored] = React.useState(false);
+  const [realError, setRealError] = React.useState(false);
   let fetcher = useFetcher();
   let navigate = useNavigate();
   let respMsg = fetcher.data?.msg || "";
@@ -88,6 +90,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
   let errConn: string | undefined;
   let errLang: string | undefined;
   if (loaderData.error) {
+    setRealError(true);
     errDesc = loaderData.error_description || undefined;
     errTrack = loaderData.tracking || undefined;
     errClient = loaderData.client_id || undefined;
@@ -159,7 +162,8 @@ export default function Error({ loaderData }: Route.ComponentProps) {
         </motion.div>
       </motions.AnimatePresence>
       <Typography variant="h2" component="div" sx={{ marginBottom: 10 }}>
-        {subtitle} <br /> {errCode}
+        {subtitle} <br />{" "}
+        {realError ? errCode : "I don't see one, yet here you are..."}
       </Typography>
       <Grid container sx={{ display: "flex", alignItems: "center" }}>
         <Grid size={4} offset={2}>
@@ -221,8 +225,12 @@ export default function Error({ loaderData }: Route.ComponentProps) {
                 <Typography variant="h5" sx={{ my: 2 }}>
                   The Details...
                 </Typography>
-                <Paper variant="outlined">
-                  <Typography variant="overline">{errDesc}</Typography>
+                <Paper variant="outlined" sx={{ padding: 1 }}>
+                  <Typography variant="overline">
+                    {realError
+                      ? errDesc
+                      : "I'm honestly at a loss. The buttons don't work because there's nothing to send. Sorry about that, send an email to webmaster@sylphaxiom.com and complain, that might do the trick"}
+                  </Typography>
                 </Paper>
               </Stack>
             </Grid>
@@ -271,7 +279,12 @@ export default function Error({ loaderData }: Route.ComponentProps) {
                         type="hidden"
                       />
                     </FormGroup>
-                    <Button type="submit" variant="contained" color="primary">
+                    <Button
+                      type="submit"
+                      disabled={!realError}
+                      variant="contained"
+                      color="primary"
+                    >
                       {fetcher.state !== "idle"
                         ? "Sending..."
                         : "Send Error Data"}
@@ -279,6 +292,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
                     <Divider variant="middle" sx={{ m: 2 }} />
                     <Button
                       type="submit"
+                      disabled={!realError}
                       variant="contained"
                       onClick={() => setIgnored(true)}
                       color="secondary"
@@ -294,6 +308,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
           </>
         )}
       </Grid>
+      <Footer />
     </Box>
   );
 }

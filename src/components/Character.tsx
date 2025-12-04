@@ -7,7 +7,7 @@ export async function clientLoader() {
   // World page loader
 }
 
-export default function World() {
+export default function Character() {
   const { isAuthenticated, user } = useAuth0();
   return (
     <>
