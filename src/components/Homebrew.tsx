@@ -10,7 +10,8 @@ export default function Homebrew() {
   const { isAuthenticated, user } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
-    queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
+    queryFn: () =>
+      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   if (isAuthenticated) {
     if (isLoading) {

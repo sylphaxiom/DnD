@@ -115,7 +115,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
         console.log(respMsg);
         if (timer === 0) {
           console.log("reset fetcher:");
-          fetcher.unstable_reset;
+          fetcher.reset();
           navigate("/");
         }
         setTimeout(() => {
