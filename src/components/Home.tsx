@@ -15,10 +15,12 @@ export default withAuthenticationRequired(Home, {
 
 export function Home() {
   const [value, setValue] = React.useState("characters");
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
+  console.log("User info is: " + JSON.stringify(user));
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
-    queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
+    queryFn: () =>
+      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   const player = data?.message[0];
   const handleChange = (e: React.SyntheticEvent, val: string) => {
@@ -29,7 +31,11 @@ export function Home() {
     return <Loading />;
   }
   if (error) {
-    console.log("Something went wrong here." + JSON.stringify(error));
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data)
+    );
   }
   return (
     <>
