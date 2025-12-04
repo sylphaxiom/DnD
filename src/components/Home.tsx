@@ -8,10 +8,23 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import type { Route } from "./+types/Home";
 
 export default withAuthenticationRequired(Home, {
   onRedirecting: () => <Loading />,
 });
+
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const query = decodeURIComponent(url.search);
+  const bits = query.slice(1).split("&");
+  let params: { [key: string]: string } = {};
+  bits.forEach((v) => {
+    const pair = v.split("=");
+    params[pair[0]] = pair[1];
+  });
+  return params;
+}
 
 export function Home() {
   const [value, setValue] = React.useState("characters");
