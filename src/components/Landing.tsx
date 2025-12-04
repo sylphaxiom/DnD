@@ -5,6 +5,19 @@ import PublicHome from "./nonAuth/PublicHome";
 import { fetchPlayer } from "./calls/Queries";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
+import type { Route } from "./+types/Landing";
+
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const query = decodeURIComponent(url.search);
+  const bits = query.slice(1).split("&");
+  let params: { [key: string]: string } = {};
+  bits.forEach((v) => {
+    const pair = v.split("=");
+    params[pair[0]] = pair[1];
+  });
+  return params;
+}
 
 export default function Landing() {
   const { isAuthenticated, user } = useAuth0();
