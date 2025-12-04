@@ -17,8 +17,8 @@ export default function PublicHome() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Grid container>
-        <Grid size={6} offset={0}>
-          <Typography variant="subtitle1">
+        <Grid size={{ xs: 12, lg: 6 }} offset={0}>
+          <Typography variant="subtitle1" sx={{ px: { xs: 2, lg: 0 } }}>
             <span className="punch-uation">“</span>
             <br />
             As a species we're fundamentally insane. Put more than two of us in
@@ -31,7 +31,7 @@ export default function PublicHome() {
             <span style={{ fontSize: "1.5rem" }}>The Mist</span>
           </Typography>
         </Grid>
-        <Grid size={6} sx={{ alignContent: "center" }}>
+        <Grid size={{ xs: 12, lg: 6 }} sx={{ alignContent: "center" }}>
           <Typography
             sx={{
               p: 4,
@@ -47,23 +47,25 @@ export default function PublicHome() {
             >
               Kothis
             </span>{" "}
-            is a homebrewed world for Dungeons & Dragons 5th edition. Created by
-            Jacob Pell, and playtested by an amazing group of players, Kothis is
-            currntly home to 2 campaigns. This site will be the online
-            repository for all things in this world. As the application
-            progresses, I hope to add additional functionality for my players
-            and other DMs who wish to run a campaign in this, or another world
-            found within.{" "}
+            is a homebrewed, TTRPG world created by Jacob Pell, and playtested
+            by an amazing group of players, Kothis is currntly home to 2
+            campaigns with the hopes of having many more in the future! This
+            site will be the online repository for all things in this world. As
+            the application progresses, I hope to add additional functionality
+            for my players and other DMs who wish to run a campaign in this, or
+            another world found within. Some of those features will include:
+            Campaign scheduling/organization, Player tracking (for DMs),
+            Character creator, Homebrewery, and more.{" "}
           </Typography>
         </Grid>
         <Grid size={12} sx={{ marginTop: 5 }}>
           <Card>
             <CardHeader title="A Diverse and Evolving World..." />
             <CardContent component={Grid} container spacing={2}>
-              <Grid size={6}>
+              <Grid size={{ xs: 12, lg: 6 }}>
                 <InteractiveKothis />
               </Grid>
-              <Grid size={6}>
+              <Grid size={{ xs: 12, lg: 6 }}>
                 <Typography sx={{ textAlign: "justify", textIndent: "3em" }}>
                   The nations of Kothis are each unique in their own way. From
                   the mountain dwellings of the dwarves in the Herzog Kingdom,

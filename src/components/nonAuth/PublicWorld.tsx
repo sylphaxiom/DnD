@@ -5,9 +5,17 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function PublicWorld() {
   // non-authenticated landing page for World tab
+
+  let bps = {
+    sm: useMediaQuery("(min-width: 600px)"),
+    md: useMediaQuery("(min-width: 900px)"),
+    lg: useMediaQuery("(min-width: 1200px)"),
+    xl: useMediaQuery("(min-width: 1536px)"),
+  };
 
   return (
     <Grid
@@ -21,7 +29,7 @@ export default function PublicWorld() {
         --- This is the public world page ---
         <Divider sx={{ my: 2 }} variant="middle" />
       </Grid>
-      <Grid size={4}>
+      <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ mx: { xs: 2, md: 0 } }}>
         <Typography variant="subtitle2" sx={{ textIndent: "3em", my: 2 }}>
           The world of Kothis is a fantasy world of diversity, magic, and
           wonder. The nations of Kothis live in peace with one another, for the
@@ -75,7 +83,7 @@ export default function PublicWorld() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid size={8}>
+      <Grid size={{ xs: 12, md: 8 }}>
         <Card
           id="interactive_map_card"
           sx={{ textAlign: "center", borderRadius: 3 }}
@@ -93,13 +101,13 @@ export default function PublicWorld() {
         flexItem
         orientation="horizontal"
         sx={{ width: 0.87, my: 3 }}
-        variant="inset"
+        variant={"middle"}
       />
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
-        <Grid size={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Borodir</Typography>
         </Grid>
-        <Grid size={9} offset={1}>
+        <Grid size={{ xs: 12, md: 9 }} offset={{ xs: 0, md: 1 }}>
           <Typography>
             The continent of Borodir has 2 nations within it; the Herzog Empire
             and Rokesh. These 2 nations are constantly at war with eachother.
@@ -110,11 +118,19 @@ export default function PublicWorld() {
           </Typography>
         </Grid>
       </Grid>
+      {!bps.md && (
+        <Divider
+          flexItem
+          orientation="horizontal"
+          sx={{ width: 0.87, my: 3 }}
+          variant={"middle"}
+        />
+      )}
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
-        <Grid size={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Dramir</Typography>
         </Grid>
-        <Grid size={9} offset={1}>
+        <Grid size={{ xs: 12, md: 9 }} offset={{ xs: 0, md: 1 }}>
           <Typography>
             A dark and mysterious island on the northern edge of the Wandering
             Sea, Dramir is a taboo around the world of Kothis. This collection
@@ -126,11 +142,19 @@ export default function PublicWorld() {
           </Typography>
         </Grid>
       </Grid>
+      {!bps.md && (
+        <Divider
+          flexItem
+          orientation="horizontal"
+          sx={{ width: 0.87, my: 3 }}
+          variant={"middle"}
+        />
+      )}
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
-        <Grid size={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Florian</Typography>
         </Grid>
-        <Grid size={9} offset={1}>
+        <Grid size={{ xs: 12, md: 9 }} offset={{ xs: 0, md: 1 }}>
           <Typography>
             Florian is the largest continent on Kothis and the only one that can
             call 3 nations home: The Praetorian Empire, Draconia, and Elandir.
@@ -144,11 +168,19 @@ export default function PublicWorld() {
           </Typography>
         </Grid>
       </Grid>
+      {!bps.md && (
+        <Divider
+          flexItem
+          orientation="horizontal"
+          sx={{ width: 0.87, my: 3 }}
+          variant={"middle"}
+        />
+      )}
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
-        <Grid size={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Elandra</Typography>
         </Grid>
-        <Grid size={9} offset={1}>
+        <Grid size={{ xs: 12, md: 9 }} offset={{ xs: 0, md: 1 }}>
           <Typography>
             Elandra is the most wild and untamed continent on Kothis. Widly
             considered the "entryway to the Feywild", Elandra is riddled with

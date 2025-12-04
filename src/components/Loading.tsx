@@ -70,17 +70,19 @@ export default function Loading() {
           })}
         </motion.div>
       </motions.AnimatePresence>
-      <Typography
-        variant="h2"
-        component="div"
-        sx={{ fontFamily: "Brush Scritp MT, cursive", marginBottom: 10 }}
-      >
+      <Typography variant="h2" component="div" sx={{ marginBottom: 10 }}>
         {subtitle}
       </Typography>
-      <Grid
-        container
-        sx={{ fontFamily: "Brush Scritp MT, cursive", display: display }}
-      >
+      {/* {variant && (
+        <Button
+          size="large"
+          href={variant}
+          title=">>> PUSH ME <<<"
+          color="error"
+          sx={{ m: 5 }}
+        />
+      )} */}
+      <Grid container sx={{ display: display }}>
         <Grid size={4} offset={2}>
           <Typography variant="h5">
             Unfortunately, that is not a proper route on this website. Perhaps

@@ -5,13 +5,13 @@ export async function clientLoader() {
   // Borodir page loader
 }
 
-export default function SecureBorodir() {
+export default function SecureHerzog() {
   // Borodir page but secure
 
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        Secure version of Borodir.
+        Secure version of The HerzogEmpire.
       </Typography>
     </Box>
   );

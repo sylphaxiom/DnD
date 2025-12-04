@@ -11,7 +11,7 @@ export default function Faena() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Typography variant="h1" sx={{ mx: "auto" }}>
-        The Faena of Kothis
+        Faena of Kothis
       </Typography>
     </Box>
   );

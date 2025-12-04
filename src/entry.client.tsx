@@ -19,6 +19,7 @@ ReactDom.hydrateRoot(
       }}
       useRefreshTokens
       useRefreshTokensFallback
+      cacheLocation="localstorage"
       onRedirectCallback={() => {
         onRedirectCallback;
       }}

@@ -70,6 +70,13 @@ export const light: ThemeOptions = {
       letterSpacing: 1.5,
       fontSize: "2rem",
     },
+    subtitle2:{
+      fontSize: "1.2rem",
+      fontWeight: 400,
+    },
+    overline: {
+      fontFamily: "Courier New, monospace",
+    },
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
