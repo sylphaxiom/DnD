@@ -15,10 +15,11 @@ export default withAuthenticationRequired(VaultDoor, {
 
 export function VaultDoor() {
   const [value, setValue] = React.useState("characters");
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
-    queryFn: () => fetchPlayer(user?.preferred_username, user?.email),
+    queryFn: () =>
+      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   const player = data?.message[0];
   const handleChange = (e: React.SyntheticEvent, val: string) => {
