@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
 
 interface Player {
   first_name: string;
@@ -11,13 +10,13 @@ interface Player {
 }
 
 export async function fetchPlayer(
+  isAuthenticated: boolean,
   username?: string,
-  email?: string
+  email?: string,
 ): Promise<{
   status: string;
   message: Player[];
 } | undefined> {
-  const {isAuthenticated}= useAuth0()
   if(isAuthenticated){
     const response = await axios
       .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
@@ -30,6 +29,7 @@ export async function fetchPlayer(
         console.log("An error occurred: %s", error);
         throw error;
       });
+    console.log("Here is some response data from inside the query "+response.data)
     return response.data;
   } else return
 }
