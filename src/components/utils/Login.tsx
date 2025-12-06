@@ -12,6 +12,10 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Avatar from "@mui/material/Avatar";
+import { useColorScheme } from "@mui/material/styles";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -25,6 +29,15 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Login() {
+  const { mode, setMode, systemMode } = useColorScheme();
+  if (!mode) {
+    return null;
+  }
+  const isDark = useMediaQuery("(prefers-color-scheme: dark)");
+  const [_color, setColor] = React.useState(
+    // This is only here to re-trigger the rendering.
+    systemMode?.toString()
+  );
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
@@ -34,9 +47,24 @@ export default function Login() {
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
 
+  React.useEffect(() => {
+    if (mode === "system") {
+      isDark ? setMode("dark") : setMode("light");
+    }
+  }, [mode]);
+
+  const ThemeMode = () => {
+    if (mode === "dark") {
+      return <DarkModeOutlinedIcon />;
+    } else {
+      return <LightModeOutlinedIcon />;
+    }
+  };
+
   const unauthed = [
     { icon: <LoginIcon />, name: "Log In" },
     { icon: <HowToRegIcon />, name: "Sign Up" },
+    { icon: <ThemeMode />, name: "Mode" },
   ];
   const authed = [
     { icon: <LogoutIcon />, name: "Log Out" },
@@ -65,6 +93,10 @@ export default function Login() {
         break;
       case "Profile":
         navigate("/notebook/profile");
+        break;
+      case "Mode":
+        mode === "light" ? setMode("dark") : setMode("light");
+        setColor(mode.toString());
         break;
       default:
         console.log("Default reached, something probably went wrong.");
