@@ -69,11 +69,11 @@ export default function Login() {
   const authed = [
     { icon: <LogoutIcon />, name: "Log Out" },
     { icon: <ManageAccountsIcon />, name: "Profile" },
+    { icon: <ThemeMode />, name: "Mode" },
   ];
   const actions = isAuthenticated ? authed : unauthed;
 
   const handleLogin = async (_e: React.MouseEvent, clk: string) => {
-    console.log(clk);
     switch (clk) {
       case "Log In":
         await loginWithRedirect({

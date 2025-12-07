@@ -9,7 +9,6 @@ export async function clientLoader() {}
 
 export function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log("auth:" + isAuthenticated + "usr:" + user);
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>;

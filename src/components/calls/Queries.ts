@@ -29,7 +29,6 @@ export async function fetchPlayer(
         console.log("An error occurred: %s", error);
         throw error;
       });
-    console.log("Here is some response data from inside the query "+response.data)
     return response.data;
   } else return
 }
