@@ -29,7 +29,6 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 export function Home() {
   const [value, setValue] = React.useState("characters");
   const { user, isAuthenticated } = useAuth0();
-  console.log("User info is: " + JSON.stringify(user));
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () =>

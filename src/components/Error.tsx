@@ -112,7 +112,6 @@ export default function Error({ loaderData }: Route.ComponentProps) {
     if (fetcher.state === "idle") {
       if (fetcher.data?.status === 200) {
         respMsg = fetcher.data?.msg;
-        console.log(respMsg);
         if (timer === 0) {
           console.log("reset fetcher:");
           fetcher.reset();
