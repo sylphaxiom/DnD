@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicNotebook from "./nonAuth/PublicNotebook";
 import type { Route } from "./+types/Notebook";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
 
@@ -40,7 +40,15 @@ export default function Notebook() {
   }
   return (
     <>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
+      <Typography
+        variant="h2"
+        sx={{
+          textAlign: "center",
+          width: 1,
+          my: 4,
+          display: isAuthenticated ? "none" : "initial",
+        }}
+      >
         {isAuthenticated ? player?.first_name + "\'s " : "The Public\'s "}{" "}
         Notebook Page
       </Typography>

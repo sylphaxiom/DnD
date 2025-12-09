@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 import PublicCharacter from "./nonAuth/PublicCharacter";
 import type { Route } from "./+types/Character";
 import Loading from "./Loading";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {

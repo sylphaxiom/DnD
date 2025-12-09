@@ -1,12 +1,12 @@
 import axios from "axios";
 
-interface Player {
+export interface Player {
   first_name: string;
   last_name: string;
   email: string;
   username: string;
   role: string;
-  prefs?: string[];
+  prefs?: string;
 }
 
 export async function fetchPlayer(
