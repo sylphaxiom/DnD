@@ -11,7 +11,7 @@
     "build": "tsc -b && react-router build",
     "api": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --API",
     "prod": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --PROD && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --PROD",
-    "test": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --DEV && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --DEV",
+    "test": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --DEV && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --DEV --SKIP",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "react-router typegen && tsc"
