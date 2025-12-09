@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicHomebrew from "./nonAuth/PublicHomebrew";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 import Loading from "./Loading";
 import type { Route } from "./+types/Homebrew";
 

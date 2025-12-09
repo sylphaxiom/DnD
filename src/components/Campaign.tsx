@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 import PublicCampaign from "./nonAuth/PublicCampaign";
 import type { Route } from "./+types/Campaign";
 import Loading from "./Loading";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {

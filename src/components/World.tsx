@@ -5,7 +5,7 @@ import PublicWorld from "./nonAuth/PublicWorld";
 import type { Route } from "./+types/World";
 import Loading from "./Loading";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);

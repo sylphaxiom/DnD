@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Loading from "../Loading";
-import { fetchPlayer } from "../calls/Queries";
+import { fetchPlayer } from "../workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";

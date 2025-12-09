@@ -1,15 +1,17 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Loading from "../Loading";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayer } from "../calls/Queries";
+import { fetchPlayer } from "../workhorse/Queries";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { Link } from "react-router";
+// import ListItem from "@mui/material/ListItem";
+// import { Link } from "react-router";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
+import TestingForm from "../forms/TestingForm";
+import { PlayerForm } from "../workhorse/SecureForms";
 
 export default withAuthenticationRequired(Profile, {
   onRedirecting: () => <Loading />,
@@ -25,6 +27,13 @@ export function Profile() {
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   const player = data?.message[0];
+  let prefs = {};
+  let profImg = "Arris_fallback.jpg";
+
+  if (player?.prefs) {
+    prefs = JSON.parse(player?.prefs);
+    console.log("After parsing prefs are: %o", prefs);
+  }
 
   if (isLoading) {
     return <Loading />;
@@ -45,10 +54,12 @@ export function Profile() {
       <Grid container spacing={3}>
         <Grid size={10} offset={1} sx={{ my: 2 }}>
           <Typography sx={{ mx: 1 }}>
-            This is where I will be putting all the pictures and names of the
-            people (or characters) that made Kothis a fun place to be.
-            Unfortunately, I have to ask their permission first. So in the
-            meantime, you will have to settle for just me. Sorry...
+            This is where you will find all of our profile info, name, image,
+            whatever. I would also like to set up a "character mode" where the
+            display names, access levels, images, etc are replaced with the
+            correlating info from the character you select. Cool, huh? Yea that
+            is going to have to be down the road though, lots to put together
+            before then.
           </Typography>
         </Grid>
         <Grid size={12} container sx={{ alignItems: "center" }}>
@@ -66,7 +77,7 @@ export function Profile() {
               }}
             >
               <img
-                src="/9-2025_headshot_1x1.png"
+                src={`/resources/character_images/${profImg}`}
                 alt="Dapper photo of Jacob Pell with his magnificent beard"
                 width={125}
                 height={125}
@@ -82,78 +93,52 @@ export function Profile() {
             <Grid container columns={3} id="demographics">
               <Grid size={3}>
                 <Typography variant="h4" id="creator_name">
-                  Jacob Pell
+                  {player?.first_name + " " + player?.last_name}
                 </Typography>
                 <Divider sx={{ width: 0.8 }} id="creator_level">
-                  Level 8
+                  Data
                 </Divider>
               </Grid>
               <Grid size={1}>
-                <Typography variant="subtitle2">Species:</Typography>
+                <Typography variant="subtitle2">Email:</Typography>
               </Grid>
               <Grid size={2}>
                 <Typography variant="subtitle2" id="creator_species">
-                  Human
+                  {player?.email}
                 </Typography>
               </Grid>
               <Grid size={1}>
-                <Typography variant="subtitle2">Class:</Typography>
+                <Typography variant="subtitle2">Username:</Typography>
               </Grid>
               <Grid size={2}>
                 <Typography variant="subtitle2" id="creator_class">
-                  Game Master
+                  {player?.username}
                 </Typography>
               </Grid>
               <Grid size={1}>
-                <Typography variant="subtitle2">Subclass:</Typography>
+                <Typography variant="subtitle2">Role:</Typography>
               </Grid>
               <Grid size={2}>
                 <Typography variant="subtitle2" id="creator_subclass">
-                  Rule of Cool
+                  {player?.role}
                 </Typography>
+              </Grid>
+              <Grid size={1}>
+                <Typography variant="subtitle2">Preferences:</Typography>
+              </Grid>
+              <Grid size={2} offset={1}>
+                <List dense>
+                  <Typography variant="subtitle2">No Preferences</Typography>
+                </List>
               </Grid>
             </Grid>
           </Grid>
           <Grid size={7}>
             <Grid container columns={6}>
-              <Grid size={1}>
-                <Typography variant="subtitle2">Background:</Typography>
-              </Grid>
-              <Grid size={5}>
-                <Typography>
-                  Jacob set out to be the greatest Game Master in the world! He
-                  found success too! It was just in his own world, rather than
-                  the one we currently live in. Oh well. At least there are
-                  still games to master!
-                </Typography>
-              </Grid>
-              <Grid size={1}>
-                <Typography variant="subtitle2" sx={{ mt: 1 }}>
-                  Notes:
-                </Typography>
-              </Grid>
-              <Grid size={4}>
-                <List dense>
-                  <ListItem disableGutters disablePadding>
-                    Mostly harmless.
-                  </ListItem>
-                  <ListItem disableGutters disablePadding>
-                    Loves players into the roleplay
-                  </ListItem>
-                  <ListItem disableGutters disablePadding>
-                    Bad at remembering the rules (or anything else)
-                  </ListItem>
-                  <ListItem disableGutters disablePadding>
-                    Probably working on this website or his{" "}
-                    <Link
-                      to="https://sylphaxiom.com/portfolio"
-                      style={{ marginLeft: 5 }}
-                    >
-                      portfolio
-                    </Link>
-                  </ListItem>
-                </List>
-              </Grid>
+              <PlayerForm
+                children={<TestingForm version="player" />}
+                player={player!}
+              />
             </Grid>
           </Grid>
         </Grid>
