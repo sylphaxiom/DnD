@@ -11,6 +11,11 @@ import Typography from "@mui/material/Typography";
 
 export default withAuthenticationRequired(VaultDoor, {
   onRedirecting: () => <Loading />,
+  loginOptions: {
+    authorizationParams: {
+      connection: "con_yU9FSo3E7oXahH3x",
+    },
+  },
 });
 
 export function VaultDoor() {
