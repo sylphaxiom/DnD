@@ -3,6 +3,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicNotebook from "./nonAuth/PublicNotebook";
 import type { Route } from "./+types/Notebook";
+import { fetchPlayer } from "./calls/Queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "./Loading";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -17,11 +20,29 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Notebook() {
-  const { isAuthenticated, user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["getPlayer", user?.preferred_username, user?.email],
+    queryFn: () =>
+      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
+  });
+  const player = data?.message[0];
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data)
+    );
+  }
   return (
     <>
       <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated ? user?.name + "\'s " : "The Public\'s "} Notebook Page
+        {isAuthenticated ? player?.first_name + "\'s " : "The Public\'s "}{" "}
+        Notebook Page
       </Typography>
       {isAuthenticated ? <Outlet /> : <PublicNotebook />}
     </>

@@ -35,7 +35,11 @@ export function VaultDoor() {
     return <Loading />;
   }
   if (error) {
-    console.log(JSON.stringify(error));
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data)
+    );
   }
   return (
     <>

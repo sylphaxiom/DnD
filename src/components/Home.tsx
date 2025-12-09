@@ -12,6 +12,11 @@ import type { Route } from "./+types/Home";
 
 export default withAuthenticationRequired(Home, {
   onRedirecting: () => <Loading />,
+  loginOptions: {
+    authorizationParams: {
+      connection: "con_yU9FSo3E7oXahH3x",
+    },
+  },
 });
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
