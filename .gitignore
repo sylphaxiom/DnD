@@ -44,3 +44,4 @@ src/resources/character_images
 .auth
 /secrets/
 */mods.json
+tmp*
