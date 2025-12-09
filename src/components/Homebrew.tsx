@@ -20,26 +20,29 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Homebrew() {
-  const { isAuthenticated, user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  if (isAuthenticated) {
-    if (isLoading) {
-      return <Loading />;
-    }
-    if (error) {
-      console.log(JSON.stringify(error));
-    }
-  }
   const player = data?.message[0];
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data)
+    );
+  }
   return (
     <>
       <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
         {isAuthenticated
-          ? player?.username + "\'s Homebrew Vault"
+          ? player?.first_name + "\'s Homebrew Vault"
           : "The Public Homebrewery"}
       </Typography>
       {isAuthenticated ? <Outlet /> : <PublicHomebrew />}
