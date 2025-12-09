@@ -16,7 +16,7 @@ export async function fetchPlayer(
 ): Promise<{
   status: string;
   message: Player[];
-} | undefined> {
+} | null> {
   if(isAuthenticated){
     const response = await axios
       .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
@@ -30,7 +30,7 @@ export async function fetchPlayer(
         throw error;
       });
     return response.data;
-  } else return
+  } else return null
 }
 
 /* ^^^ Implementation ^^^ */
