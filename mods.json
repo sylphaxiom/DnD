@@ -12,25 +12,25 @@
         "PROD":true
     },
     {
-        "filename":"components/Layout.tsx",
+        "filename":"components\\Layout.tsx",
         "search":"http://localhost:5173",
         "update":"https://test.sylphaxiom.com",
         "DEV":true
     },
     {
-        "filename":"components/Layout.tsx",
+        "filename":"components\\Layout.tsx",
         "search":"http://localhost:5173",
         "update":"https://kothis.sylphaxiom.com",
         "PROD":true
     },
     {
-        "filename":"components/utils/Login.tsx",
+        "filename":"components\\utils\\Login.tsx",
         "search":"http://localhost:5173",
         "update":"https://test.sylphaxiom.com",
         "DEV":true
     },
     {
-        "filename":"components/utils/Login.tsx",
+        "filename":"components\\utils\\Login.tsx",
         "search":"http://localhost:5173",
         "update":"https://kothis.sylphaxiom.com",
         "PROD":true
