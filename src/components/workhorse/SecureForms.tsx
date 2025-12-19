@@ -1,11 +1,11 @@
 import * as React from "react";
 import { type Player } from "./Queries";
 import ErrorForm from "../forms/ErrorForm";
-interface Props {
+export interface FormProps {
   children: React.ReactNode;
   player: Player;
 }
-export function PlayerForm({ children, player }: Props) {
+export function PlayerForm({ children, player }: FormProps) {
   const role = player.role;
   let authorized = false;
   switch (role) {
@@ -30,7 +30,7 @@ export function PlayerForm({ children, player }: Props) {
   }
 }
 
-export function HomebrewerForm({ children, player }: Props) {
+export function HomebrewerForm({ children, player }: FormProps) {
   const role = player.role;
   let authorized = false;
   switch (role) {
@@ -55,7 +55,7 @@ export function HomebrewerForm({ children, player }: Props) {
   }
 }
 
-export function DMForm({ children, player }: Props) {
+export function DMForm({ children, player }: FormProps) {
   const role = player.role;
   let authorized = false;
   switch (role) {
@@ -80,7 +80,7 @@ export function DMForm({ children, player }: Props) {
   }
 }
 
-export function AdminForm({ children, player }: Props) {
+export function AdminForm({ children, player }: FormProps) {
   const role = player.role;
   let authorized = false;
   switch (role) {

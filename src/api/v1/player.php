@@ -194,6 +194,77 @@ switch($method) {
     case 'PUT':
         // PUT info like email drop or info storage that doesn't require feedback
         break;
+
+    case 'PATCH':
+        // PATCH info like updates to profile or settings that want immediate feedback
+
+        $first_name = $input['fname'] ?? '';
+        $last_name = $input['lname'] ?? '';
+        $email = $input['email'] ?? '';
+        $username = $input['username'] ?? '';
+        $image = $_FILES['profile_image'] ?? '';
+
+        if (!isset($username)) {
+            http_response_code(400);
+            echo json_encode([
+                "result"=>"failure",
+                "message"=>"username is required"
+            ]);
+            exit(1);
+        }   // Now assume username is populated
+
+        if (isset($first_name)){
+            $query = $conn->prepare("UPDATE player 
+                                    SET first_name = ? 
+                                    WHERE username = ?");
+            $query->bind_param('ss', $first_name, $username);
+            $query->execute();
+        }
+
+        if (isset($last_name)){
+            $query = $conn->prepare("UPDATE player 
+                                    SET last_name = ? 
+                                    WHERE username = ?");
+            $query->bind_param('ss', $last_name, $username);
+            $query->execute();
+        }
+
+        if (isset($email)){
+            $search = $conn->prepare("SELECT email 
+                                    FROM player 
+                                    WHERE email = ?");
+            $search->bind_param('s', $email);
+            $search->execute();
+            $search->bind_result($resp_email);
+            $result = $search->fetch();
+
+            if ($result && $resp_email == $email) {
+                http_response_code(400);
+                echo json_encode([
+                    "result"=>"failure",
+                    "message"=>"email is already in use, try another one."
+                ]);
+                exit(1);
+            } else {
+                $query = $conn->prepare("UPDATE player 
+                                        SET email = ? 
+                                        WHERE username = ?");
+                $query->bind_param('ss', $email, $username);
+                $query->execute();
+            }
+        }
+
+        if (isset($image)){
+            // Here I need to place the image into the directory and return the path
+            // Then update Prefs with the new path ref.
+
+            $imageName = $image['name'];
+            $imageTmpName = $image['tmp_name'];
+            $imageSize = $image['size'];
+            $imageError = $image['error'];
+            // default dir ~/web_images/intake/
+        }
+        break;
         
     case 'DELETE':
         // DELETE info like DROP and removal requests

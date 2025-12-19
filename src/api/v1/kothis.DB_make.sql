@@ -560,7 +560,7 @@ CREATE TABLE IF NOT EXISTS `pc_tools` (
     CONSTRAINT `FK_tool_pc` FOREIGN KEY (`tool`) REFERENCES `tools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
-CREATE TABLE IF NOT EXISTS `player` (
+CREATE TABLE if NOT EXISTS `player` (
     `username` varchar(25) NOT NULL,
     `first_name` varchar(25) NOT NULL,
     `last_name` varchar(25) NOT NULL,
@@ -571,9 +571,8 @@ CREATE TABLE IF NOT EXISTS `player` (
         'admin',
         'homebrewer'
     ) NOT NULL DEFAULT 'player',
-    `pwd` char(128) NOT NULL,
-    `init_ts` int NOT NULL COMMENT 'Unix timestamp of original record creation.',
     `preferences` text COMMENT 'string dict of user preferences.',
+    `is_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag for email verification',
     PRIMARY KEY (`username`),
     UNIQUE KEY `UNIQUE_email` (`email`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci

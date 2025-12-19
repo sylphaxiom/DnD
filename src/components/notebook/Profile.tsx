@@ -10,8 +10,8 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
-import TestingForm from "../forms/TestingForm";
 import { PlayerForm } from "../workhorse/SecureForms";
+import ProfileDataForm from "../forms/ProfileDataForm";
 
 export default withAuthenticationRequired(Profile, {
   onRedirecting: () => <Loading />,
@@ -136,7 +136,7 @@ export function Profile() {
           <Grid size={7}>
             <Grid container columns={6}>
               <PlayerForm
-                children={<TestingForm version="player" />}
+                children={<ProfileDataForm player={player!} />}
                 player={player!}
               />
             </Grid>
