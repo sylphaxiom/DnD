@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS `item` (
     `magic` tinyint(1) NOT NULL DEFAULT '0',
     `tags` text,
     `weight` int NOT NULL DEFAULT '1',
-    `attunement` int NOT NULL,
+    `attunement` tinyint(1) NOT NULL DEFAULT '0',
     `charges` int DEFAULT NULL,
     `reset` varchar(200) DEFAULT NULL,
     `restrictions` varchar(200) DEFAULT NULL,

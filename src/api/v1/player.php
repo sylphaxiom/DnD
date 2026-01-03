@@ -55,7 +55,7 @@ switch($method) {
         }
         try {
             $stmt->execute();
-            $stmt->bind_result($uname,$fname,$lname,$email,$role,$prefs);
+            $stmt->bind_result($uname,$fname,$lname,$email,$role,$prefs,$is_verified);
         } catch (mysqli_sql_exception $e) {
             http_response_code(500);
             echo json_encode([
