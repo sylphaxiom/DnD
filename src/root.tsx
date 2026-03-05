@@ -13,7 +13,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     () =>
       new QueryClient({
         defaultOptions: { queries: { staleTime: 1000 * 60 * 60 * 4 } },
-      })
+      }),
   );
 
   return (
@@ -64,10 +64,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <CssBaseline enableColorScheme />
               {children}
             </ThemeProvider>
-            <ReactQueryDevtools
+            {/* <ReactQueryDevtools
               initialIsOpen={false}
               buttonPosition="bottom-left"
-            />
+            /> */}
           </QueryClientProvider>
         </React.Fragment>
         <ScrollRestoration />

@@ -26,7 +26,7 @@ export default function Loading() {
     const bouncy = animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2) }
+      { delay: stagger(0.2) },
     );
     setTimeout(() => {
       bouncy.then;
@@ -38,9 +38,9 @@ export default function Loading() {
     <Box
       id="loader_scr"
       sx={{
-        minWidth: 1,
         p: 0,
         textAlign: "center",
+        mx: 4,
       }}
     >
       <img
@@ -60,7 +60,7 @@ export default function Loading() {
             justifyContent: "center",
             overflow: "visible",
             fontFamily: "Courier New, monospace",
-            fontSize: "9em",
+            fontSize: "7em",
             fontWeight: 700,
           }}
           ref={scope}

@@ -35,7 +35,7 @@ export default function Lore() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (
