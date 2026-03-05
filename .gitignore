@@ -37,8 +37,11 @@ tests/example.spec.ts
 .react-router/
 *.d.ts
 build/
-src/api/v1/bucket.php
+*bucket.php
+src/resources/player_images
+src/resources/character_images
 .env
 .auth
 /secrets/
 */mods.json
+tmp*

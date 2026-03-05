@@ -1,12 +1,12 @@
 import axios from "axios";
 
-interface Player {
+export interface Player {
   first_name: string;
   last_name: string;
   email: string;
   username: string;
   role: string;
-  prefs?: string[];
+  prefs?: string;
 }
 
 export async function fetchPlayer(
@@ -16,7 +16,7 @@ export async function fetchPlayer(
 ): Promise<{
   status: string;
   message: Player[];
-} | undefined> {
+} | null> {
   if(isAuthenticated){
     const response = await axios
       .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
@@ -30,23 +30,25 @@ export async function fetchPlayer(
         throw error;
       });
     return response.data;
-  } else return
+  } else return null
 }
 
 /* ^^^ Implementation ^^^ */
 /*
-  export default Component(){
-    const { user } = useAuth0();
-    const { isLoading, data, error } = useQuery({
-     queryKey: ["getPlayer", user?.preferred_username, user?.email],
-      queryFn: () => fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
-    });
-    if (isLoading) {
-      return <Loading />;
-    }
-    if (error) {
-      console.log(JSON.stringify(error));
-    }
-    const player = data?.message[0];
+  const { user } = useAuth0();
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["getPlayer", user?.preferred_username, user?.email],
+    queryFn: () => fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
+  });
+  const player = data?.message[0];
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data)
+    );
   }
 /**************************/

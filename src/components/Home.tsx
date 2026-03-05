@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Loading from "./Loading";
-import { fetchPlayer } from "./calls/Queries";
+import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -12,6 +12,11 @@ import type { Route } from "./+types/Home";
 
 export default withAuthenticationRequired(Home, {
   onRedirecting: () => <Loading />,
+  loginOptions: {
+    authorizationParams: {
+      connection: "con_yU9FSo3E7oXahH3x",
+    },
+  },
 });
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {

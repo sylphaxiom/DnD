@@ -82,7 +82,7 @@ export default function Login() {
         break;
       case "Log Out":
         await logout({
-          logoutParams: { returnTo: domain + location.pathname },
+          logoutParams: { returnTo: domain + "/" },
         });
         break;
       case "Sign Up":
