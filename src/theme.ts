@@ -28,8 +28,18 @@ export const dark: ThemeOptions = {
     },
     subtitle1:{
       fontFamily: "'Kings', cursive",
-      fontStyle: "italic",
-      fontSize: "3em",
+      letterSpacing: 1.5,
+      fontSize: "2.5rem",
+    },
+    subtitle2:{
+      fontSize: "1.2rem",
+      fontWeight: 400,
+    },
+    overline: {
+      fontFamily: "Courier New, monospace",
+    },
+    body1: {
+      fontSize: "1.4em"
     },
     fontWeightLight: 300,
     fontWeightRegular: 400,
@@ -67,7 +77,7 @@ export const light: ThemeOptions = {
     subtitle1:{
       fontFamily: "'Kings', cursive",
       letterSpacing: 1.5,
-      fontSize: "2rem",
+      fontSize: "2.5rem",
     },
     subtitle2:{
       fontSize: "1.2rem",
@@ -76,11 +86,14 @@ export const light: ThemeOptions = {
     overline: {
       fontFamily: "Courier New, monospace",
     },
+    body1: {
+      fontSize: "1.4em"
+    },
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 800,
-    fontSize: 18,
+    fontSize: 16,
   },
 };
 

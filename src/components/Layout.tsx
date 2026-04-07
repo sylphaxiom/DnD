@@ -108,10 +108,15 @@ export default function Layout() {
         </Box>
       ) : (
         <Box>
-          <AppBar sx={{ width: 1 }} position="sticky">
+          <AppBar id="navHead" sx={{ width: 1 }} position="sticky">
             <Toolbar>
               <Navbar bps={bps} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Typography
+                variant="h5"
+                className="primary"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              >
                 Kothis Portal<span style={{ float: "right" }}>{page}</span>
               </Typography>
               <IconButton

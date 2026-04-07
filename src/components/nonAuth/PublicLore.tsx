@@ -9,23 +9,70 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import TextField from "@mui/material/TextField";
-import NumberSpinner from "../workhorse/NumberSpinner";
-import Slider from "@mui/material/Slider";
+import Filters from "../forms/Filters";
+import Paper from "@mui/material/Paper";
+import Grow from "@mui/material/Grow";
+
+interface FilterState {
+  magical: boolean;
+  gamesystem: string;
+  nameCont: string;
+  descCont: string;
+  costVal: boolean;
+  value: number[];
+  costValue: number;
+}
+
+type FilterAction =
+  | { type: "SET_MAGICAL"; payload: boolean }
+  | { type: "SET_GAMESYSTEM"; payload: string }
+  | { type: "SET_NAME_CONT"; payload: string }
+  | { type: "SET_DESC_CONT"; payload: string }
+  | { type: "SET_COST_VAL"; payload: boolean }
+  | { type: "SET_VALUE"; payload: number[] }
+  | { type: "SET_COST_VALUE"; payload: number };
+
+const initialFilterState: FilterState = {
+  magical: false,
+  gamesystem: "",
+  nameCont: "",
+  descCont: "",
+  costVal: true,
+  value: [500, 9000],
+  costValue: 1000,
+};
+
+function filterReducer(state: FilterState, action: FilterAction): FilterState {
+  switch (action.type) {
+    case "SET_MAGICAL":
+      return { ...state, magical: action.payload };
+    case "SET_GAMESYSTEM":
+      return { ...state, gamesystem: action.payload };
+    case "SET_NAME_CONT":
+      return { ...state, nameCont: action.payload };
+    case "SET_DESC_CONT":
+      return { ...state, descCont: action.payload };
+    case "SET_COST_VAL":
+      return { ...state, costVal: action.payload };
+    case "SET_VALUE":
+      return { ...state, value: action.payload };
+    case "SET_COST_VALUE":
+      return { ...state, costValue: action.payload };
+    default:
+      return state;
+  }
+}
 
 export async function clientLoader() {
   // Lore page loader
 }
 
 export default function PublicLore() {
-  // Lore page
-  const [topic, setTopic] = React.useState("");
-  const [magical, setMagical] = React.useState(false);
-  const [gamesystem, setGamesystem] = React.useState("");
-  const [nameCont, setNameCont] = React.useState("");
-  const [descCont, setDescCont] = React.useState("");
-  const [costVal, setCostVal] = React.useState(true);
-  const [value, setValue] = React.useState<number[]>([500, 9000]);
+  const [filterState, dispatch] = React.useReducer(
+    filterReducer,
+    initialFilterState,
+  );
+  const [filtered, setFiltered] = React.useState(false);
 
   return (
     <Grid container spacing={1}>
@@ -51,19 +98,21 @@ export default function PublicLore() {
         API into the site.
       </Typography>
       <Divider variant="middle" sx={{ my: 4, width: 0.9, mx: "auto" }} />
-      <Grid size={{ xs: 12 }}>
-        <Typography variant="body1" sx={{ mx: 3, mt: 3, fontSize: "1.4em" }}>
+      <Grid size={{ xs: 12 }} sx={{ mx: 3, mt: 3 }}>
+        <Typography variant="body1">
           What do we want to look at today?
         </Typography>
       </Grid>
-      <Grid size={{ xs: 5 }} offset={{ xs: 1 }}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
+      <Grid size={{ xs: 12 }} sx={{ mx: 3, mt: 3 }}>
+        <FormControl variant="standard" sx={{ width: { xs: 1 } }}>
           <InputLabel id="search-topic-label">Topic</InputLabel>
           <Select
             labelId="search-topic-label"
             id="search-topic"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value as string)}
+            value={filterState.topic}
+            onChange={(e) =>
+              dispatch({ type: "SET_TOPIC", payload: e.target.value as string })
+            }
             label="Topic"
           >
             <MenuItem value="items">Items</MenuItem>
@@ -82,92 +131,25 @@ export default function PublicLore() {
           </Select>
         </FormControl>
       </Grid>
-      <Grid size={{ xs: 6 }}>
-        <Typography variant="body1" sx={{ mx: 3, mt: 3, fontSize: "1.4em" }}>
-          Any filters?
-        </Typography>
-      </Grid>
-      <Grid
-        container
-        spacing={2}
-        sx={{ mx: 3, mt: 1, alignItems: "center" }}
-        id="items-filters"
-      >
-        <Grid size={{ xs: 6 }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={magical}
-                onChange={(e) => setMagical(e.target.checked)}
-              />
-            }
-            label="Magical?"
-          />
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
-            <InputLabel id="gamesystem-label">Gamesystem</InputLabel>
-            <Select
-              labelId="gamesystem-label"
-              id="gamesystem"
-              value={gamesystem}
-              onChange={(e) => setGamesystem(e.target.value as string)}
-              label="Gamesystem"
-            >
-              <MenuItem value="5e-2014">5th Edition 2014</MenuItem>
-              <MenuItem value="5e-2024">5th Edition 2024</MenuItem>
-              <MenuItem value="a5e">Advanced 5th Edition</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <TextField
-            id="name-contains"
-            label="Name Contains..."
-            variant="standard"
-            value={nameCont}
-            onChange={(e) => setNameCont(e.target.value)}
-          />
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <TextField
-            id="desc-contains"
-            label="Description Contains..."
-            variant="standard"
-            value={descCont}
-            onChange={(e) => setDescCont(e.target.value)}
-          />
-        </Grid>
-        <Grid size={{ xs: 2 }} offset={{ xs: 1 }}>
-          <Typography variant="body1" sx={{ fontSize: "1.4em" }}>
-            Cost
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 8 }} offset={1}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={costVal}
-                onChange={(e) => setCostVal(e.target.checked)}
-              />
-            }
-            label={costVal ? "Single Value" : "Range Input"}
-          />
-        </Grid>
-        <Grid size={{ xs: 10 }} offset={{ xs: 1 }}>
-          {costVal ? (
-            <NumberSpinner label="Cost Value" size="small" />
-          ) : (
-            <Slider
-              min={0}
-              max={40000}
-              value={value}
-              onChange={(_e, newValue: number[]) => setValue(newValue)}
-              valueLabelDisplay="auto"
+      <Grid size={{ xs: 12 }} sx={{ mx: 1, mt: 3 }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={filtered}
+              onChange={(e) => setFiltered(e.target.checked)}
+              sx={{ mx: 3 }}
             />
-          )}
-        </Grid>
+          }
+          sx={{ width: 1, justifyContent: "space-between" }}
+          label="Any filters?"
+          labelPlacement="start"
+        />
       </Grid>
+      <Grow in={filtered} unmountOnExit>
+        <Paper variant="elevation" elevation={10} sx={{ m: 3, p: 3 }}>
+          <Filters filterState={filterState} dispatch={dispatch} />
+        </Paper>
+      </Grow>
     </Grid>
   );
 }
