@@ -16,6 +16,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
 import Avatar from "@mui/material/Avatar";
+import ModeSwitch from "./utils/ModeSwitch";
 interface bps {
   sm: boolean;
   md: boolean;
@@ -39,7 +40,7 @@ export default function Layout() {
     navigate("/notebook/profile");
   };
 
-  const domain = "http://localhost:5173";
+  const domain = "https://test.sylphaxiom.com";
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
     console.log(clk);
@@ -120,6 +121,7 @@ export default function Layout() {
                 aria-haspopup="true"
                 onClick={handleClick}
                 color={isAuthenticated ? "success" : "secondary"}
+                sx={{ mr: 4 }}
               >
                 {isAuthenticated ? (
                   <Avatar src={user?.picture} />
@@ -127,6 +129,7 @@ export default function Layout() {
                   <NoAccountsIcon />
                 )}
               </IconButton>
+              <ModeSwitch />
               {isAuthenticated ? (
                 <Menu
                   id="menu-appbar"

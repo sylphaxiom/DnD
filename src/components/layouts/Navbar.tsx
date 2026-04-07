@@ -22,7 +22,7 @@ export async function clientLoader() {}
 export default function Navigation({ bps }: Props) {
   let location = useLocation();
   const [navAnchorEl, setNavAnchorEl] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
   const tabSX = {
     height: "100%",

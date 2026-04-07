@@ -23,53 +23,51 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   if (path === "/login") {
     console.log("redirecting...");
     return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173/"
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/",
     );
   }
 }
 
 export default function Login() {
-  const { mode, setMode, systemMode } = useColorScheme();
-  if (!mode) {
-    return null;
-  }
-  const isDark = useMediaQuery("(prefers-color-scheme: dark)");
-  const [_color, setColor] = React.useState(
-    // This is only here to re-trigger the rendering.
-    systemMode?.toString()
-  );
+  // const { mode, setMode, systemMode } = useColorScheme();
+  // if (!mode) {
+  //   return null;
+  // }
+  // const isDark = useMediaQuery("(prefers-color-scheme: dark)");
+  // const [_color, setColor] = React.useState(
+  //   // This is only here to re-trigger the rendering.
+  //   systemMode?.toString()
+  // );
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const domain = "http://localhost:5173";
+  const domain = "https://test.sylphaxiom.com";
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
 
-  React.useEffect(() => {
-    if (mode === "system") {
-      isDark ? setMode("dark") : setMode("light");
-    }
-  }, [mode]);
+  // React.useEffect(() => {
+  //   if (mode === "system") {
+  //     isDark ? setMode("dark") : setMode("light");
+  //   }
+  // }, [mode]);
 
-  const ThemeMode = () => {
-    if (mode === "dark") {
-      return <DarkModeOutlinedIcon />;
-    } else {
-      return <LightModeOutlinedIcon />;
-    }
-  };
+  // const ThemeMode = () => {
+  //   if (mode === "dark") {
+  //     return <DarkModeOutlinedIcon />;
+  //   } else {
+  //     return <LightModeOutlinedIcon />;
+  //   }
+  // };
 
   const unauthed = [
     { icon: <LoginIcon />, name: "Log In" },
     { icon: <HowToRegIcon />, name: "Sign Up" },
-    { icon: <ThemeMode />, name: "Mode" },
   ];
   const authed = [
     { icon: <LogoutIcon />, name: "Log Out" },
     { icon: <ManageAccountsIcon />, name: "Profile" },
-    { icon: <ThemeMode />, name: "Mode" },
   ];
   const actions = isAuthenticated ? authed : unauthed;
 
@@ -94,10 +92,10 @@ export default function Login() {
       case "Profile":
         navigate("/notebook/profile");
         break;
-      case "Mode":
-        mode === "light" ? setMode("dark") : setMode("light");
-        setColor(mode.toString());
-        break;
+      // case "Mode":
+      //   mode === "light" ? setMode("dark") : setMode("light");
+      //   setColor(mode.toString());
+      //   break;
       default:
         console.log("Default reached, something probably went wrong.");
     }

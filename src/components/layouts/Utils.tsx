@@ -1,6 +1,7 @@
 // import * as React from "react";
 import Box from "@mui/material/Box";
 import Login from "../utils/Login";
+import ModeSwitch from "../utils/ModeSwitch";
 
 export async function clientLoader() {}
 
@@ -18,6 +19,7 @@ export default function Utils() {
       }}
       id="utilBox"
     >
+      <ModeSwitch />
       <Login />
     </Box>
   );

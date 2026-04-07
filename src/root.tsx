@@ -5,8 +5,9 @@ import Loading from "./components/Loading";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TwinkleStars from "./components/layouts/TwinkleStars";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
@@ -53,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <title>World of Kothis</title>
       </head>
       <body>
+        <TwinkleStars />
         <InitColorSchemeScript attribute="class" />
         <React.Fragment>
           <QueryClientProvider client={queryClient}>

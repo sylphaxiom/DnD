@@ -8,7 +8,6 @@
     "skipLibCheck": true,
     "composite": true,
     "rootDirs": [".", "./.react-router/types"],
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     },

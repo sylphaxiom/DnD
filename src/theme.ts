@@ -4,16 +4,14 @@ import type { ThemeOptions } from '@mui/material/styles';
 export const dark: ThemeOptions = {
   palette: {
     primary: {
-      main: '#4d69fd',
+      main: '#c478e0',
     },
     secondary: {
-      main: '#ab47bc',
+      main: '#3544b1',
     },
     background: {
-      default: '#292929',
-    },
-    text: {
-      primary: '#f5f5f5',
+      default: '#05060f',
+      paper: '#05060f',
     },
     info: {
       main: '#00acc1',
@@ -44,17 +42,18 @@ export const dark: ThemeOptions = {
 export const light: ThemeOptions = {
   palette: {
     primary: {
-      main: '#1c35c5',
+      main: '#8338a8',
     },
     secondary: {
-      main: '#ca3be4',
+      main: '#2537d2',
     },
     info: {
       main: '#00acc1',
     },
     divider: '#512da8',
     background: {
-      default: '#f5f5f5',
+      default: '#f2f7fc',
+      paper: '#f2f7fc',
     },
   },
   typography: {

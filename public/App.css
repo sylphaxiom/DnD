@@ -1,3 +1,10 @@
+.primary {
+  color: var(--mui-palette-primary-main);
+}
+.secondary {
+  color: var(--mui-palette-secondary-main);
+}
+
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
@@ -15,4 +22,22 @@ svg#kothisWorld {
 .punch-uation {
   font-size: 5rem;
   line-height: 50%;
+}
+
+#stary_bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+html.light #stary_bg {
+  background: #F2F7FC;
+  background-image: linear-gradient(15deg, rgba(242, 247, 252, 1) 0%, rgba(235, 244, 252, 1) 70%, rgba(176, 203, 232, 1) 100%);
+}
+
+#navHead {
+  backdrop-filter: blur(90px);
+  background-color: transparent;
 }
