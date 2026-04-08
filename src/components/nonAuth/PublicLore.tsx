@@ -73,6 +73,19 @@ export default function PublicLore() {
     initialFilterState,
   );
   const [filtered, setFiltered] = React.useState(false);
+  const [topic, setTopic] = React.useState<
+    | ""
+    | "spells"
+    | "items"
+    | "species"
+    | "classes"
+    | "backgrounds"
+    | "feats"
+    | "creatures"
+    | "rules"
+    | "lookup"
+    | "references"
+  >("");
 
   return (
     <Grid container spacing={1}>
@@ -109,25 +122,33 @@ export default function PublicLore() {
           <Select
             labelId="search-topic-label"
             id="search-topic"
-            value={filterState.topic}
+            value={topic}
             onChange={(e) =>
-              dispatch({ type: "SET_TOPIC", payload: e.target.value as string })
+              setTopic((e.target.value as string) ? e.target.value : "")
             }
             label="Topic"
           >
-            <MenuItem value="items">Items</MenuItem>
-            <MenuItem value="magicItems">Magic Items</MenuItem>
-            <MenuItem value="spells">Spells</MenuItem>
-            <MenuItem value="species">Species</MenuItem>
-            <MenuItem value="classes">Classes</MenuItem>
-            <MenuItem value="weapons">Weapons</MenuItem>
-            <MenuItem value="armor">Armor</MenuItem>
+            <MenuItem value="">Select a topic...</MenuItem>
+            <MenuItem value="spells" disabled>
+              Spells
+            </MenuItem>
+            <MenuItem value="items" disabled>
+              Items
+            </MenuItem>
+            <MenuItem value="species" disabled>
+              Species
+            </MenuItem>
+            <MenuItem value="classes" disabled>
+              Classes
+            </MenuItem>
             <MenuItem value="backgrounds">Backgrounds</MenuItem>
             <MenuItem value="feats">Feats</MenuItem>
-            <MenuItem value="creatures">Creatures</MenuItem>
-            <MenuItem value="conditions">Conditions</MenuItem>
-            <MenuItem value="abilities">Abilities</MenuItem>
-            <MenuItem value="skills">Skills</MenuItem>
+            <MenuItem value="creatures" disabled>
+              Creatures
+            </MenuItem>
+            <MenuItem value="rules">Rules</MenuItem>
+            <MenuItem value="lookup">Lookup Lists</MenuItem>
+            <MenuItem value="references">References</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -146,8 +167,12 @@ export default function PublicLore() {
         />
       </Grid>
       <Grow in={filtered} unmountOnExit>
-        <Paper variant="elevation" elevation={10} sx={{ m: 3, p: 3 }}>
-          <Filters filterState={filterState} dispatch={dispatch} />
+        <Paper variant="elevation" elevation={10} sx={{ m: 3, p: 3, width: 1 }}>
+          <Filters
+            filterState={filterState}
+            dispatch={dispatch}
+            topic={topic}
+          />
         </Paper>
       </Grow>
     </Grid>

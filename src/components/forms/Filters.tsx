@@ -1,14 +1,17 @@
 import Grid from "@mui/material/Grid";
-import NumberSpinner from "../workhorse/NumberSpinner";
-import Slider from "@mui/material/Slider";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Typography from "@mui/material/Typography";
+// import NumberSpinner from "../workhorse/NumberSpinner";
+// import Slider from "@mui/material/Slider";
+// import Switch from "@mui/material/Switch";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
+import { useQuery } from "@tanstack/react-query";
+import { fetchGameSystems, type GameSystem } from "../workhorse/Queries";
+import Tooltip from "@mui/material/Tooltip";
 
 interface FilterState {
   magical: boolean;
@@ -32,11 +35,96 @@ type FilterAction =
 interface FilterProps {
   filterState: FilterState;
   dispatch: React.Dispatch<FilterAction>;
+  topic:
+    | ""
+    | "spells"
+    | "items"
+    | "species"
+    | "classes"
+    | "backgrounds"
+    | "feats"
+    | "creatures"
+    | "rules"
+    | "lookup"
+    | "references";
 }
 
-export default function Filters({ filterState, dispatch }: FilterProps) {
+export default function Filters({ filterState, dispatch, topic }: FilterProps) {
+  console.log("Filters rendered with topic:", topic);
   const { magical, gamesystem, nameCont, descCont, costVal, value, costValue } =
     filterState;
+  const { data, error } = useQuery({
+    queryKey: ["getGamesystem"],
+    queryFn: () => fetchGameSystems(),
+  });
+  const gameSystems = data?.results;
+  if (error) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data),
+    );
+  }
+
+  // All can use order, search, page, limit
+
+  // SPELLS: BASIC, classes, level, range, school, duration, concentration, verbal, somatic, material, material_consumed, casting_time
+  // ITEMS: BASIC, desc, cost, weight, rarity, attunement, category, magic, weapon, armor, light, versatile, thown, finesse, two_handed
+  // SPECIES: BASIC, subspecies_of__isnull, subspecies_of
+  // CLASSES: BASIC, subclass_of, subclass?
+  // + BACKGROUNDS: BASIC
+  // + FEATS: BASIC
+  // CREATURES: BASIC, size, category, subcategory, type, cr, ac, ability_score, saving_throw, skill_bonus, passive_perception
+  // + RULES: BASIC
+  // LOOKUP: - static no filter -
+  // + REFERENCES: BASIC
+
+  // Types:
+  // Basic: name, document (gamesystem/source)
+  const basicFilters = (
+    <>
+      <Grid size={{ xs: 12 }}>
+        <TextField
+          id="name-contains"
+          label="Name Contains..."
+          variant="standard"
+          fullWidth
+          value={nameCont}
+          onChange={(e) =>
+            dispatch({ type: "SET_NAME_CONT", payload: e.target.value })
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: "100%" }}>
+          <InputLabel id="gamesystem-label">Gamesystem</InputLabel>
+          <Select
+            labelId="gamesystem-label"
+            id="gamesystem"
+            value={gamesystem}
+            onChange={(e) =>
+              dispatch({
+                type: "SET_GAMESYSTEM",
+                payload: e.target.value as string,
+              })
+            }
+            label="Gamesystem"
+          >
+            <MenuItem value="">Select a Game System...</MenuItem>
+            {gameSystems?.map(({ key, name, desc }: GameSystem) => {
+              return (
+                <MenuItem value={key}>
+                  <Tooltip title={desc} key={key}>
+                    <div>{name}</div>
+                  </Tooltip>
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
+    </>
+  );
 
   return (
     <Grid
@@ -48,7 +136,8 @@ export default function Filters({ filterState, dispatch }: FilterProps) {
       }}
       id="items-filters"
     >
-      <Grid size={{ xs: 6 }}>
+      {basicFilters}
+      {/* <Grid size={{ xs: 6 }}>
         <FormControlLabel
           control={
             <Switch
@@ -143,7 +232,7 @@ export default function Filters({ filterState, dispatch }: FilterProps) {
             valueLabelDisplay="auto"
           />
         )}
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

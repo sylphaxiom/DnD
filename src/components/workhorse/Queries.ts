@@ -30,7 +30,7 @@ export async function fetchPlayer(
         throw error;
       });
     return response.data;
-  } else return null
+  } else return null;
 }
 
 /* ^^^ Implementation ^^^ */
@@ -52,3 +52,30 @@ export async function fetchPlayer(
     );
   }
 /**************************/
+
+export interface GameSystem {
+  url:string;
+  key:string;
+  name:string;
+  desc:string;
+  content_prefix:string;
+}
+
+export async function fetchGameSystems(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: GameSystem[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/gamesystems`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred: %s", error);
+        throw error;
+      });
+    return response.data;
+}
