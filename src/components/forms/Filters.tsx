@@ -51,8 +51,9 @@ interface FilterProps {
 
 export default function Filters({ filterState, dispatch, topic }: FilterProps) {
   console.log("Filters rendered with topic:", topic);
-  const { magical, gamesystem, nameCont, descCont, costVal, value, costValue } =
-    filterState;
+  // const { magical, gamesystem, nameCont, descCont, costVal, value, costValue } =
+  //   filterState;
+  const { gamesystem, nameCont } = filterState;
   const { data, error } = useQuery({
     queryKey: ["getGamesystem"],
     queryFn: () => fetchGameSystems(),
