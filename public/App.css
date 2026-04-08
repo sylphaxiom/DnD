@@ -8,6 +8,13 @@
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .dark img.svg {
@@ -28,9 +35,11 @@ svg#kothisWorld {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: -1;
+  margin: 0;
+  padding: 0;
 }
 html.light #stary_bg {
   background: #F2F7FC;

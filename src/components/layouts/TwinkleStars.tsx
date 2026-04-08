@@ -54,14 +54,6 @@ export default function TwinkleStars() {
       viewBox="0 0 19200 10800"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="none"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: -1,
-      }}
     >
       {stars.map((star) => star)}
     </svg>

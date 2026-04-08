@@ -12,6 +12,10 @@ import Switch from "@mui/material/Switch";
 import Filters from "../forms/Filters";
 import Paper from "@mui/material/Paper";
 import Grow from "@mui/material/Grow";
+import { Button } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { fetchBackgrounds, type Background } from "../workhorse/Queries";
+import Loading from "../Loading";
 
 interface FilterState {
   magical: boolean;
@@ -72,6 +76,12 @@ export default function PublicLore() {
     filterReducer,
     initialFilterState,
   );
+  const { isLoading, data, error, refetch } = useQuery({
+    queryKey: ["fetchBackgrounds"],
+    queryFn: () => fetchBackgrounds(),
+    enabled: false,
+  });
+  const backgrounds: Background[] | undefined = data?.results;
   const [filtered, setFiltered] = React.useState(false);
   const [topic, setTopic] = React.useState<
     | ""
@@ -86,6 +96,19 @@ export default function PublicLore() {
     | "lookup"
     | "references"
   >("");
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(error.message),
+      JSON.stringify(data),
+    );
+  }
+
+  console.log("PublicLore rendered with backgrounds:", backgrounds);
 
   return (
     <Grid container spacing={1}>
@@ -111,63 +134,79 @@ export default function PublicLore() {
         API into the site.
       </Typography>
       <Divider variant="middle" sx={{ my: 4, width: 0.9, mx: "auto" }} />
-      <Grid size={{ xs: 12 }} sx={{ mx: 3, mt: 3 }}>
+      <Grid size={{ xs: 12 }} sx={{ px: 3, mt: 3 }}>
         <Typography variant="body1">
           What do we want to look at today?
         </Typography>
       </Grid>
-      <Grid size={{ xs: 12 }} sx={{ mx: 3, mt: 3 }}>
-        <FormControl variant="standard" sx={{ width: { xs: 1 } }}>
-          <InputLabel id="search-topic-label">Topic</InputLabel>
-          <Select
-            labelId="search-topic-label"
-            id="search-topic"
-            value={topic}
-            onChange={(e) =>
-              setTopic((e.target.value as string) ? e.target.value : "")
-            }
-            label="Topic"
+      <div style={{ width: "100%" }}>
+        <Grid size={12} sx={{ px: 3, mt: 3 }}>
+          <FormControl variant="standard" sx={{ width: { xs: 1 } }}>
+            <InputLabel id="search-topic-label">Topic</InputLabel>
+            <Select
+              labelId="search-topic-label"
+              id="search-topic"
+              value={topic}
+              onChange={(e) =>
+                setTopic((e.target.value as string) ? e.target.value : "")
+              }
+              label="Topic"
+            >
+              <MenuItem value="">Select a topic...</MenuItem>
+              <MenuItem value="spells" disabled>
+                Spells
+              </MenuItem>
+              <MenuItem value="items" disabled>
+                Items
+              </MenuItem>
+              <MenuItem value="species" disabled>
+                Species
+              </MenuItem>
+              <MenuItem value="classes" disabled>
+                Classes
+              </MenuItem>
+              <MenuItem value="backgrounds">Backgrounds</MenuItem>
+              <MenuItem value="feats">Feats</MenuItem>
+              <MenuItem value="creatures" disabled>
+                Creatures
+              </MenuItem>
+              <MenuItem value="rules">Rules</MenuItem>
+              <MenuItem value="lookup">Lookup Lists</MenuItem>
+              <MenuItem value="references">References</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ mt: 2, width: 1 }}
+            onClick={() => {
+              refetch();
+            }}
           >
-            <MenuItem value="">Select a topic...</MenuItem>
-            <MenuItem value="spells" disabled>
-              Spells
-            </MenuItem>
-            <MenuItem value="items" disabled>
-              Items
-            </MenuItem>
-            <MenuItem value="species" disabled>
-              Species
-            </MenuItem>
-            <MenuItem value="classes" disabled>
-              Classes
-            </MenuItem>
-            <MenuItem value="backgrounds">Backgrounds</MenuItem>
-            <MenuItem value="feats">Feats</MenuItem>
-            <MenuItem value="creatures" disabled>
-              Creatures
-            </MenuItem>
-            <MenuItem value="rules">Rules</MenuItem>
-            <MenuItem value="lookup">Lookup Lists</MenuItem>
-            <MenuItem value="references">References</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid size={{ xs: 12 }} sx={{ mx: 1, mt: 3 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={filtered}
-              onChange={(e) => setFiltered(e.target.checked)}
-              sx={{ mx: 3 }}
-            />
-          }
-          sx={{ width: 1, justifyContent: "space-between" }}
-          label="Any filters?"
-          labelPlacement="start"
-        />
-      </Grid>
+            Search
+          </Button>
+        </Grid>
+        <Grid size={{ xs: 12 }} sx={{ px: 1, mt: 3 }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={filtered}
+                onChange={(e) => setFiltered(e.target.checked)}
+                sx={{ mx: 3 }}
+              />
+            }
+            sx={{ width: 1, justifyContent: "space-between" }}
+            label="Any filters?"
+            labelPlacement="start"
+          />
+        </Grid>
+      </div>
       <Grow in={filtered} unmountOnExit>
-        <Paper variant="elevation" elevation={10} sx={{ m: 3, p: 3, width: 1 }}>
+        <Paper
+          variant="elevation"
+          elevation={10}
+          sx={{ mx: 3, py: 3, width: 1 }}
+        >
           <Filters
             filterState={filterState}
             dispatch={dispatch}
@@ -175,6 +214,10 @@ export default function PublicLore() {
           />
         </Paper>
       </Grow>
+      <Grid size={12}>
+        {isLoading ||
+          backgrounds?.map((bg) => <div key={bg.key}>{bg.name}</div>)}
+      </Grid>
     </Grid>
   );
 }

@@ -29,7 +29,7 @@ export default function PublicWorld() {
         --- This is the public world page ---
         <Divider sx={{ my: 2 }} variant="middle" />
       </Grid>
-      <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ mx: { xs: 2, md: 0 } }}>
+      <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ px: { xs: 2, md: 0 } }}>
         <Typography variant="subtitle2" sx={{ textIndent: "3em", my: 2 }}>
           The world of Kothis is a fantasy world of diversity, magic, and
           wonder. The nations of Kothis live in peace with one another, for the

@@ -15,10 +15,10 @@ export default function Footer() {
       container
       id="footRoot"
       sx={{
-        // maxWidth: "75vw",
-
+        maxWidth: { xs: "100vw", lg: "80vw" },
+        mx: "auto",
         paddingTop: "100px",
-        mx: 3,
+        px: 3,
       }}
     >
       <Grid
@@ -48,7 +48,7 @@ export default function Footer() {
         </Grid>
         <Grid>
           <NavLink
-            to="https://sylphaxiom.com/contact"
+            to="https://sylphaxiom.com/guestbook"
             style={{ marginRight: "1em" }}
           >
             Contact
