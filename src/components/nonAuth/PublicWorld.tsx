@@ -6,6 +6,9 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Link } from "react-router";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 
 export default function PublicWorld() {
   // non-authenticated landing page for World tab
@@ -30,7 +33,7 @@ export default function PublicWorld() {
         <Divider sx={{ my: 2 }} variant="middle" />
       </Grid>
       <Grid size={{ xs: 12, lg: 4 }} sx={{ px: { xs: 2, lg: 0 } }}>
-        <Typography variant="subtitle2" sx={{ textIndent: "3em", my: 2 }}>
+        <Typography variant="body1" sx={{ textIndent: "3em", my: 2 }}>
           The world of Kothis is a fantasy world of diversity, magic, and
           wonder. The nations of Kothis live in peace with one another, for the
           most part, but there is always something to threaten the status quo.
@@ -40,9 +43,23 @@ export default function PublicWorld() {
           world or to play in a Kothis campaign, log in or sign up and gain
           access to all that Kothis has to offer!
         </Typography>
+        <Divider sx={{ my: 2 }} variant="middle" />
+        <Typography variant="body1" sx={{ my: 2, textAlign: "center" }}>
+          {"Looking for the Lore page? It moved "}{" "}
+          <Button
+            component={Link}
+            sx={{ m: 2 }}
+            to="/world/lore"
+            variant="contained"
+            size="large"
+          >
+            {">>> here <<<"}
+          </Button>
+        </Typography>
+        <Divider sx={{ my: 2 }} variant="middle" />
         <Grid container>
-          <Grid size={6}>
-            <Typography variant="h6" sx={{ my: 1 }}>
+          <Grid size={6} sx={{ textAlign: "center" }}>
+            <Typography variant="body1" sx={{ my: 1 }}>
               Continents
             </Typography>
             <Typography variant="subtitle2" sx={{}}>
@@ -58,8 +75,8 @@ export default function PublicWorld() {
               Elandra
             </Typography>
           </Grid>
-          <Grid size={6}>
-            <Typography variant="h6" sx={{ my: 1 }}>
+          <Grid size={6} sx={{ textAlign: "center" }}>
+            <Typography variant="body1" sx={{ my: 1 }}>
               Nations
             </Typography>
             <Typography variant="subtitle2" sx={{}}>
