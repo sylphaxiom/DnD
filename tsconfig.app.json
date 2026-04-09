@@ -28,14 +28,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": [
-    "src",
-    ".react-router/types",
-    "api",
-    "src/components/.ret/TestingForm.tsx",
-    "src/components/.ret/Announcements.tsx",
-    "src/components/.ret/Calendar.tsx",
-    "src/components/.ret/SecureHerzog.tsx"
-  ],
+  "include": ["src", ".react-router/types", "api"],
   "exclude": ["*bucket.php"]
 }
