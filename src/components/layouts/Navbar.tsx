@@ -40,7 +40,6 @@ export default function Navigation({ bps }: Props) {
     "campaign",
     "notebook",
     "world",
-    "lore",
     "homebrew",
   ];
 
@@ -61,13 +60,13 @@ export default function Navigation({ bps }: Props) {
           {pages.map((page, index) => (
             <Tab
               component={NavLink}
-              label={page}
+              label={page.toUpperCase()}
               value={page}
               to={page === "home" ? "/" : page}
               aria-controls={page}
               key={"tab-" + index}
               id={"tab-" + index}
-              sx={{ height: "13.5vh" }}
+              sx={{ height: "16.5vh" }}
             />
           ))}
         </Tabs>

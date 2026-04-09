@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Copyright from "@mui/icons-material/Copyright";
 import Facebook from "@mui/icons-material/Facebook";
 import Button from "@mui/material/Button";
@@ -8,6 +7,7 @@ import { faDragon, faDiceD20 } from "@fortawesome/free-solid-svg-icons";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router";
+import Link from "@mui/material/Link";
 
 export default function Footer() {
   return (
@@ -56,7 +56,11 @@ export default function Footer() {
         </Grid>
       </Grid>
       <Grid size={12} sx={{ display: "flex", justifyContent: "space-around" }}>
-        <Button startIcon={<FontAwesomeIcon icon={faDiceD20} />}>
+        <Button
+          component={Link}
+          href="https://roll20.net/"
+          startIcon={<FontAwesomeIcon icon={faDiceD20} />}
+        >
           {"Roll 20"}
         </Button>
         <Divider
@@ -65,7 +69,11 @@ export default function Footer() {
           orientation="vertical"
           sx={{ height: 0.5 }}
         />
-        <Button startIcon={<FontAwesomeIcon icon={faDragon} />}>
+        <Button
+          component={Link}
+          href="https://www.dndbeyond.com/"
+          startIcon={<FontAwesomeIcon icon={faDragon} />}
+        >
           {"D&D Beyond"}
         </Button>
         <Divider
@@ -74,7 +82,11 @@ export default function Footer() {
           orientation="vertical"
           sx={{ height: 0.5 }}
         />
-        <Button startIcon={<Facebook />}>
+        <Button
+          component={Link}
+          href="https://www.facebook.com/profile.php?id=61570811451145"
+          startIcon={<Facebook />}
+        >
           <span style={{}}> {"Kothis Players Page"}</span>
         </Button>
       </Grid>

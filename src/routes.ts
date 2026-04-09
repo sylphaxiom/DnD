@@ -11,7 +11,7 @@ export default [
             index("./components/secured/Home.tsx")
         ]),
         route("character", "./components/Character.tsx", [
-            index("./components/secured/MyCharacters.tsx"),
+            index("./components/nonAuth/PublicCharacter.tsx"),
         ]),
         route("campaign", "./components/Campaign.tsx", [
             index("./components/nonAuth/PublicCampaign.tsx"),
@@ -61,13 +61,13 @@ export default [
             ...prefix("wildlands", [
                 route("pon", "./components/world/Pon.tsx",),
             ]),
-        ]),
-        route("lore", "./components/Lore.tsx", [
-            index("./components/nonAuth/PublicLore.tsx"),
-        ]),
-        ...prefix("lore", [            
-            route("portal", "./components/secured/Portal.tsx"),
-            route("creators", "./components/secured/Creators.tsx"),
+            route("lore", "./components/Lore.tsx", [
+                index("./components/nonAuth/PublicLore.tsx"),
+            ]),
+            ...prefix("lore", [            
+                route("portal", "./components/nonAuth/Portal.tsx"),
+                route("creators", "./components/nonAuth/Creators.tsx"),
+            ]),
         ]),
         route("homebrew", "./components/Homebrew.tsx", [
             index("./components/secured/VaultDoor.tsx"),
