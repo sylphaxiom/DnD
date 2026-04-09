@@ -8,14 +8,14 @@ import { data, useFetcher, useNavigate } from "react-router";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import type { Route } from "./+types/Error.tsx";
 import Paper from "@mui/material/Paper";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
-import Footer from "./layouts/Footer.tsx";
+import Footer from "../layouts/Footer.tsx";
+import type { Route } from "./+types/Error.ts";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -103,7 +103,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
     const bouncy = animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2) }
+      { delay: stagger(0.2) },
     );
     setTimeout(() => {
       bouncy.then;

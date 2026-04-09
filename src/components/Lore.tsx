@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicLore from "./nonAuth/PublicLore";
 import type { Route } from "./+types/Lore";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 

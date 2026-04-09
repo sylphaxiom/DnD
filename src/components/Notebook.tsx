@@ -5,7 +5,7 @@ import PublicNotebook from "./nonAuth/PublicNotebook";
 import type { Route } from "./+types/Notebook";
 import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -35,7 +35,7 @@ export default function Notebook() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (

@@ -15,7 +15,7 @@ import Grow from "@mui/material/Grow";
 import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackgrounds, type Background } from "../workhorse/Queries";
-import Loading from "../Loading";
+import Loading from "../utils/Loading";
 
 interface FilterState {
   magical: boolean;

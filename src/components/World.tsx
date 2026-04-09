@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicWorld from "./nonAuth/PublicWorld";
 import type { Route } from "./+types/World";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayer } from "./workhorse/Queries";
 
@@ -35,7 +35,7 @@ export default function World() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (

@@ -1,5 +1,5 @@
 // import * as React from "react";
-import type { Route } from "./+types/Result";
+import type { Route } from "../+types/Result";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);

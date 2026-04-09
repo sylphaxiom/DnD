@@ -1,5 +1,5 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import Loading from "../Loading";
+import Loading from "../utils/Loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayer } from "../workhorse/Queries";
 import Box from "@mui/material/Box";
@@ -42,7 +42,7 @@ export function Profile() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
 

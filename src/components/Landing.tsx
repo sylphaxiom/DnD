@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 import PublicHome from "./nonAuth/PublicHome";
 import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 import type { Route } from "./+types/Landing";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
@@ -34,7 +34,7 @@ export default function Landing() {
       console.log(
         "Something went wrong here.\nError message: %s\nReturned Data: %s",
         JSON.stringify(error.message),
-        JSON.stringify(data)
+        JSON.stringify(data),
       );
     }
   }

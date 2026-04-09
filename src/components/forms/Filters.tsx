@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-// import NumberSpinner from "../workhorse/NumberSpinner";
+// import NumberSpinner from "../utils/NumberSpinner";
 // import Slider from "@mui/material/Slider";
 // import Switch from "@mui/material/Switch";
 // import FormControlLabel from "@mui/material/FormControlLabel";

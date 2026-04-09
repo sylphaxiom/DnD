@@ -1,15 +1,16 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import Loading from "../Loading";
+import Loading from "../utils/Loading";
 import { fetchPlayer } from "../workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import type { Route } from "./+types/Home";
 
-export default withAuthenticationRequired(VaultDoor, {
+export default withAuthenticationRequired(Home, {
   onRedirecting: () => <Loading />,
   loginOptions: {
     authorizationParams: {
@@ -18,7 +19,19 @@ export default withAuthenticationRequired(VaultDoor, {
   },
 });
 
-export function VaultDoor() {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const query = decodeURIComponent(url.search);
+  const bits = query.slice(1).split("&");
+  let params: { [key: string]: string } = {};
+  bits.forEach((v) => {
+    const pair = v.split("=");
+    params[pair[0]] = pair[1];
+  });
+  return params;
+}
+
+export function Home() {
   const [value, setValue] = React.useState("characters");
   const { user, isAuthenticated } = useAuth0();
   const { isLoading, data, error } = useQuery({
@@ -38,7 +51,7 @@ export function VaultDoor() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (
@@ -47,9 +60,14 @@ export function VaultDoor() {
         variant="h5"
         sx={{ width: 0.8, mx: "auto", my: 3, textAlign: "center" }}
       >
-        Hey {player?.first_name}, This is your Homebrew Vault. Here you will be
-        able to create and update your homebrew rules, classes, items, whatever.
-        Suggestions to UI and additions are appreciated
+        Hey {player?.first_name}, This is the homepage. Here you will be able to
+        get an overview of all your stuff...{" "}
+      </Typography>
+      <Typography
+        variant="h5"
+        sx={{ width: 0.8, mx: "auto", my: 3, textAlign: "center" }}
+      >
+        Once I figure out what all that stuff is that is.
       </Typography>
       <Box>
         <Tabs

@@ -1,11 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Title from "./layouts/Title";
-import Navbar from "./layouts/Navbar";
-import Footer from "./layouts/Footer";
+import Title from "./Title";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Utils from "./layouts/Utils";
+import Utils from "./Utils";
 import Container from "@mui/material/Container";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,7 +16,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
 import Avatar from "@mui/material/Avatar";
-import ModeSwitch from "./utils/ModeSwitch";
+import ModeSwitch from "../utils/ModeSwitch";
 interface bps {
   sm: boolean;
   md: boolean;

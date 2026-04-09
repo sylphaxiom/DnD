@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicCharacter from "./nonAuth/PublicCharacter";
 import type { Route } from "./+types/Character";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 
@@ -35,7 +35,7 @@ export default function Character() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (

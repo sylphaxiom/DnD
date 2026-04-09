@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicCampaign from "./nonAuth/PublicCampaign";
 import type { Route } from "./+types/Campaign";
-import Loading from "./Loading";
+import Loading from "./utils/Loading";
 import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
 
@@ -35,7 +35,7 @@ export default function Campaign() {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (

@@ -1,13 +1,13 @@
 import { Outlet, Scripts, ScrollRestoration } from "react-router";
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Loading from "./components/Loading";
+import Loading from "./components/utils/Loading";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TwinkleStars from "./components/layouts/TwinkleStars";
+import TwinkleStars from "./components/utils/TwinkleStars";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
