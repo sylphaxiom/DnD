@@ -29,7 +29,7 @@ export default function PublicWorld() {
         --- This is the public world page ---
         <Divider sx={{ my: 2 }} variant="middle" />
       </Grid>
-      <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ px: { xs: 2, md: 0 } }}>
+      <Grid size={{ xs: 12, lg: 4 }} sx={{ px: { xs: 2, lg: 0 } }}>
         <Typography variant="subtitle2" sx={{ textIndent: "3em", my: 2 }}>
           The world of Kothis is a fantasy world of diversity, magic, and
           wonder. The nations of Kothis live in peace with one another, for the
@@ -83,7 +83,7 @@ export default function PublicWorld() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid size={{ xs: 12, md: 8 }}>
+      <Grid size={{ xs: 12, lg: 8 }} sx={{ px: { xs: 2, lg: 0 } }}>
         <Card
           id="interactive_map_card"
           sx={{ textAlign: "center", borderRadius: 3 }}
@@ -97,12 +97,9 @@ export default function PublicWorld() {
           </CardContent>
         </Card>
       </Grid>
-      <Divider
-        flexItem
-        orientation="horizontal"
-        sx={{ width: 0.87, my: 3 }}
-        variant={"middle"}
-      />
+      <Grid size={12}>
+        <Divider sx={{ my: 3 }} variant={"middle"} />
+      </Grid>
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
         <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Borodir</Typography>

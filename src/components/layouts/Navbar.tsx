@@ -38,9 +38,9 @@ export default function Navigation({ bps }: Props) {
     "home",
     "character",
     "campaign",
-    "notebook",
     "world",
     "homebrew",
+    "notebook",
   ];
 
   return (
