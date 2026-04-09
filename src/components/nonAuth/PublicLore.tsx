@@ -97,9 +97,6 @@ export default function PublicLore() {
     | "references"
   >("");
 
-  if (isLoading) {
-    return <Loading />;
-  }
   if (error) {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
@@ -215,8 +212,11 @@ export default function PublicLore() {
         </Paper>
       </Grow>
       <Grid size={12}>
-        {isLoading ||
-          backgrounds?.map((bg) => <div key={bg.key}>{bg.name}</div>)}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          backgrounds?.map((bg) => <div key={bg.key}>{bg.name}</div>)
+        )}
       </Grid>
     </Grid>
   );
