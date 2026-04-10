@@ -98,17 +98,23 @@ export default function Error({ loaderData }: Route.ComponentProps) {
     errConn = loaderData.connection || undefined;
     errLang = loaderData.lang || undefined;
   }
+  const lengthVal = title.length;
+  const durationVal = lengthVal / 10;
+  const staggerVal = durationVal / 10;
+  const totalVal = durationVal + staggerVal + 0.4;
 
   React.useEffect(() => {
-    const bouncy = animate(
+    animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2) },
+      {
+        delay: stagger(staggerVal),
+        duration: durationVal,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatDelay: totalVal,
+      },
     );
-    setTimeout(() => {
-      bouncy.then;
-      setBounce(!bounce);
-    }, 3000);
     if (fetcher.state === "idle") {
       if (fetcher.data?.status === 200) {
         respMsg = fetcher.data?.msg;

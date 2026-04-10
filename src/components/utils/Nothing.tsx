@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as motion from "motion/react-client";
 import * as motions from "motion/react";
-import { delay, stagger } from "motion";
+import { stagger } from "motion";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
@@ -64,10 +64,12 @@ export default function Loading({ title, subtitle, nodot }: NothingProps) {
     let staggerVal: number;
     let durationVal: number;
     let totalVal: number;
+
+    // 10% stagger with 0.4s pause before restart
     if (animatedTitle.length > 0) {
-      staggerVal = animatedTitle.length / 60;
-      totalVal = animatedTitle.length / 10 + staggerVal;
-      durationVal = totalVal - staggerVal - 0.2;
+      durationVal = animatedTitle.length / 10;
+      staggerVal = durationVal / 10;
+      totalVal = durationVal + staggerVal + 0.4;
     } else {
       totalVal = 1.5;
       durationVal = 0.6;

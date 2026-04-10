@@ -21,18 +21,24 @@ export default function Loading() {
     subtitle = "Looks like you tried to go to /" + catchall;
     display = "flex";
   }
+  const lengthVal = title.length;
+  const durationVal = lengthVal / 10;
+  const staggerVal = durationVal / 10;
+  const totalVal = durationVal + staggerVal + 0.4;
 
   React.useEffect(() => {
-    const bouncy = animate(
+    animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2), duration: 0.6, ease: ["easeIn", "easeOut"] },
+      {
+        delay: stagger(staggerVal),
+        duration: durationVal,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatDelay: totalVal,
+      },
     );
-    setTimeout(() => {
-      bouncy.then;
-      setBounce(!bounce);
-    }, 3000);
-  }, [bounce]);
+  }, []);
 
   return (
     <Box
