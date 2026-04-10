@@ -97,7 +97,7 @@ export default function Filters({ filterState, dispatch, topic }: FilterProps) {
         />
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: "100%" }}>
+        <FormControl variant="standard" sx={{ p: 1, minWidth: "100%" }}>
           <InputLabel id="gamesystem-label">Gamesystem</InputLabel>
           <Select
             labelId="gamesystem-label"
@@ -132,7 +132,7 @@ export default function Filters({ filterState, dispatch, topic }: FilterProps) {
       container
       spacing={3}
       sx={{
-        mx: 2,
+        px: 2,
         alignItems: "center",
       }}
       id="items-filters"
