@@ -8,7 +8,6 @@ import Divider from "@mui/material/Divider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link } from "react-router";
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
 
 export default function PublicWorld() {
   // non-authenticated landing page for World tab

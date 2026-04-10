@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 
 export default function Loading() {
   const [scope, animate] = motions.useAnimate();
-  const [bounce, setBounce] = React.useState(true);
   let title = "LOADING...";
   let subtitle = null;
   let display = "none";

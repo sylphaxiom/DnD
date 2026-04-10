@@ -30,7 +30,6 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
-  // await new Promise((res) => setTimeout(res, 1000));
   let formData = await request.formData();
   const errClient = decodeURI(String(formData.get("errClient")));
   const errConn = decodeURI(String(formData.get("errConn")));
@@ -74,7 +73,6 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export default function Error({ loaderData }: Route.ComponentProps) {
   const [scope, animate] = motions.useAnimate();
-  const [bounce, setBounce] = React.useState(true);
   const [timer, setTimer] = React.useState(10);
   const [ignored, setIgnored] = React.useState(false);
   const [realError, setRealError] = React.useState(false);
@@ -128,7 +126,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
         }, 1000);
       }
     }
-  }, [bounce, timer, fetcher.state]);
+  }, [timer, fetcher.state]);
 
   return (
     <Box

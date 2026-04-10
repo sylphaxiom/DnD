@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicNotebook from "./nonAuth/PublicNotebook";
