@@ -92,8 +92,8 @@ export default function Navigation({ bps }: Props) {
               vertical: "bottom",
               horizontal: "left",
             }}
-            disableScrollLock
-            keepMounted
+            // disableScrollLock
+            // keepMounted
             transformOrigin={{
               vertical: "top",
               horizontal: "left",

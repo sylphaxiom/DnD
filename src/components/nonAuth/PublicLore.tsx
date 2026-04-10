@@ -11,10 +11,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Filters from "../forms/Filters";
 import Paper from "@mui/material/Paper";
-import Grow from "@mui/material/Grow";
-import { Button, Collapse, Drawer, Slide, Zoom } from "@mui/material";
+import { Button, Collapse } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBackgrounds, type Background } from "../workhorse/Queries";
+import {
+  fetchBackgrounds,
+  fetchFeats,
+  fetchRules,
+  fetchReferences,
+} from "../workhorse/Queries";
 import Loading from "../utils/Loading";
 import Nothing from "../utils/Nothing";
 
@@ -77,13 +81,6 @@ export default function PublicLore() {
     filterReducer,
     initialFilterState,
   );
-  const { isLoading, data, error, refetch } = useQuery({
-    queryKey: ["fetchBackgrounds"],
-    queryFn: () => fetchBackgrounds(),
-    enabled: false,
-  });
-  // const backgrounds: Background[] | undefined = data?.results;
-  const results = data?.results || [];
   const [filtered, setFiltered] = React.useState(false);
   const [topic, setTopic] = React.useState<
     | ""
@@ -98,6 +95,43 @@ export default function PublicLore() {
     | "lookup"
     | "references"
   >("");
+  const display = topic === "" ? "none" : "flex";
+  let query: any;
+  const qBackgrounds = useQuery({
+    queryKey: ["fetchBackgrounds"],
+    queryFn: () => fetchBackgrounds(),
+    enabled: false,
+  });
+  if (topic === "backgrounds") {
+    query = qBackgrounds;
+  }
+  const qFeats = useQuery({
+    queryKey: ["fetchFeats"],
+    queryFn: () => fetchFeats(),
+    enabled: false,
+  });
+  if (topic === "feats") {
+    query = qFeats;
+  }
+  const qRules = useQuery({
+    queryKey: ["fetchRules"],
+    queryFn: () => fetchRules(),
+    enabled: false,
+  });
+  if (topic === "rules") {
+    query = qRules;
+  }
+  const qReferences = useQuery({
+    queryKey: ["fetchReferences"],
+    queryFn: () => fetchReferences(),
+    enabled: false,
+  });
+  if (topic === "references") {
+    query = qReferences;
+  }
+  const { isLoading, data, error, refetch } = query || {};
+  const results = query?.data?.results || [];
+  // const backgrounds: Background[] | undefined = data?.results;
 
   if (error) {
     console.log(
@@ -110,7 +144,7 @@ export default function PublicLore() {
   return (
     <Grid container spacing={1}>
       <Typography variant="h3" sx={{ textAlign: "center", width: 1, py: 3 }}>
-        The Lore of Kothis and worlds beyond...
+        The Lore of Kothis and Worlds Beyond...
       </Typography>
       <Typography
         variant="h6"
@@ -192,32 +226,36 @@ export default function PublicLore() {
               sx={{ mx: 3 }}
             />
           }
-          sx={{ width: 1, justifyContent: "space-between" }}
+          sx={{ width: 1, justifyContent: "space-between", display: display }}
           label="Any filters?"
           labelPlacement="start"
         />
       </Grid>
-      <Drawer open={filtered} onClose={() => setFiltered(false)}>
-        <Paper
-          variant="elevation"
-          elevation={10}
-          sx={{ m: 3, py: 3, width: 1, boxSizing: "border-box" }}
-        >
-          <Filters
-            filterState={filterState}
-            dispatch={dispatch}
-            topic={topic}
-          />
-        </Paper>
-      </Drawer>
+      <Grid size={12}>
+        <Collapse orientation="vertical" sx={{ mx: 3 }} in={filtered}>
+          <Paper
+            variant="elevation"
+            elevation={10}
+            sx={{
+              width: 1,
+            }}
+          >
+            <Filters
+              filterState={filterState}
+              dispatch={dispatch}
+              topic={topic}
+            />
+          </Paper>
+        </Collapse>
+      </Grid>
       <Grid size={12}>
         <Paper variant="elevation" elevation={10} sx={{ m: 3, py: 3 }}>
           {isLoading ? (
             <Loading />
-          ) : results.length === 0 ? (
-            <Nothing />
+          ) : results && results.length > 0 ? (
+            results?.map((item: any) => <div key={item.key}>{item.name}</div>)
           ) : (
-            results?.map((item) => <div key={item.key}>{item.name}</div>)
+            <Nothing />
           )}
         </Paper>
       </Grid>

@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicHomebrew from "./nonAuth/PublicHomebrew";
@@ -26,7 +25,7 @@ export default function Homebrew() {
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  const player = data?.message[0];
+  // const player = data?.message[0];
 
   if (isLoading) {
     return <Loading />;
@@ -38,14 +37,5 @@ export default function Homebrew() {
       JSON.stringify(data),
     );
   }
-  return (
-    <>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated
-          ? player?.first_name + "\'s Homebrew Vault"
-          : "The Public Homebrewery"}
-      </Typography>
-      {isAuthenticated ? <Outlet /> : <PublicHomebrew />}
-    </>
-  );
+  return isAuthenticated ? <Outlet /> : <PublicHomebrew />;
 }

@@ -51,9 +51,10 @@ interface FilterProps {
 
 export default function Filters({ filterState, dispatch, topic }: FilterProps) {
   console.log("Filters rendered with topic:", topic);
-  // const { magical, gamesystem, nameCont, descCont, costVal, value, costValue } =
-  //   filterState;
+
   const { gamesystem, nameCont } = filterState;
+
+  // get the Game Systems list
   const { data, error } = useQuery({
     queryKey: ["getGamesystem"],
     queryFn: () => fetchGameSystems(),
@@ -126,13 +127,33 @@ export default function Filters({ filterState, dispatch, topic }: FilterProps) {
       </Grid>
     </>
   );
+  switch (topic) {
+    case "spells":
+      // Use spell filters
+      break;
+    case "items":
+      // Use item filters
+      break;
+    case "species":
+      // Use species filters
+      break;
+    case "classes":
+      // Use classes filters
+      break;
+    case "creatures":
+      // Use creatures filters
+      break;
+    default:
+      // Use basic filters filters
+      break;
+  }
 
   return (
     <Grid
       container
       spacing={3}
       sx={{
-        px: 2,
+        p: 3,
         alignItems: "center",
       }}
       id="items-filters"

@@ -26,7 +26,7 @@ export default function Notebook() {
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  const player = data?.message[0];
+  // const player = data?.message[0];
 
   if (isLoading) {
     return <Loading />;
@@ -38,21 +38,5 @@ export default function Notebook() {
       JSON.stringify(data),
     );
   }
-  return (
-    <>
-      <Typography
-        variant="h2"
-        sx={{
-          textAlign: "center",
-          width: 1,
-          my: 4,
-          display: isAuthenticated ? "none" : "initial",
-        }}
-      >
-        {isAuthenticated ? player?.first_name + "\'s " : "The Public\'s "}{" "}
-        Notebook Page
-      </Typography>
-      {isAuthenticated ? <Outlet /> : <PublicNotebook />}
-    </>
-  );
+  return isAuthenticated ? <Outlet /> : <PublicNotebook />;
 }

@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicHome from "./nonAuth/PublicHome";
@@ -38,15 +37,6 @@ export default function Landing() {
       );
     }
   }
-  const player = data?.message[0];
-  return (
-    <>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated
-          ? `Welcome Back, ${player?.username}`
-          : "The Public's Landing Page"}
-      </Typography>
-      {isAuthenticated ? <Outlet /> : <PublicHome />}
-    </>
-  );
+  // const player = data?.message[0];
+  return isAuthenticated ? <Outlet /> : <PublicHome />;
 }

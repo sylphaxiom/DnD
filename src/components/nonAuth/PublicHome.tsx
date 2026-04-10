@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import { Divider } from "@mui/material";
 
 export async function clientLoader() {
   // Home page loader
@@ -17,6 +18,16 @@ export default function PublicHome() {
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Grid container>
+        <Grid size={{ xs: 12 }}>
+          <Divider variant="middle" sx={{ my: 4 }} />
+          <Typography
+            variant="h2"
+            sx={{ textAlign: "center", width: 1, my: 4 }}
+          >
+            The Setting
+          </Typography>
+          <Divider variant="middle" sx={{ my: 4 }} />
+        </Grid>
         <Grid size={{ xs: 12, lg: 6 }} offset={0}>
           <Typography variant="subtitle1" sx={{ px: { xs: 2, lg: 0 } }}>
             <span className="punch-uation">“</span>

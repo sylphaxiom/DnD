@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Outlet } from "react-router";
 import PublicLore from "./nonAuth/PublicLore";
@@ -26,7 +25,7 @@ export default function Lore() {
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  const player = data?.message[0];
+  // const player = data?.message[0];
 
   if (isLoading) {
     return <Loading />;
@@ -38,13 +37,5 @@ export default function Lore() {
       JSON.stringify(data),
     );
   }
-  return (
-    <>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated ? player?.first_name + "\'s " : "The Public\'s "} Lore
-        Page
-      </Typography>
-      {isAuthenticated ? <Outlet /> : <PublicLore />}
-    </>
-  );
+  return isAuthenticated ? <Outlet /> : <PublicLore />;
 }
