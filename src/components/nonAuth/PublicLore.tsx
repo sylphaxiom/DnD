@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import Filters from "../forms/Filters";
+import Filters, { type BgFilter } from "../forms/Filters";
 import Paper from "@mui/material/Paper";
 import { Button, Collapse } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
@@ -19,69 +19,25 @@ import {
   fetchRules,
   fetchReferences,
 } from "../workhorse/Queries";
-import Loading from "../utils/Loading";
 import Nothing from "../utils/Nothing";
-
-interface FilterState {
-  magical: boolean;
-  gamesystem: string;
-  nameCont: string;
-  descCont: string;
-  costVal: boolean;
-  value: number[];
-  costValue: number;
-}
-
-type FilterAction =
-  | { type: "SET_MAGICAL"; payload: boolean }
-  | { type: "SET_GAMESYSTEM"; payload: string }
-  | { type: "SET_NAME_CONT"; payload: string }
-  | { type: "SET_DESC_CONT"; payload: string }
-  | { type: "SET_COST_VAL"; payload: boolean }
-  | { type: "SET_VALUE"; payload: number[] }
-  | { type: "SET_COST_VALUE"; payload: number };
-
-const initialFilterState: FilterState = {
-  magical: false,
-  gamesystem: "",
-  nameCont: "",
-  descCont: "",
-  costVal: true,
-  value: [500, 9000],
-  costValue: 1000,
-};
-
-function filterReducer(state: FilterState, action: FilterAction): FilterState {
-  switch (action.type) {
-    case "SET_MAGICAL":
-      return { ...state, magical: action.payload };
-    case "SET_GAMESYSTEM":
-      return { ...state, gamesystem: action.payload };
-    case "SET_NAME_CONT":
-      return { ...state, nameCont: action.payload };
-    case "SET_DESC_CONT":
-      return { ...state, descCont: action.payload };
-    case "SET_COST_VAL":
-      return { ...state, costVal: action.payload };
-    case "SET_VALUE":
-      return { ...state, value: action.payload };
-    case "SET_COST_VALUE":
-      return { ...state, costValue: action.payload };
-    default:
-      return state;
-  }
-}
+import Thinking from "../utils/Thinking";
 
 export async function clientLoader() {
   // Lore page loader
 }
 
 export default function PublicLore() {
-  const [filterState, dispatch] = React.useReducer(
-    filterReducer,
-    initialFilterState,
+  const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
+    undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
+  // Used for pagination.
+  const [page, setPage] = React.useState(1);
+  // Doesn't do anything and won't be executed.
+  // Used so there isn't an unused param error temporarily.
+  if (page === 0) {
+    setPage(1);
+  }
   const [topic, setTopic] = React.useState<
     | ""
     | "spells"
@@ -97,14 +53,21 @@ export default function PublicLore() {
   >("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
+
+  // Background query
+  let bgName = bgFilters?.name || "";
+  let bgGameSystem = bgFilters?.gameSystem || "";
+  let bgExact = bgFilters?.exact || false;
   const qBackgrounds = useQuery({
-    queryKey: ["fetchBackgrounds"],
-    queryFn: () => fetchBackgrounds(),
+    queryKey: ["fetchBackgrounds", bgName, bgGameSystem, bgExact],
+    queryFn: () => fetchBackgrounds(bgName, bgGameSystem, bgExact),
     enabled: false,
   });
   if (topic === "backgrounds") {
     query = qBackgrounds;
   }
+
+  // Feat query
   const qFeats = useQuery({
     queryKey: ["fetchFeats"],
     queryFn: () => fetchFeats(),
@@ -131,7 +94,32 @@ export default function PublicLore() {
   }
   const { isLoading, data, error, refetch } = query || {};
   const results = query?.data?.results || [];
-  // const backgrounds: Background[] | undefined = data?.results;
+
+  React.useEffect(() => {
+    if (refetch) {
+      refetch();
+      console.log("refetch completed closing filters: %o...", bgFilters);
+    }
+  }, [bgFilters]);
+
+  const filterRef = React.useRef(null);
+
+  const handleSearch = () => {
+    switch (topic) {
+      case "backgrounds":
+        console.log("Starting filters: %o", bgFilters);
+        // const { name, gameSystem, exact } = filterRef.current;
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          console.log("inside if ref: %o", filter);
+          setBgFilters(filter);
+        }
+        console.log(
+          "BG filters have been set refetching with background \n%o...",
+          filterRef.current,
+        );
+    }
+  };
 
   if (error) {
     console.log(
@@ -210,9 +198,7 @@ export default function PublicLore() {
           type="button"
           variant="contained"
           sx={{ mt: 2, width: 1 }}
-          onClick={() => {
-            refetch();
-          }}
+          onClick={() => handleSearch()}
         >
           Search
         </Button>
@@ -240,18 +226,14 @@ export default function PublicLore() {
               width: 1,
             }}
           >
-            <Filters
-              filterState={filterState}
-              dispatch={dispatch}
-              topic={topic}
-            />
+            <Filters topic={topic} ref={filterRef} />
           </Paper>
         </Collapse>
       </Grid>
       <Grid size={12}>
         <Paper variant="elevation" elevation={10} sx={{ m: 3, py: 3 }}>
           {isLoading ? (
-            <Loading />
+            <Thinking />
           ) : results && results.length > 0 ? (
             results?.map((item: any) => <div key={item.key}>{item.name}</div>)
           ) : (

@@ -32,7 +32,6 @@ export function Profile() {
 
   if (player?.prefs) {
     prefs = JSON.parse(player?.prefs);
-    console.log("After parsing prefs are: %o", prefs);
   }
 
   if (isLoading) {

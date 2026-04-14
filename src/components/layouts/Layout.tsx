@@ -43,7 +43,6 @@ export default function Layout() {
   const domain = "https://test.sylphaxiom.com";
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
-    console.log(clk);
     switch (clk) {
       case "Log In":
         handleClose();

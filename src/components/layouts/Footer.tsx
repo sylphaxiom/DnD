@@ -37,12 +37,12 @@ export default function Footer() {
           </NavLink>
         </Grid>
         <Grid>
-          <NavLink to="/lore/portal" style={{ marginRight: "1em" }}>
+          <NavLink to="/world/lore/portal" style={{ marginRight: "1em" }}>
             About
           </NavLink>
         </Grid>
         <Grid>
-          <NavLink to="/lore/creators" style={{ marginRight: "1em" }}>
+          <NavLink to="/world/lore/creators" style={{ marginRight: "1em" }}>
             Contributors
           </NavLink>
         </Grid>

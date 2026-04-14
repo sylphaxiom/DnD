@@ -126,20 +126,24 @@ export interface Background {
 }
 
 export async function fetchBackgrounds(
-  name__iexact: string = "",
-  name__icontains: string = "",
-  document__gamesystem__key: string = "",
+  name: string = "",
+  document_key: string = "",
+  exact: boolean = false,
   key: string = "",
   order: string = "",
-  search: string = "",
-  page: number = 1,
-  limit: number = 20
 ): Promise<{
   count: number;
   next: string | null;
   previous: string | null;
   results: Background[]
   } | null> {
+    let name__iexact = ""
+    let name__icontains = ""
+    if (exact) {
+      name__iexact = name
+    } else {
+      name__icontains = name
+    }
     const response = await axios
       .get(`https://api.open5e.com/v2/backgrounds`, {
         headers: {
@@ -148,12 +152,9 @@ export async function fetchBackgrounds(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document__gamesystem__key,
+          document__gamesystem__key: document_key,
           key: key,
           order: order,
-          search: search,
-          page: page,
-          limit: limit,
         },
       })
       .catch((error) => {

@@ -50,3 +50,20 @@ html.light #stary_bg {
   backdrop-filter: blur(90px);
   background-color: transparent;
 }
+
+#spinDaddy {
+  position:relative;
+  width: 250px;
+  height: 250px;
+  display:flex;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#logoBG {
+  position:absolute;
+  width:100px;
+  height:100px;
+  align-self: center;
+  margin-left: 75px;
+}

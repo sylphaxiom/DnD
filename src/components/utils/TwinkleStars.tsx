@@ -45,7 +45,6 @@ export default function TwinkleStars() {
       stars.push(randStar(iter));
       iter++;
     }
-    console.log("Number of stars is " + totalStars);
     setStars(stars);
   }, []);
   return (

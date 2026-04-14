@@ -12,29 +12,11 @@ import InputLabel from "@mui/material/InputLabel";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGameSystems, type GameSystem } from "../workhorse/Queries";
 import Tooltip from "@mui/material/Tooltip";
-
-interface FilterState {
-  magical: boolean;
-  gamesystem: string;
-  nameCont: string;
-  descCont: string;
-  costVal: boolean;
-  value: number[];
-  costValue: number;
-}
-
-type FilterAction =
-  | { type: "SET_MAGICAL"; payload: boolean }
-  | { type: "SET_GAMESYSTEM"; payload: string }
-  | { type: "SET_NAME_CONT"; payload: string }
-  | { type: "SET_DESC_CONT"; payload: string }
-  | { type: "SET_COST_VAL"; payload: boolean }
-  | { type: "SET_VALUE"; payload: number[] }
-  | { type: "SET_COST_VALUE"; payload: number };
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import React from "react";
 
 interface FilterProps {
-  filterState: FilterState;
-  dispatch: React.Dispatch<FilterAction>;
   topic:
     | ""
     | "spells"
@@ -47,12 +29,34 @@ interface FilterProps {
     | "rules"
     | "lookup"
     | "references";
+  ref: React.Ref<{ name: string; gameSystem: string; exact: boolean }>;
 }
 
-export default function Filters({ filterState, dispatch, topic }: FilterProps) {
-  console.log("Filters rendered with topic:", topic);
+export interface BgFilter {
+  name: string;
+  gameSystem: string;
+  exact: boolean;
+}
 
-  const { gamesystem, nameCont } = filterState;
+export default function Filters({ topic, ref }: FilterProps) {
+  const [name, setName] = React.useState("");
+  const [gameSystem, setGameSystem] = React.useState("");
+  const [exact, setExact] = React.useState(false);
+
+  // React.useEffect(() => {
+  //   ref!.currrent = { name: name, gameSystem: gameSystem, exact: exact };
+  // }, []);
+
+  React.useImperativeHandle(ref, () => {
+    console.log(
+      "Entered Imperative Handle with filter information:\nname: %s | gameSystem: %s | exact: %s",
+      name,
+      gameSystem,
+      exact,
+    );
+    console.log("ref information: %o", ref);
+    return { name: name, gameSystem: gameSystem, exact: exact };
+  }, [name, gameSystem, exact]);
 
   // get the Game Systems list
   const { data, error } = useQuery({
@@ -85,16 +89,26 @@ export default function Filters({ filterState, dispatch, topic }: FilterProps) {
   // Basic: name, document (gamesystem/source)
   const basicFilters = (
     <>
-      <Grid size={{ xs: 12 }}>
+      <Grid size={{ xs: 8 }}>
         <TextField
           id="name-contains"
           label="Name Contains..."
           variant="standard"
           fullWidth
-          value={nameCont}
-          onChange={(e) =>
-            dispatch({ type: "SET_NAME_CONT", payload: e.target.value })
+          value={name}
+          onChange={(e) => setName(e.currentTarget.value)}
+        />
+      </Grid>
+      <Grid size={4} sx={{ alignSelf: "end" }}>
+        <FormControlLabel
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={exact}
+              onChange={(e) => setExact(e.currentTarget.checked)}
+            />
           }
+          label="Exact Match?"
         />
       </Grid>
       <Grid size={{ xs: 12 }}>
@@ -103,13 +117,8 @@ export default function Filters({ filterState, dispatch, topic }: FilterProps) {
           <Select
             labelId="gamesystem-label"
             id="gamesystem"
-            value={gamesystem}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_GAMESYSTEM",
-                payload: e.target.value as string,
-              })
-            }
+            value={gameSystem}
+            onChange={(e) => setGameSystem(e.target.value)}
             label="Gamesystem"
           >
             <MenuItem value="">Select a Game System...</MenuItem>

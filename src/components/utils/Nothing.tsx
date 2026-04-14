@@ -78,8 +78,6 @@ export default function Loading({ title, subtitle, nodot }: NothingProps) {
     return { stagr: staggerVal, duration: durationVal, total: totalVal };
   }, [animatedTitle.length]);
 
-  console.log("Duration:", duration, "Stagger:", stagr);
-
   React.useEffect(() => {
     if (!displayTitle) return; // Only animate when title is set
 
@@ -117,7 +115,7 @@ export default function Loading({ title, subtitle, nodot }: NothingProps) {
             justifyContent: "center",
             overflow: "visible",
             fontFamily: "Courier New, monospace",
-            fontSize: "5em",
+            fontSize: "3em",
             fontWeight: 700,
           }}
           ref={scope}
