@@ -1,22 +1,22 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Title from "./Title";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import { Outlet, useLocation, useNavigate } from "react-router";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Utils from "./Utils";
-import Container from "@mui/material/Container";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
 import NoAccountsIcon from "@mui/icons-material/NoAccounts";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useAuth0 } from "@auth0/auth0-react";
-import Avatar from "@mui/material/Avatar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import * as React from "react";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import ModeSwitch from "../utils/ModeSwitch";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+import Title from "./Title";
+import Utils from "./Utils";
 interface bps {
   sm: boolean;
   md: boolean;
@@ -40,7 +40,7 @@ export default function Layout() {
     navigate("/notebook/profile");
   };
 
-  const domain = "https://test.sylphaxiom.com";
+  const domain = "http://localhost:5173";
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
     switch (clk) {

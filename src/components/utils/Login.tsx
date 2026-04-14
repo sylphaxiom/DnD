@@ -1,17 +1,17 @@
-import * as React from "react";
-import type { Route } from "./+types/Login";
-import { redirectDocument, useLocation, useNavigate } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import CloseIcon from "@mui/icons-material/Close";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import NoAccountsIcon from "@mui/icons-material/NoAccounts";
-import CloseIcon from "@mui/icons-material/Close";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 import Avatar from "@mui/material/Avatar";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import * as React from "react";
+import { redirectDocument, useLocation, useNavigate } from "react-router";
+import type { Route } from "./+types/Login";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -38,7 +38,7 @@ export default function Login() {
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const domain = "https://test.sylphaxiom.com";
+  const domain = "http://localhost:5173";
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
