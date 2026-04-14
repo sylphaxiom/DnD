@@ -1,17 +1,17 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import Loading from "../utils/Loading";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPlayer } from "../workhorse/Queries";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../utils/Loading";
+import { fetchPlayer } from "../workhorse/Queries";
 // import ListItem from "@mui/material/ListItem";
 // import { Link } from "react-router";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
-import { PlayerForm } from "../workhorse/SecureForms";
+import Typography from "@mui/material/Typography";
 import ProfileDataForm from "../forms/ProfileDataForm";
+import { PlayerForm } from "../workhorse/SecureForms";
 
 export default withAuthenticationRequired(Profile, {
   onRedirecting: () => <Loading />,
@@ -27,12 +27,12 @@ export function Profile() {
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   const player = data?.message[0];
-  let prefs = {};
+  // let prefs = {};
   let profImg = "Arris_fallback.jpg";
 
-  if (player?.prefs) {
-    prefs = JSON.parse(player?.prefs);
-  }
+  // if (player?.prefs) {
+  //   prefs = JSON.parse(player?.prefs);
+  // }
 
   if (isLoading) {
     return <Loading />;

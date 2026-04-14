@@ -1,11 +1,6 @@
-import * as React from "react";
-import * as motion from "motion/react-client";
-import * as motions from "motion/react";
-import { stagger } from "motion";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
-import { infiniteQueryOptions } from "@tanstack/react-query";
+import * as motions from "motion/react";
+import * as motion from "motion/react-client";
 
 export default function Loading() {
   //   React.useEffect(() => {nly animate when title is set
