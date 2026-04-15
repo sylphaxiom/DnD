@@ -1,13 +1,12 @@
-import { Outlet, Scripts, ScrollRestoration } from "react-router";
-import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Loading from "./components/utils/Loading";
-import theme from "./theme";
-import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as React from "react";
+import { Outlet, Scripts, ScrollRestoration } from "react-router";
+import Loading from "./components/utils/Loading";
 import TwinkleStars from "./components/utils/TwinkleStars";
+import theme from "./theme";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
@@ -66,10 +65,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <CssBaseline enableColorScheme />
               {children}
             </ThemeProvider>
-            <ReactQueryDevtools
+            {/* <ReactQueryDevtools
               initialIsOpen={false}
               buttonPosition="bottom-left"
-            />
+            /> */}
           </QueryClientProvider>
         </React.Fragment>
         <ScrollRestoration />

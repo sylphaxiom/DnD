@@ -130,7 +130,7 @@ export async function fetchBackgrounds(
   document_key: string = "",
   exact: boolean = false,
   key: string = "",
-  order: string = "",
+  ordering: string = "name",
 ): Promise<{
   count: number;
   next: string | null;
@@ -154,7 +154,7 @@ export async function fetchBackgrounds(
           name__icontains: name__icontains,
           document__gamesystem__key: document_key,
           key: key,
-          order: order,
+          ordering: ordering,
         },
       })
       .catch((error) => {

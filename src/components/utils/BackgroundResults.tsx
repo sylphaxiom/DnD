@@ -17,13 +17,6 @@ interface BgProps {
 export default function BackgroundResults({ results }: BgProps) {
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const components = {
-    // h1: ({ ...props }) => <Typography variant="h3" {...props} />,
-    // h2: ({ ...props }) => <Typography variant="h4" {...props} />,
-    // p: ({ ...props }) => <Typography variant="body1" {...props} />,
-    // li: ({ ...props }) => <ListItem {...props} />,
-  };
-
   const handleChange =
     (key: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? key : false);
@@ -56,9 +49,7 @@ export default function BackgroundResults({ results }: BgProps) {
                   {benefit.name}
                 </Typography>
                 <Divider />
-                <Markdown components={components} remarkPlugins={[remarkGfm]}>
-                  {description}
-                </Markdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
                 <br />
               </>
             );

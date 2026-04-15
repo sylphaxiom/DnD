@@ -4,17 +4,17 @@ import Grid from "@mui/material/Grid";
 // import Switch from "@mui/material/Switch";
 // import FormControlLabel from "@mui/material/FormControlLabel";
 // import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import { useQuery } from "@tanstack/react-query";
-import { fetchGameSystems, type GameSystem } from "../workhorse/Queries";
-import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { fetchGameSystems, type GameSystem } from "../workhorse/Queries";
 
 interface FilterProps {
   topic:
@@ -89,7 +89,7 @@ export default function Filters({ topic, ref }: FilterProps) {
   // Basic: name, document (gamesystem/source)
   const basicFilters = (
     <>
-      <Grid size={{ xs: 8 }}>
+      <Grid size={{ xs: 12, sm: 8 }}>
         <TextField
           id="name-contains"
           label="Name Contains..."
@@ -99,7 +99,7 @@ export default function Filters({ topic, ref }: FilterProps) {
           onChange={(e) => setName(e.currentTarget.value)}
         />
       </Grid>
-      <Grid size={4} sx={{ alignSelf: "end" }}>
+      <Grid size={{ xs: 12, sm: 4 }} sx={{ alignSelf: "end" }}>
         <FormControlLabel
           labelPlacement="start"
           control={
