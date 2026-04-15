@@ -1,26 +1,27 @@
-import * as React from "react";
+import { Button, Collapse } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import Typography from "@mui/material/Typography";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Filters, { type BgFilter } from "../forms/Filters";
 import Paper from "@mui/material/Paper";
-import { Button, Collapse } from "@mui/material";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
+import * as React from "react";
+import Filters, { type BgFilter } from "../forms/Filters";
+import BackgroundResults from "../utils/BackgroundResults";
+import Nothing from "../utils/Nothing";
+import Thinking from "../utils/Thinking";
 import {
   fetchBackgrounds,
   fetchFeats,
-  fetchRules,
   fetchReferences,
+  fetchRules,
 } from "../workhorse/Queries";
-import Nothing from "../utils/Nothing";
-import Thinking from "../utils/Thinking";
 
 export async function clientLoader() {
   // Lore page loader
@@ -235,7 +236,8 @@ export default function PublicLore() {
           {isLoading ? (
             <Thinking />
           ) : results && results.length > 0 ? (
-            results?.map((item: any) => <div key={item.key}>{item.name}</div>)
+            // results?.map((item: any) => <div key={item.key}>{item.name}</div>)
+            <BackgroundResults results={results} />
           ) : (
             <Nothing />
           )}

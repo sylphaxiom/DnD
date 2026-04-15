@@ -38,6 +38,7 @@
     "file-saver": "^2.0.5",
     "isbot": "^5",
     "motion": "^12.23.12",
+    "mui-markdown": "^2.1.1",
     "react": "^19.1.1",
     "react-big-calendar": "^1.19.4",
     "react-cookie": "^8.0.1",
