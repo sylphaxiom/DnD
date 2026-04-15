@@ -236,7 +236,6 @@ export default function PublicLore() {
           {isLoading ? (
             <Thinking />
           ) : results && results.length > 0 ? (
-            // results?.map((item: any) => <div key={item.key}>{item.name}</div>)
             <BackgroundResults results={results} />
           ) : (
             <Nothing />
