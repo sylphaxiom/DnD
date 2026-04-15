@@ -4,11 +4,13 @@ import Grid from "@mui/material/Grid";
 // import Switch from "@mui/material/Switch";
 // import FormControlLabel from "@mui/material/FormControlLabel";
 // import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
@@ -29,32 +31,26 @@ interface FilterProps {
     | "rules"
     | "lookup"
     | "references";
-  ref: React.Ref<{ name: string; gameSystem: string; exact: boolean }>;
+  bgRef: React.Ref<{
+    name: string;
+    gameSystem: string[];
+    exact: boolean;
+  }>;
 }
 
 export interface BgFilter {
   name: string;
-  gameSystem: string;
+  gameSystem: string[];
   exact: boolean;
 }
 
-export default function Filters({ topic, ref }: FilterProps) {
+export default function Filters({ topic, bgRef }: FilterProps) {
   const [name, setName] = React.useState("");
-  const [gameSystem, setGameSystem] = React.useState("");
+  const [gameSystem, setGameSystem] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
 
-  // React.useEffect(() => {
-  //   ref!.currrent = { name: name, gameSystem: gameSystem, exact: exact };
-  // }, []);
-
-  React.useImperativeHandle(ref, () => {
-    console.log(
-      "Entered Imperative Handle with filter information:\nname: %s | gameSystem: %s | exact: %s",
-      name,
-      gameSystem,
-      exact,
-    );
-    console.log("ref information: %o", ref);
+  // Imperitive handle for Backgrounds.
+  React.useImperativeHandle(bgRef, () => {
     return { name: name, gameSystem: gameSystem, exact: exact };
   }, [name, gameSystem, exact]);
 
@@ -71,6 +67,16 @@ export default function Filters({ topic, ref }: FilterProps) {
       JSON.stringify(data),
     );
   }
+
+  const handleChange = (event: SelectChangeEvent<typeof gameSystem>) => {
+    const {
+      target: { value },
+    } = event;
+    setGameSystem(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value,
+    );
+  };
 
   // All can use order, search, page, limit
 
@@ -117,16 +123,23 @@ export default function Filters({ topic, ref }: FilterProps) {
           <Select
             labelId="gamesystem-label"
             id="gamesystem"
+            multiple
             value={gameSystem}
-            onChange={(e) => setGameSystem(e.target.value)}
+            onChange={handleChange}
             label="Gamesystem"
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
           >
-            <MenuItem value="">Select a Game System...</MenuItem>
             {gameSystems?.map(({ key, name, desc }: GameSystem) => {
               return (
-                <MenuItem value={key}>
+                <MenuItem value={key} key={key + "-item"}>
                   <Tooltip title={desc} key={key}>
-                    <div>{name}</div>
+                    <div key={key + "-" + name}>{name}</div>
                   </Tooltip>
                 </MenuItem>
               );

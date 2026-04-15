@@ -31,31 +31,49 @@ export default function BackgroundResults({ results }: BgProps) {
     desc,
   }: Background) => {
     return (
-      <Accordion expanded={expanded === key} onChange={handleChange(key)}>
+      <Accordion
+        expanded={expanded === key}
+        key={key + "-acc"}
+        onChange={handleChange(key)}
+      >
         <AccordionSummary
           aria-controls={key + "-content"}
           id={key + "-header"}
-          expandIcon={<ExpandMoreIcon />}
+          key={key + "-header"}
+          expandIcon={<ExpandMoreIcon key={key + "-ico"} />}
         >
-          <Typography component="h3">{name}</Typography>
+          <Typography component="h3" key={key + "-name"}>
+            {name + " (" + document.gamesystem.key + ")"}
+          </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>{desc}</Typography>
+        <AccordionDetails key={key + "-accDetail"}>
+          <Typography key={key + "-desc"}>{desc}</Typography>
           {benefits.map((benefit: BackgroundBenefit) => {
             const description = benefit.desc;
             return (
-              <>
-                <Typography component="span" variant="h4" sx={{}}>
+              <React.Fragment key={benefit.name + "-frag"}>
+                <Typography
+                  component="span"
+                  variant="h4"
+                  key={key + "-" + benefit}
+                >
                   {benefit.name}
                 </Typography>
-                <Divider />
-                <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
-                <br />
-              </>
+                <Divider key={key + "-" + benefit + "-divider"} />
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  key={key + "-" + benefit + "-md"}
+                >
+                  {description}
+                </Markdown>
+                <br key={key + "-br"} />
+              </React.Fragment>
             );
           })}
-          <Typography variant="body2">
-            <a href={document.permalink}>{document.gamesystem.name}</a>
+          <Typography variant="body2" key={key + "-refSection"}>
+            <a href={document.permalink} key={key + "-refA"}>
+              {document.gamesystem.name}
+            </a>
             {" - "}
             {document.display_name}
           </Typography>
@@ -65,7 +83,7 @@ export default function BackgroundResults({ results }: BgProps) {
   };
 
   return (
-    <Box sx={{ px: 3 }}>
+    <Box sx={{ px: 3 }} key={"benefit_box"}>
       {results?.map((item: Background) => accordian(item))}
     </Box>
   );

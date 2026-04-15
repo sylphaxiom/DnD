@@ -1,4 +1,10 @@
-import { Button, Collapse } from "@mui/material";
+import {
+  Button,
+  Collapse,
+  FormHelperText,
+  Pagination,
+  Stack,
+} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,7 +16,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import Filters, { type BgFilter } from "../forms/Filters";
 import BackgroundResults from "../utils/BackgroundResults";
@@ -34,11 +40,8 @@ export default function PublicLore() {
   const [filtered, setFiltered] = React.useState(false);
   // Used for pagination.
   const [page, setPage] = React.useState(1);
-  // Doesn't do anything and won't be executed.
-  // Used so there isn't an unused param error temporarily.
-  if (page === 0) {
-    setPage(1);
-  }
+  const [limit, setLimit] = React.useState(20);
+  const [sort, setSort] = React.useState("name");
   const [topic, setTopic] = React.useState<
     | ""
     | "spells"
@@ -54,18 +57,40 @@ export default function PublicLore() {
   >("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
+  let sorts: string[] = [];
 
   // Background query
   let bgName = bgFilters?.name || "";
-  let bgGameSystem = bgFilters?.gameSystem || "";
+  let bgGameSystem = bgFilters?.gameSystem || [];
   let bgExact = bgFilters?.exact || false;
+  const bgLimit = limit;
+  const bgPage = page;
+  const bgOrdering = sort;
   const qBackgrounds = useQuery({
-    queryKey: ["fetchBackgrounds", bgName, bgGameSystem, bgExact],
-    queryFn: () => fetchBackgrounds(bgName, bgGameSystem, bgExact),
+    queryKey: [
+      "fetchBackgrounds",
+      bgName,
+      bgGameSystem,
+      bgExact,
+      bgLimit,
+      bgPage,
+      bgOrdering,
+    ],
+    queryFn: () =>
+      fetchBackgrounds(
+        bgName,
+        bgGameSystem,
+        bgExact,
+        bgLimit,
+        bgPage,
+        bgOrdering,
+      ),
     enabled: false,
+    placeholderData: keepPreviousData,
   });
   if (topic === "backgrounds") {
     query = qBackgrounds;
+    sorts = ["name", "document"];
   }
 
   // Feat query
@@ -95,30 +120,24 @@ export default function PublicLore() {
   }
   const { isLoading, data, error, refetch } = query || {};
   const results = query?.data?.results || [];
+  const totalResults = query?.data?.count || 0;
 
   React.useEffect(() => {
     if (refetch) {
       refetch();
-      console.log("refetch completed closing filters: %o...", bgFilters);
     }
-  }, [bgFilters]);
+  }, [bgFilters, page, sort]);
 
   const filterRef = React.useRef(null);
 
   const handleSearch = () => {
     switch (topic) {
       case "backgrounds":
-        console.log("Starting filters: %o", bgFilters);
         // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
-          console.log("inside if ref: %o", filter);
           setBgFilters(filter);
         }
-        console.log(
-          "BG filters have been set refetching with background \n%o...",
-          filterRef.current,
-        );
     }
   };
 
@@ -227,7 +246,7 @@ export default function PublicLore() {
               width: 1,
             }}
           >
-            <Filters topic={topic} ref={filterRef} />
+            <Filters topic={topic} bgRef={filterRef} />
           </Paper>
         </Collapse>
       </Grid>
@@ -236,7 +255,78 @@ export default function PublicLore() {
           {isLoading ? (
             <Thinking />
           ) : results && results.length > 0 ? (
-            <BackgroundResults results={results} />
+            <>
+              <Stack
+                spacing={2}
+                direction={{ xs: "column", sm: "row" }}
+                sx={{ justifyContent: "space-between", alignItems: "center" }}
+              >
+                <FormControl size="small" sx={{ p: 2 }}>
+                  <InputLabel id="sort-page-label" sx={{ pl: "20px" }}>
+                    Sort
+                  </InputLabel>
+                  <Select
+                    labelId="sort-page-label"
+                    id="sort-page"
+                    variant="outlined"
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    label="sort"
+                  >
+                    {sorts.map((srt) => {
+                      const exSrt = "Reference";
+                      return [
+                        <MenuItem value={srt} key={srt}>
+                          {srt === "document"
+                            ? exSrt + " (A-Z)"
+                            : srt
+                                .charAt(0)
+                                .toUpperCase()
+                                .concat(srt.substring(1)) + " (A-Z)"}
+                        </MenuItem>,
+                        <MenuItem value={"-" + srt} key={"-" + srt}>
+                          {srt === "document"
+                            ? exSrt + " (Z-A)"
+                            : srt
+                                .charAt(0)
+                                .toUpperCase()
+                                .concat(srt.substring(1)) + " (Z-A)"}
+                        </MenuItem>,
+                      ];
+                    })}
+                  </Select>
+                </FormControl>
+                <Pagination
+                  size="large"
+                  page={page}
+                  onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
+                    setPage(value)
+                  }
+                  count={Math.ceil(totalResults / limit)}
+                  sx={{ px: 2 }}
+                />
+                <FormControl size="small" sx={{ p: 2 }}>
+                  <InputLabel id="limit-page-label" sx={{ pl: "11px" }}>
+                    Results
+                  </InputLabel>
+                  <Select
+                    labelId="limit-page-label"
+                    id="limit-page"
+                    variant="outlined"
+                    value={limit}
+                    onChange={(e) => setLimit(e.target.value)}
+                    label="Results"
+                  >
+                    <MenuItem value="10">10</MenuItem>
+                    <MenuItem value="20">20</MenuItem>
+                    <MenuItem value="50">50</MenuItem>
+                    <MenuItem value="100">100</MenuItem>
+                  </Select>
+                  <FormHelperText>per page</FormHelperText>
+                </FormControl>
+              </Stack>
+              <BackgroundResults results={results} />
+            </>
           ) : (
             <Nothing />
           )}

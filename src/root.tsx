@@ -2,6 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import { ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import * as React from "react";
 import { Outlet, Scripts, ScrollRestoration } from "react-router";
 import Loading from "./components/utils/Loading";
