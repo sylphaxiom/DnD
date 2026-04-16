@@ -53,11 +53,9 @@ export async function fetchPlayer(
 /**************************/
 
 export interface GameSystem {
-  url:string;
   key:string;
   name:string;
   desc:string;
-  content_prefix:string;
 }
 
 export async function fetchGameSystems(): Promise<{
@@ -71,6 +69,9 @@ export async function fetchGameSystems(): Promise<{
         headers: {
           "Content-Type": "application/json",
         },
+        params: {
+          exclude: "content_prefix"
+        }
       })
       .catch((error) => {
         console.log("An error occurred fetching Game Systems: %s", error);
@@ -87,12 +88,10 @@ export interface DocumentSummary {
     publisher:{
       name:string;
       key:string;
-      url:string;
     };
     gamesystem:{
       name:string;
       key:string;
-      url:string;
     };
     permalink:string;
   }
@@ -117,7 +116,6 @@ export interface BackgroundBenefit {
 
 // Backgrounds
 export interface Background {
-  url:string;
   key:string;
   benefits:BackgroundBenefit[];
   document: DocumentSummary;
@@ -178,7 +176,6 @@ export interface FeatBenefit {
 
 // Feats
 export interface Feat {
-  url:string;
   key:string;
   has_prerequisite:boolean;
   benefits:FeatBenefit[];
@@ -256,6 +253,14 @@ export interface Rule {
   ruleset:string;
 }
 
+export interface Ruleset {
+  name:string;
+  key:string;
+  document: DocumentSummary
+  desc:string;
+  rules:Rule[];
+}
+
 // Rules
 export async function fetchRules(
   name: string = "",
@@ -282,7 +287,7 @@ export async function fetchRules(
     document_key.map((key)=>{documents += (key+",")})
     console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
-      .get(`https://api.open5e.com/v2/rules`, {
+      .get(`https://api.open5e.com/v2/rulesets`, {
         headers: {
           "Content-Type": "application/json",
         },
