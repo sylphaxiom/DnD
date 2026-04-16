@@ -31,7 +31,12 @@ interface FilterProps {
     | "rules"
     | "lookup"
     | "references";
-  bgRef: React.Ref<{
+  bgRef?: React.Ref<{
+    name: string;
+    gameSystem: string[];
+    exact: boolean;
+  }>;
+  ftRef?: React.Ref<{
     name: string;
     gameSystem: string[];
     exact: boolean;
@@ -43,14 +48,24 @@ export interface BgFilter {
   gameSystem: string[];
   exact: boolean;
 }
+export interface FtFilter {
+  name: string;
+  gameSystem: string[];
+  exact: boolean;
+}
 
-export default function Filters({ topic, bgRef }: FilterProps) {
+export default function Filters({ topic, bgRef, ftRef }: FilterProps) {
   const [name, setName] = React.useState("");
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
 
   // Imperitive handle for Backgrounds.
   React.useImperativeHandle(bgRef, () => {
+    return { name: name, gameSystem: gameSystem, exact: exact };
+  }, [name, gameSystem, exact]);
+
+  // Imperitive handle for Feats.
+  React.useImperativeHandle(ftRef, () => {
     return { name: name, gameSystem: gameSystem, exact: exact };
   }, [name, gameSystem, exact]);
 
@@ -93,62 +108,71 @@ export default function Filters({ topic, bgRef }: FilterProps) {
 
   // Types:
   // Basic: name, document (gamesystem/source)
-  const basicFilters = (
-    <>
-      <Grid size={{ xs: 12, sm: 8 }}>
-        <TextField
-          id="name-contains"
-          label="Name Contains..."
-          variant="standard"
-          fullWidth
-          value={name}
-          onChange={(e) => setName(e.currentTarget.value)}
-        />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 4 }} sx={{ alignSelf: "end" }}>
-        <FormControlLabel
-          labelPlacement="start"
-          control={
-            <Switch
-              checked={exact}
-              onChange={(e) => setExact(e.currentTarget.checked)}
-            />
-          }
-          label="Exact Match?"
-        />
-      </Grid>
-      <Grid size={{ xs: 12 }}>
-        <FormControl variant="standard" sx={{ p: 1, minWidth: "100%" }}>
-          <InputLabel id="gamesystem-label">Gamesystem</InputLabel>
-          <Select
-            labelId="gamesystem-label"
-            id="gamesystem"
-            multiple
-            value={gameSystem}
-            onChange={handleChange}
-            label="Gamesystem"
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </Box>
-            )}
-          >
-            {gameSystems?.map(({ key, name, desc }: GameSystem) => {
-              return (
-                <MenuItem value={key} key={key + "-item"}>
-                  <Tooltip title={desc} key={key}>
-                    <div key={key + "-" + name}>{name}</div>
-                  </Tooltip>
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Grid>
-    </>
-  );
+  const basicFilters = [
+    <Grid size={{ xs: 12, sm: 8 }} key="name-grid">
+      <TextField
+        id="name-contains"
+        label="Name Contains..."
+        variant="standard"
+        fullWidth
+        value={name}
+        key="name-text"
+        onChange={(e) => setName(e.currentTarget.value)}
+      />
+    </Grid>,
+    <Grid size={{ xs: 12, sm: 4 }} sx={{ alignSelf: "end" }} key="exact-grid">
+      <FormControlLabel
+        labelPlacement="start"
+        key="exact-label"
+        control={
+          <Switch
+            checked={exact}
+            key="exact-switch"
+            onChange={(e) => setExact(e.currentTarget.checked)}
+          />
+        }
+        label="Exact Match?"
+      />
+    </Grid>,
+    <Grid size={{ xs: 12 }} key="gamesystem-grid">
+      <FormControl
+        variant="standard"
+        key="gamesystem-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="gamesystem-label" id="gamesystem-label">
+          Gamesystem
+        </InputLabel>
+        <Select
+          labelId="gamesystem-label"
+          id="gamesystem"
+          multiple
+          value={gameSystem}
+          onChange={handleChange}
+          label="Gamesystem"
+          key="gamesystem-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {gameSystems?.map(({ key, name, desc }: GameSystem) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                <Tooltip title={desc} key={key}>
+                  <div key={key + "-" + name}>{name}</div>
+                </Tooltip>
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+  ];
+  let filters = [];
   switch (topic) {
     case "spells":
       // Use spell filters
@@ -166,7 +190,7 @@ export default function Filters({ topic, bgRef }: FilterProps) {
       // Use creatures filters
       break;
     default:
-      // Use basic filters filters
+      filters.push(basicFilters);
       break;
   }
 
@@ -180,103 +204,9 @@ export default function Filters({ topic, bgRef }: FilterProps) {
       }}
       id="items-filters"
     >
-      {basicFilters}
-      {/* <Grid size={{ xs: 6 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={magical}
-              onChange={(e) =>
-                dispatch({ type: "SET_MAGICAL", payload: e.target.checked })
-              }
-            />
-          }
-          label="Magical?"
-        />
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
-          <InputLabel id="gamesystem-label">Gamesystem</InputLabel>
-          <Select
-            labelId="gamesystem-label"
-            id="gamesystem"
-            value={gamesystem}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_GAMESYSTEM",
-                payload: e.target.value as string,
-              })
-            }
-            label="Gamesystem"
-          >
-            <MenuItem value="5e-2014">5th Edition 2014</MenuItem>
-            <MenuItem value="5e-2024">5th Edition 2024</MenuItem>
-            <MenuItem value="a5e">Advanced 5th Edition</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <TextField
-          id="name-contains"
-          label="Name Contains..."
-          variant="standard"
-          value={nameCont}
-          onChange={(e) =>
-            dispatch({ type: "SET_NAME_CONT", payload: e.target.value })
-          }
-        />
-      </Grid>
-      <Grid size={{ xs: 6 }}>
-        <TextField
-          id="desc-contains"
-          label="Description Contains..."
-          variant="standard"
-          value={descCont}
-          onChange={(e) =>
-            dispatch({ type: "SET_DESC_CONT", payload: e.target.value })
-          }
-        />
-      </Grid>
-      <Grid size={{ xs: 2 }} offset={{ xs: 1 }}>
-        <Typography variant="body1" sx={{ fontSize: "1.4em" }}>
-          Cost
-        </Typography>
-      </Grid>
-      <Grid size={{ xs: 8 }} offset={1}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={costVal}
-              onChange={(e) =>
-                dispatch({ type: "SET_COST_VAL", payload: e.target.checked })
-              }
-            />
-          }
-          label={costVal ? "Single Value" : "Range Input"}
-        />
-      </Grid>
-      <Grid size={{ xs: 10 }} offset={{ xs: 1 }}>
-        {costVal ? (
-          <NumberSpinner
-            label="Cost Value"
-            size="small"
-            value={costValue}
-            onValueChange={(value) =>
-              dispatch({ type: "SET_COST_VALUE", payload: value ? value : 0 })
-            }
-          />
-        ) : (
-          <Slider
-            min={0}
-            max={40000}
-            value={value}
-            onChange={(_e, newValue: number[]) =>
-              dispatch({ type: "SET_VALUE", payload: newValue })
-            }
-            valueLabelDisplay="auto"
-          />
-        )}
-      </Grid> */}
+      {filters.map((filter) => {
+        return filter;
+      })}
     </Grid>
   );
 }

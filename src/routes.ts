@@ -1,4 +1,4 @@
-import {type RouteConfig, route, layout, index, prefix,} from "@react-router/dev/routes"
+import { type RouteConfig, index, layout, prefix, route, } from "@react-router/dev/routes"
 import "react-router"
 declare module "react-router"{
     interface AppLoadContext {
@@ -77,5 +77,4 @@ export default [
     route("result", "./components/utils/Result.tsx", {id:"result"}),
     route("*?", "./components/utils/Loading.tsx", {id:"catchall"}),
     route("error", "./components/utils/Error.tsx", {id:"error"}),
-    route("thinking", "./components/utils/Thinking.tsx")
 ] satisfies RouteConfig

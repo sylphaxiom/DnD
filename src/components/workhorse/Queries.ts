@@ -172,12 +172,16 @@ export async function fetchBackgrounds(
     return response.data;
 }
 
+export interface FeatBenefit {
+  desc:string;
+}
+
 // Feats
 export interface Feat {
   url:string;
   key:string;
   has_prerequisite:boolean;
-  benefits:string[];
+  benefits:FeatBenefit[];
   document:DocumentSummary;
   name:string;
   desc:string;
@@ -189,21 +193,31 @@ export interface Feat {
   | "EPIC_BOON"
 }
 
+
 export async function fetchFeats(
-  name__iexact: string = "",
-  name__icontains: string = "",
-  document__gamesystem__key: string = "",
-  key: string = "",
-  order: string = "",
-  search: string = "",
+  name: string = "",
+  document_key: string[] = [],
+  exact: boolean = false,
+  limit: number = 20,
   page: number = 1,
-  limit: number = 20
+  ordering: string = "name",
+  key: string = "",
 ): Promise<{
   count: number;
   next: string | null;
   previous: string | null;
   results: Feat[]
   } | null> {
+    let name__iexact = ""
+    let name__icontains = ""
+    if (exact) {
+      name__iexact = name
+    } else {
+      name__icontains = name
+    }
+    let documents = ""
+    document_key.map((key)=>{documents += (key+",")})
+    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/feats`, {
         headers: {
@@ -212,12 +226,11 @@ export async function fetchFeats(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document__gamesystem__key,
-          key: key,
-          order: order,
-          search: search,
-          page: page,
+          document__gamesystem__key__in: documents,
           limit: limit,
+          page: page,
+          ordering: ordering,
+          key: key,
         },
       })
       .catch((error) => {
@@ -247,7 +260,7 @@ export interface Rule {
 export async function fetchRules(
   name__iexact: string = "",
   name__icontains: string = "",
-  document__gamesystem__key: string = "",
+  document_key: string = "",
   key: string = "",
   order: string = "",
   search: string = "",
@@ -267,7 +280,7 @@ export async function fetchRules(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document__gamesystem__key,
+          document__gamesystem__key: document_key,
           key: key,
           order: order,
           search: search,
@@ -329,7 +342,7 @@ export interface Document {
 export async function fetchReferences(
   name__iexact: string = "",
   name__icontains: string = "",
-  document__gamesystem__key: string = "",
+  document_key: string = "",
   key: string = "",
   order: string = "",
   search: string = "",
@@ -349,7 +362,7 @@ export async function fetchReferences(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document__gamesystem__key,
+          document__gamesystem__key: document_key,
           key: key,
           order: order,
           search: search,

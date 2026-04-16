@@ -18,8 +18,9 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
-import Filters, { type BgFilter } from "../forms/Filters";
+import Filters, { type BgFilter, type FtFilter } from "../forms/Filters";
 import BackgroundResults from "../utils/BackgroundResults";
+import FeatResults from "../utils/FeatResults";
 import Nothing from "../utils/Nothing";
 import Thinking from "../utils/Thinking";
 import {
@@ -35,6 +36,9 @@ export async function clientLoader() {
 
 export default function PublicLore() {
   const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
+    undefined,
+  );
+  const [ftFilters, setFtFilters] = React.useState<FtFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -58,6 +62,7 @@ export default function PublicLore() {
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
+  let resultCompnent;
 
   // Background query
   let bgName = bgFilters?.name || "";
@@ -88,20 +93,30 @@ export default function PublicLore() {
     enabled: false,
     placeholderData: keepPreviousData,
   });
-  if (topic === "backgrounds") {
-    query = qBackgrounds;
-    sorts = ["name", "document"];
-  }
 
-  // Feat query
+  // Feats query
+  let ftName = ftFilters?.name || "";
+  let ftGameSystem = ftFilters?.gameSystem || [];
+  let ftExact = ftFilters?.exact || false;
+  const ftLimit = limit;
+  const ftPage = page;
+  const ftOrdering = sort;
   const qFeats = useQuery({
-    queryKey: ["fetchFeats"],
-    queryFn: () => fetchFeats(),
+    queryKey: [
+      "fetchFeats",
+      ftName,
+      ftGameSystem,
+      ftExact,
+      ftLimit,
+      ftPage,
+      ftOrdering,
+    ],
+    queryFn: () =>
+      fetchFeats(ftName, ftGameSystem, ftExact, ftLimit, ftPage, ftOrdering),
     enabled: false,
+    placeholderData: keepPreviousData,
   });
-  if (topic === "feats") {
-    query = qFeats;
-  }
+
   const qRules = useQuery({
     queryKey: ["fetchRules"],
     queryFn: () => fetchRules(),
@@ -118,9 +133,35 @@ export default function PublicLore() {
   if (topic === "references") {
     query = qReferences;
   }
-  const { isLoading, data, error, refetch } = query || {};
+
+  // query and sort switch
+  switch (topic) {
+    case "backgrounds":
+      query = qBackgrounds;
+      sorts = ["name", "document"];
+      break;
+    case "feats":
+      query = qFeats;
+      sorts = ["name", "document", "type", "prerequisite"];
+      console.log("assigning Feats information");
+      break;
+    case "rules":
+      query = qRules;
+      sorts = ["name", "document"];
+  }
+  const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
   const totalResults = query?.data?.count || 0;
+
+  // Component switch (because it uses results)
+  switch (topic) {
+    case "backgrounds":
+      resultCompnent = <BackgroundResults results={results} />;
+      break;
+    case "feats":
+      resultCompnent = <FeatResults results={results} />;
+      break;
+  }
 
   React.useEffect(() => {
     if (refetch) {
@@ -138,6 +179,14 @@ export default function PublicLore() {
           const filter = filterRef.current;
           setBgFilters(filter);
         }
+        break;
+      case "feats":
+        // const { name, gameSystem, exact } = filterRef.current;
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          setBgFilters(filter);
+        }
+        break;
     }
   };
 
@@ -253,7 +302,7 @@ export default function PublicLore() {
       <Grid size={12}>
         <Paper variant="elevation" elevation={10} sx={{ m: 3, py: 3 }}>
           {isLoading ? (
-            <Thinking />
+            <Thinking sizing={"large"} />
           ) : results && results.length > 0 ? (
             <>
               <Stack
@@ -296,15 +345,19 @@ export default function PublicLore() {
                     })}
                   </Select>
                 </FormControl>
-                <Pagination
-                  size="large"
-                  page={page}
-                  onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
-                    setPage(value)
-                  }
-                  count={Math.ceil(totalResults / limit)}
-                  sx={{ px: 2 }}
-                />
+                {isFetching ? (
+                  <Thinking sizing="small" />
+                ) : (
+                  <Pagination
+                    size="large"
+                    page={page}
+                    onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
+                      setPage(value)
+                    }
+                    count={Math.ceil(totalResults / limit)}
+                    sx={{ px: 2 }}
+                  />
+                )}
                 <FormControl size="small" sx={{ p: 2 }}>
                   <InputLabel id="limit-page-label" sx={{ pl: "11px" }}>
                     Results
@@ -325,7 +378,7 @@ export default function PublicLore() {
                   <FormHelperText>per page</FormHelperText>
                 </FormControl>
               </Stack>
-              <BackgroundResults results={results} />
+              {resultCompnent}
             </>
           ) : (
             <Nothing />
