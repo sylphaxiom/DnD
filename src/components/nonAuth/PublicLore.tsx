@@ -143,7 +143,6 @@ export default function PublicLore() {
     case "feats":
       query = qFeats;
       sorts = ["name", "document", "type", "prerequisite"];
-      console.log("assigning Feats information");
       break;
     case "rules":
       query = qRules;
@@ -167,7 +166,7 @@ export default function PublicLore() {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, page, sort]);
+  }, [bgFilters, ftFilters, page, sort]);
 
   const filterRef = React.useRef(null);
 
@@ -184,7 +183,7 @@ export default function PublicLore() {
         // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
-          setBgFilters(filter);
+          setFtFilters(filter);
         }
         break;
     }
