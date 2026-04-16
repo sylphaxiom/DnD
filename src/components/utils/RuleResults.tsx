@@ -6,10 +6,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import type { Rule } from "../workhorse/Queries";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import type { Rule, Ruleset } from "../workhorse/Queries";
 
 interface RuProps {
-  results: Rule[];
+  results: Ruleset[];
 }
 
 export default function FeatResults({ results }: RuProps) {
@@ -27,10 +29,8 @@ export default function FeatResults({ results }: RuProps) {
     document,
     name,
     desc,
-    index,
-    initialHeaderLevel,
-    ruleset,
-  }: Rule) => {
+    rules,
+  }: Ruleset) => {
     return (
       <Accordion
         expanded={expanded === key}
@@ -44,16 +44,43 @@ export default function FeatResults({ results }: RuProps) {
           expandIcon={<ExpandMoreIcon key={key + "-ico"} />}
         >
           <Typography component="h3" key={key + "-name"}>
-            {name + " (" + document + ")"}
+            {name + " (" + document.gamesystem.key + ")"}
           </Typography>
         </AccordionSummary>
         <AccordionDetails key={key + "-accDetail"}>
-          <Typography key={key + "-desc"}>{desc}</Typography>
+          <Markdown remarkPlugins={[remarkGfm]} key={key + "-" + "-md"}>
+            {desc}
+          </Markdown>
           <Divider />
-          <Typography key={key + "-ruleset"}>{ruleset}</Typography>
+          {rules.map((rule: Rule) => {
+            const description = rule.desc;
+            return (
+              <React.Fragment key={rule.name + "-frag"}>
+                <Typography
+                  component="span"
+                  variant="h4"
+                  key={key + "-" + rule}
+                >
+                  {rule.name}
+                </Typography>
+                <Divider key={key + "-" + rule + "-divider"} />
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  key={key + "-" + rule + "-md"}
+                >
+                  {description}
+                </Markdown>
+                <br key={key + "-br"} />
+              </React.Fragment>
+            );
+          })}
           <Divider />
           <Typography variant="body2" key={key + "-refSection"}>
-            {"Index: " + index + " | Header-level: " + initialHeaderLevel}
+            <a href={document.permalink} key={key + "-refA"}>
+              {document.gamesystem.name}
+            </a>
+            {" - "}
+            {document.display_name}
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -62,7 +89,7 @@ export default function FeatResults({ results }: RuProps) {
 
   return (
     <Box sx={{ px: 3 }} key={"rule_box"}>
-      {results?.map((item: Rule) => accordian(item))}
+      {results?.map((item: Ruleset) => accordian(item))}
     </Box>
   );
 }
