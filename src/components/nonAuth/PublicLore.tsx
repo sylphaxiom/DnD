@@ -166,7 +166,7 @@ export default function PublicLore() {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, page, sort]);
+  }, [bgFilters, ftFilters, page, sort, limit]);
 
   const filterRef = React.useRef(null);
 
