@@ -242,7 +242,7 @@ export async function fetchFeats(
 }
 
 export interface Rule {
-  url:string;
+  key:string;
   name:string;
   desc:string;
   index:number;
@@ -258,20 +258,29 @@ export interface Rule {
 
 // Rules
 export async function fetchRules(
-  name__iexact: string = "",
-  name__icontains: string = "",
-  document_key: string = "",
-  key: string = "",
-  order: string = "",
-  search: string = "",
+  name: string = "",
+  document_key: string[] = [],
+  exact: boolean = false,
+  limit: number = 20,
   page: number = 1,
-  limit: number = 20
+  ordering: string = "name",
+  key: string = "",
 ): Promise<{
   count: number;
   next: string | null;
   previous: string | null;
   results: Rule[]
   } | null> {
+    let name__iexact = ""
+    let name__icontains = ""
+    if (exact) {
+      name__iexact = name
+    } else {
+      name__icontains = name
+    }
+    let documents = ""
+    document_key.map((key)=>{documents += (key+",")})
+    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/rules`, {
         headers: {
@@ -280,12 +289,11 @@ export async function fetchRules(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document_key,
-          key: key,
-          order: order,
-          search: search,
-          page: page,
+          document__gamesystem__key__in: documents,
           limit: limit,
+          page: page,
+          ordering: ordering,
+          key: key,
         },
       })
       .catch((error) => {

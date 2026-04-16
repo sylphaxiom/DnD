@@ -41,6 +41,11 @@ interface FilterProps {
     gameSystem: string[];
     exact: boolean;
   }>;
+  ruRef?: React.Ref<{
+    name: string;
+    gameSystem: string[];
+    exact: boolean;
+  }>;
 }
 
 export interface BgFilter {
@@ -53,8 +58,13 @@ export interface FtFilter {
   gameSystem: string[];
   exact: boolean;
 }
+export interface RuFilter {
+  name: string;
+  gameSystem: string[];
+  exact: boolean;
+}
 
-export default function Filters({ topic, bgRef, ftRef }: FilterProps) {
+export default function Filters({ topic, bgRef, ftRef, ruRef }: FilterProps) {
   const [name, setName] = React.useState("");
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
@@ -66,6 +76,11 @@ export default function Filters({ topic, bgRef, ftRef }: FilterProps) {
 
   // Imperitive handle for Feats.
   React.useImperativeHandle(ftRef, () => {
+    return { name: name, gameSystem: gameSystem, exact: exact };
+  }, [name, gameSystem, exact]);
+
+  // Imperitive handle for Feats.
+  React.useImperativeHandle(ruRef, () => {
     return { name: name, gameSystem: gameSystem, exact: exact };
   }, [name, gameSystem, exact]);
 

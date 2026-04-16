@@ -18,10 +18,15 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
-import Filters, { type BgFilter, type FtFilter } from "../forms/Filters";
+import Filters, {
+  type BgFilter,
+  type FtFilter,
+  type RuFilter,
+} from "../forms/Filters";
 import BackgroundResults from "../utils/BackgroundResults";
 import FeatResults from "../utils/FeatResults";
 import Nothing from "../utils/Nothing";
+import RuleResults from "../utils/RuleResults";
 import Thinking from "../utils/Thinking";
 import {
   fetchBackgrounds,
@@ -39,6 +44,9 @@ export default function PublicLore() {
     undefined,
   );
   const [ftFilters, setFtFilters] = React.useState<FtFilter | undefined>(
+    undefined,
+  );
+  const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -117,14 +125,28 @@ export default function PublicLore() {
     placeholderData: keepPreviousData,
   });
 
+  // Rules query
+  let ruName = ruFilters?.name || "";
+  let ruGameSystem = ruFilters?.gameSystem || [];
+  let ruExact = ruFilters?.exact || false;
+  const ruLimit = limit;
+  const ruPage = page;
+  const ruOrdering = sort;
   const qRules = useQuery({
-    queryKey: ["fetchRules"],
-    queryFn: () => fetchRules(),
+    queryKey: [
+      "fetchRules",
+      ruName,
+      ruGameSystem,
+      ruExact,
+      ruLimit,
+      ruPage,
+      ruOrdering,
+    ],
+    queryFn: () =>
+      fetchRules(ruName, ruGameSystem, ruExact, ruLimit, ruPage, ruOrdering),
     enabled: false,
+    placeholderData: keepPreviousData,
   });
-  if (topic === "rules") {
-    query = qRules;
-  }
   const qReferences = useQuery({
     queryKey: ["fetchReferences"],
     queryFn: () => fetchReferences(),
@@ -146,7 +168,7 @@ export default function PublicLore() {
       break;
     case "rules":
       query = qRules;
-      sorts = ["name", "document"];
+      sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
@@ -160,13 +182,16 @@ export default function PublicLore() {
     case "feats":
       resultCompnent = <FeatResults results={results} />;
       break;
+    case "rules":
+      resultCompnent = <RuleResults results={results} />;
+      break;
   }
 
   React.useEffect(() => {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, page, sort, limit]);
+  }, [bgFilters, ftFilters, ruFilters, page, sort, limit]);
 
   const filterRef = React.useRef(null);
 
@@ -184,6 +209,13 @@ export default function PublicLore() {
         if (filterRef.current) {
           const filter = filterRef.current;
           setFtFilters(filter);
+        }
+        break;
+      case "rules":
+        // const { name, gameSystem, exact } = filterRef.current;
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          setRuFilters(filter);
         }
         break;
     }
