@@ -26,6 +26,7 @@ import Filters, {
 import BackgroundResults from "../utils/BackgroundResults";
 import FeatResults from "../utils/FeatResults";
 import Nothing from "../utils/Nothing";
+import ReferenceResults from "../utils/ReferenceResults";
 import RuleResults from "../utils/RuleResults";
 import Thinking from "../utils/Thinking";
 import {
@@ -47,6 +48,9 @@ export default function PublicLore() {
     undefined,
   );
   const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
+    undefined,
+  );
+  const [doFilters, setDoFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -147,10 +151,34 @@ export default function PublicLore() {
     enabled: false,
     placeholderData: keepPreviousData,
   });
+  // Documents query
+  let doName = doFilters?.name || "";
+  let doGameSystem = doFilters?.gameSystem || [];
+  let doExact = doFilters?.exact || false;
+  const doLimit = limit;
+  const doPage = page;
+  const doOrdering = sort;
   const qReferences = useQuery({
-    queryKey: ["fetchReferences"],
-    queryFn: () => fetchReferences(),
+    queryKey: [
+      "fetchReferences",
+      doName,
+      doGameSystem,
+      doExact,
+      doLimit,
+      doPage,
+      doOrdering,
+    ],
+    queryFn: () =>
+      fetchReferences(
+        doName,
+        doGameSystem,
+        doExact,
+        doLimit,
+        doPage,
+        doOrdering,
+      ),
     enabled: false,
+    placeholderData: keepPreviousData,
   });
   if (topic === "references") {
     query = qReferences;
@@ -169,6 +197,18 @@ export default function PublicLore() {
     case "rules":
       query = qRules;
       sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
+      break;
+    case "references":
+      query = qReferences;
+      sorts = [
+        "name",
+        "licenses",
+        "publisher",
+        "gamesystem",
+        "author",
+        "publication_date",
+      ];
+      break;
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
@@ -185,13 +225,16 @@ export default function PublicLore() {
     case "rules":
       resultCompnent = <RuleResults results={results} />;
       break;
+    case "references":
+      resultCompnent = <ReferenceResults results={results} />;
+      break;
   }
 
   React.useEffect(() => {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, ruFilters, page, sort, limit]);
+  }, [bgFilters, ftFilters, ruFilters, doFilters, page, sort, limit]);
 
   const filterRef = React.useRef(null);
 
@@ -216,6 +259,13 @@ export default function PublicLore() {
         if (filterRef.current) {
           const filter = filterRef.current;
           setRuFilters(filter);
+        }
+        break;
+      case "references":
+        // const { name, gameSystem, exact } = filterRef.current;
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          setDoFilters(filter);
         }
         break;
     }
@@ -360,6 +410,7 @@ export default function PublicLore() {
                           {srt === "document"
                             ? exSrt + " (A-Z)"
                             : srt
+                                .replace("_", " ")
                                 .charAt(0)
                                 .toUpperCase()
                                 .concat(srt.substring(1)) + " (A-Z)"}
@@ -368,6 +419,7 @@ export default function PublicLore() {
                           {srt === "document"
                             ? exSrt + " (Z-A)"
                             : srt
+                                .replace("_", " ")
                                 .charAt(0)
                                 .toUpperCase()
                                 .concat(srt.substring(1)) + " (Z-A)"}

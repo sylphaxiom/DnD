@@ -1,13 +1,8 @@
-import Grid from "@mui/material/Grid";
-// import NumberSpinner from "../utils/NumberSpinner";
-// import Slider from "@mui/material/Slider";
-// import Switch from "@mui/material/Switch";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
@@ -46,6 +41,11 @@ interface FilterProps {
     gameSystem: string[];
     exact: boolean;
   }>;
+  doRef?: React.Ref<{
+    name: string;
+    gameSystem: string[];
+    exact: boolean;
+  }>;
 }
 
 export interface BgFilter {
@@ -63,8 +63,19 @@ export interface RuFilter {
   gameSystem: string[];
   exact: boolean;
 }
+export interface DoFilter {
+  name: string;
+  gameSystem: string[];
+  exact: boolean;
+}
 
-export default function Filters({ topic, bgRef, ftRef, ruRef }: FilterProps) {
+export default function Filters({
+  topic,
+  bgRef,
+  ftRef,
+  ruRef,
+  doRef,
+}: FilterProps) {
   const [name, setName] = React.useState("");
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
@@ -79,8 +90,13 @@ export default function Filters({ topic, bgRef, ftRef, ruRef }: FilterProps) {
     return { name: name, gameSystem: gameSystem, exact: exact };
   }, [name, gameSystem, exact]);
 
-  // Imperitive handle for Feats.
+  // Imperitive handle for Rules.
   React.useImperativeHandle(ruRef, () => {
+    return { name: name, gameSystem: gameSystem, exact: exact };
+  }, [name, gameSystem, exact]);
+
+  // Imperitive handle for Documents
+  React.useImperativeHandle(doRef, () => {
     return { name: name, gameSystem: gameSystem, exact: exact };
   }, [name, gameSystem, exact]);
 

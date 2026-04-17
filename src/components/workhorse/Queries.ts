@@ -309,26 +309,21 @@ export async function fetchRules(
     return response.data;
 }
 
-export interface LicenseSummary {
-  name:string;
-  key:string;
-  url:string;
-}
 
 // NOTE: weight_unit is NOT an error, that is how it is in the docs 4/10/2026
-export interface Document {
-  url:string;
+export interface Reference {
   key:string;
-  licenses: LicenseSummary;
+  licenses: {
+    name:string;
+    key:string;
+  }[];
   publisher:{
     name:string;
     key:string;
-    url:string;
   };
   gamesystem:{
     name:string;
     key:string;
-    url:string;
   };
   display_name:string;
   name:string;
@@ -353,20 +348,29 @@ export interface Document {
 
 // References
 export async function fetchReferences(
-  name__iexact: string = "",
-  name__icontains: string = "",
-  document_key: string = "",
-  key: string = "",
-  order: string = "",
-  search: string = "",
+  name: string = "",
+  document_key: string[] = [],
+  exact: boolean = false,
+  limit: number = 20,
   page: number = 1,
-  limit: number = 20
+  ordering: string = "name",
+  key: string = "",
 ): Promise<{
   count: number;
   next: string | null;
   previous: string | null;
-  results: Document[]
+  results: Reference[]
   } | null> {
+    let name__iexact = ""
+    let name__icontains = ""
+    if (exact) {
+      name__iexact = name
+    } else {
+      name__icontains = name
+    }
+    let documents = ""
+    document_key.map((key)=>{documents += (key+",")})
+    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/documents`, {
         headers: {
@@ -375,18 +379,17 @@ export async function fetchReferences(
         params: {
           name__iexact: name__iexact,
           name__icontains: name__icontains,
-          document__gamesystem__key: document_key,
-          key: key,
-          order: order,
-          search: search,
-          page: page,
+          document__gamesystem__key__in: documents,
           limit: limit,
+          page: page,
+          ordering: ordering,
+          key: key,
         },
       })
       .catch((error) => {
-        console.log("An error occurred: %s", error);
+        console.log("An error occurred fetching Rules: %s", error);
         throw error;
       });
-      console.log("Backgrounds fetched: %i", response.data.count);
+      console.log("Rules fetched: %i", response.data.count);
     return response.data;
 }
