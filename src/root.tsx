@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import * as React from "react";
 import { Outlet, Scripts, ScrollRestoration } from "react-router";
-import Loading from "./components/utils/Loading";
+import Thinking from "./components/utils/Thinking";
 import TwinkleStars from "./components/utils/TwinkleStars";
 import theme from "./theme";
 
@@ -80,7 +80,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export function HydrateFallback() {
-  return <Loading />;
+  return <Thinking />;
 }
 
 export default function Root() {

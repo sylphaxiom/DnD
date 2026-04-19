@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Outlet } from "react-router";
-import PublicCampaign from "./nonAuth/PublicCampaign";
-import type { Route } from "./+types/Campaign";
-import Loading from "./utils/Loading";
-import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
+import { Outlet } from "react-router";
+import type { Route } from "./+types/Campaign";
+import PublicCampaign from "./nonAuth/PublicCampaign";
+import Thinking from "./utils/Thinking";
+import { fetchPlayer } from "./workhorse/Queries";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -28,7 +28,7 @@ export default function Campaign() {
   // const player = data?.message[0];
 
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(

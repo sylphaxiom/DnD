@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Outlet } from "react-router";
-import PublicHome from "./nonAuth/PublicHome";
-import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "./utils/Loading";
+import { Outlet } from "react-router";
 import type { Route } from "./+types/Landing";
+import PublicHome from "./nonAuth/PublicHome";
+import Thinking from "./utils/Thinking";
+import { fetchPlayer } from "./workhorse/Queries";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -27,7 +27,7 @@ export default function Landing() {
   });
   if (isAuthenticated) {
     if (isLoading) {
-      return <Loading />;
+      return <Thinking />;
     }
     if (error) {
       console.log(

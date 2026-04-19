@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Outlet } from "react-router";
-import PublicWorld from "./nonAuth/PublicWorld";
-import type { Route } from "./+types/World";
-import Loading from "./utils/Loading";
 import { useQuery } from "@tanstack/react-query";
+import { Outlet } from "react-router";
+import type { Route } from "./+types/World";
+import PublicWorld from "./nonAuth/PublicWorld";
+import Thinking from "./utils/Thinking";
 import { fetchPlayer } from "./workhorse/Queries";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
@@ -28,7 +28,7 @@ export default function World() {
   // const player = data?.message[0];
 
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(

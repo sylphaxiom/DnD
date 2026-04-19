@@ -41,7 +41,7 @@ export async function fetchPlayer(
   });
   const player = data?.message[0];
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(

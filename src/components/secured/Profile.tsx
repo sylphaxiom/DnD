@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "../utils/Loading";
 import { fetchPlayer } from "../workhorse/Queries";
 // import ListItem from "@mui/material/ListItem";
 // import { Link } from "react-router";
@@ -11,10 +10,11 @@ import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ProfileDataForm from "../forms/ProfileDataForm";
+import Thinking from "../utils/Thinking";
 import { PlayerForm } from "../workhorse/SecureForms";
 
 export default withAuthenticationRequired(Profile, {
-  onRedirecting: () => <Loading />,
+  onRedirecting: () => <Thinking />,
 });
 
 export async function clientLoader() {}
@@ -35,7 +35,7 @@ export function Profile() {
   // }
 
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(

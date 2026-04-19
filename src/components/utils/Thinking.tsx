@@ -5,7 +5,7 @@ import * as motion from "motion/react-client";
 import * as React from "react";
 
 interface ThinkingProps {
-  sizing: "small" | "medium" | "large";
+  sizing?: "small" | "medium" | "large";
 }
 
 export default function Thinking(props: ThinkingProps) {
