@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 
 export default function Loading() {
   const [scope, animate] = motions.useAnimate();
-  const [bounce, setBounce] = React.useState(true);
   let title = "LOADING...";
   let subtitle = null;
   let display = "none";
@@ -21,26 +20,32 @@ export default function Loading() {
     subtitle = "Looks like you tried to go to /" + catchall;
     display = "flex";
   }
+  const lengthVal = title.length;
+  const durationVal = lengthVal / 10;
+  const staggerVal = durationVal / 10;
+  const totalVal = durationVal + staggerVal + 0.4;
 
   React.useEffect(() => {
-    const bouncy = animate(
+    animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2) }
+      {
+        delay: stagger(staggerVal),
+        duration: durationVal,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatDelay: totalVal,
+      },
     );
-    setTimeout(() => {
-      bouncy.then;
-      setBounce(!bounce);
-    }, 3000);
-  }, [bounce]);
+  }, []);
 
   return (
     <Box
       id="loader_scr"
       sx={{
-        minWidth: 1,
         p: 0,
         textAlign: "center",
+        mx: 4,
       }}
     >
       <img
@@ -60,7 +65,7 @@ export default function Loading() {
             justifyContent: "center",
             overflow: "visible",
             fontFamily: "Courier New, monospace",
-            fontSize: "9em",
+            fontSize: "7em",
             fontWeight: 700,
           }}
           ref={scope}

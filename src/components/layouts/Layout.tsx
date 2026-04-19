@@ -1,21 +1,22 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Title from "./layouts/Title";
-import Navbar from "./layouts/Navbar";
-import Footer from "./layouts/Footer";
-import { Outlet, useLocation, useNavigate } from "react-router";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Utils from "./layouts/Utils";
-import Container from "@mui/material/Container";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
 import NoAccountsIcon from "@mui/icons-material/NoAccounts";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useAuth0 } from "@auth0/auth0-react";
-import Avatar from "@mui/material/Avatar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import * as React from "react";
+import { Outlet, useLocation, useNavigate } from "react-router";
+import ModeSwitch from "../utils/ModeSwitch";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+import Title from "./Title";
+import Utils from "./Utils";
 interface bps {
   sm: boolean;
   md: boolean;
@@ -42,7 +43,6 @@ export default function Layout() {
   const domain = "http://localhost:5173";
 
   const handleLogin = (_e: React.MouseEvent, clk: string) => {
-    console.log(clk);
     switch (clk) {
       case "Log In":
         handleClose();
@@ -96,8 +96,15 @@ export default function Layout() {
   return (
     <>
       {bps.lg ? (
-        <Box sx={{ height: "100%", width: 1, mx: "auto" }}>
-          <Container id="cont-main" sx={{ ml: "15vw" }}>
+        <Box
+          sx={{
+            height: "100%",
+            width: 1,
+            paddingLeft: { lg: "15vw", xl: "0" },
+            paddingRight: { lg: "5vw", xl: "0" },
+          }}
+        >
+          <Container id="cont-main">
             <Navbar bps={bps} />
             <Title />
             <Outlet />
@@ -107,10 +114,15 @@ export default function Layout() {
         </Box>
       ) : (
         <Box>
-          <AppBar sx={{ width: 1 }} position="sticky">
+          <AppBar id="navHead" sx={{ width: 1 }} position="sticky">
             <Toolbar>
               <Navbar bps={bps} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Typography
+                variant="h5"
+                className="primary"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              >
                 Kothis Portal<span style={{ float: "right" }}>{page}</span>
               </Typography>
               <IconButton
@@ -120,6 +132,7 @@ export default function Layout() {
                 aria-haspopup="true"
                 onClick={handleClick}
                 color={isAuthenticated ? "success" : "secondary"}
+                sx={{ mr: 4 }}
               >
                 {isAuthenticated ? (
                   <Avatar src={user?.picture} />
@@ -127,6 +140,7 @@ export default function Layout() {
                   <NoAccountsIcon />
                 )}
               </IconButton>
+              <ModeSwitch />
               {isAuthenticated ? (
                 <Menu
                   id="menu-appbar"
@@ -189,6 +203,7 @@ export default function Layout() {
             </Toolbar>
           </AppBar>
           <Outlet />
+          <Footer />
         </Box>
       )}
     </>

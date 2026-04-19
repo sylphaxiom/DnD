@@ -22,7 +22,7 @@ export async function clientLoader() {}
 export default function Navigation({ bps }: Props) {
   let location = useLocation();
   const [navAnchorEl, setNavAnchorEl] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
   const tabSX = {
     height: "100%",
@@ -38,10 +38,9 @@ export default function Navigation({ bps }: Props) {
     "home",
     "character",
     "campaign",
-    "notebook",
     "world",
-    "lore",
     "homebrew",
+    "notebook",
   ];
 
   return (
@@ -61,13 +60,13 @@ export default function Navigation({ bps }: Props) {
           {pages.map((page, index) => (
             <Tab
               component={NavLink}
-              label={page}
+              label={page.toUpperCase()}
               value={page}
               to={page === "home" ? "/" : page}
               aria-controls={page}
               key={"tab-" + index}
               id={"tab-" + index}
-              sx={{ height: "13.5vh" }}
+              sx={{ height: "16.5vh" }}
             />
           ))}
         </Tabs>
@@ -93,8 +92,8 @@ export default function Navigation({ bps }: Props) {
               vertical: "bottom",
               horizontal: "left",
             }}
-            disableScrollLock
-            keepMounted
+            // disableScrollLock
+            // keepMounted
             transformOrigin={{
               vertical: "top",
               horizontal: "left",

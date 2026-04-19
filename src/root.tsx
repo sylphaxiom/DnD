@@ -1,19 +1,20 @@
-import { Outlet, Scripts, ScrollRestoration } from "react-router";
-import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Loading from "./components/Loading";
-import theme from "./theme";
-import { ThemeProvider } from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import * as React from "react";
+import { Outlet, Scripts, ScrollRestoration } from "react-router";
+import Thinking from "./components/utils/Thinking";
+import TwinkleStars from "./components/utils/TwinkleStars";
+import theme from "./theme";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
         defaultOptions: { queries: { staleTime: 1000 * 60 * 60 * 4 } },
-      })
+      }),
   );
 
   return (
@@ -53,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <title>World of Kothis</title>
       </head>
       <body>
+        <TwinkleStars />
         <InitColorSchemeScript attribute="class" />
         <React.Fragment>
           <QueryClientProvider client={queryClient}>
@@ -78,7 +80,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export function HydrateFallback() {
-  return <Loading />;
+  return <Thinking />;
 }
 
 export default function Root() {

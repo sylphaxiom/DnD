@@ -8,14 +8,14 @@ import { data, useFetcher, useNavigate } from "react-router";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import type { Route } from "./+types/Error.tsx";
 import Paper from "@mui/material/Paper";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
-import Footer from "./layouts/Footer.tsx";
+import Footer from "../layouts/Footer.tsx";
+import type { Route } from "./+types/Error.ts";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -30,7 +30,6 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
-  // await new Promise((res) => setTimeout(res, 1000));
   let formData = await request.formData();
   const errClient = decodeURI(String(formData.get("errClient")));
   const errConn = decodeURI(String(formData.get("errConn")));
@@ -74,7 +73,6 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export default function Error({ loaderData }: Route.ComponentProps) {
   const [scope, animate] = motions.useAnimate();
-  const [bounce, setBounce] = React.useState(true);
   const [timer, setTimer] = React.useState(10);
   const [ignored, setIgnored] = React.useState(false);
   const [realError, setRealError] = React.useState(false);
@@ -98,17 +96,23 @@ export default function Error({ loaderData }: Route.ComponentProps) {
     errConn = loaderData.connection || undefined;
     errLang = loaderData.lang || undefined;
   }
+  const lengthVal = title.length;
+  const durationVal = lengthVal / 10;
+  const staggerVal = durationVal / 10;
+  const totalVal = durationVal + staggerVal + 0.4;
 
   React.useEffect(() => {
-    const bouncy = animate(
+    animate(
       "span",
       { y: [-35, -105, -35] },
-      { delay: stagger(0.2) }
+      {
+        delay: stagger(staggerVal),
+        duration: durationVal,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatDelay: totalVal,
+      },
     );
-    setTimeout(() => {
-      bouncy.then;
-      setBounce(!bounce);
-    }, 3000);
     if (fetcher.state === "idle") {
       if (fetcher.data?.status === 200) {
         respMsg = fetcher.data?.msg;
@@ -122,7 +126,7 @@ export default function Error({ loaderData }: Route.ComponentProps) {
         }, 1000);
       }
     }
-  }, [bounce, timer, fetcher.state]);
+  }, [timer, fetcher.state]);
 
   return (
     <Box

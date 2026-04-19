@@ -1,11 +1,10 @@
-import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Outlet } from "react-router";
-import PublicCharacter from "./nonAuth/PublicCharacter";
-import type { Route } from "./+types/Character";
-import Loading from "./Loading";
-import { fetchPlayer } from "./workhorse/Queries";
 import { useQuery } from "@tanstack/react-query";
+import { Outlet } from "react-router";
+import type { Route } from "./+types/Character";
+import PublicCharacter from "./nonAuth/PublicCharacter";
+import Thinking from "./utils/Thinking";
+import { fetchPlayer } from "./workhorse/Queries";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -26,25 +25,17 @@ export default function Character() {
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  const player = data?.message[0];
+  // const player = data?.message[0];
 
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
-  return (
-    <>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
-        {isAuthenticated ? player?.first_name + "\'s " : "The Public\'s "}{" "}
-        Character Page
-      </Typography>
-      {isAuthenticated ? <Outlet /> : <PublicCharacter />}
-    </>
-  );
+  return isAuthenticated ? <Outlet /> : <PublicCharacter />;
 }

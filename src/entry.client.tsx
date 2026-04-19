@@ -25,10 +25,10 @@ ReactDom.hydrateRoot(
       }}
     >
       <HydratedRouter
-        unstable_onError={(error, errorInfo) => {
+        onError={(error, errorInfo) => {
           console.error(error, errorInfo);
         }}
       />
     </Auth0Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

@@ -1,4 +1,4 @@
-import {type RouteConfig, route, layout, index, prefix,} from "@react-router/dev/routes"
+import { type RouteConfig, index, layout, prefix, route, } from "@react-router/dev/routes"
 import "react-router"
 declare module "react-router"{
     interface AppLoadContext {
@@ -6,19 +6,19 @@ declare module "react-router"{
 }
 
 export default [
-    layout("./components/Layout.tsx", [
+    layout("./components/layouts/Layout.tsx", [
         route('/',"./components/Landing.tsx",[
-            index("./components/Home.tsx")
+            index("./components/secured/Home.tsx")
         ]),
         route("character", "./components/Character.tsx", [
-            index("./components/character/MyCharacters.tsx"),
+            index("./components/nonAuth/PublicCharacter.tsx"),
         ]),
         route("campaign", "./components/Campaign.tsx", [
             index("./components/nonAuth/PublicCampaign.tsx"),
         ]),
         route("notebook","./components/Notebook.tsx", [
             index("./components/nonAuth/PublicNotebook.tsx"),
-            route("profile/", "./components/notebook/Profile.tsx"),
+            route("profile/", "./components/secured/Profile.tsx"),
         ]),
         route("world", "./components/World.tsx", [
             index( "./components/nonAuth/PublicWorld.tsx"),
@@ -61,20 +61,20 @@ export default [
             ...prefix("wildlands", [
                 route("pon", "./components/world/Pon.tsx",),
             ]),
-        ]),
-        route("lore", "./components/Lore.tsx", [
-            index("./components/nonAuth/PublicLore.tsx"),
-        ]),
-        ...prefix("lore", [            
-            route("portal", "./components/lore/Portal.tsx"),
-            route("creators", "./components/lore/Creators.tsx"),
+            route("lore", "./components/Lore.tsx", [
+                index("./components/nonAuth/PublicLore.tsx"),
+            ]),
+            ...prefix("lore", [            
+                route("portal", "./components/nonAuth/Portal.tsx"),
+                route("creators", "./components/nonAuth/Creators.tsx"),
+            ]),
         ]),
         route("homebrew", "./components/Homebrew.tsx", [
-            index("./components/homebrew/VaultDoor.tsx"),
+            index("./components/secured/VaultDoor.tsx"),
         ]),
     ]),
     route("login", "./components/utils/Login.tsx", {id:"login"}),
-    route("result", "./components/Result.tsx", {id:"result"}),
-    route("*?", "./components/Loading.tsx", {id:"catchall"}),
-    route("error", "./components/Error.tsx", {id:"error"}),
+    route("result", "./components/utils/Result.tsx", {id:"result"}),
+    route("*?", "./components/utils/Loading.tsx", {id:"catchall"}),
+    route("error", "./components/utils/Error.tsx", {id:"error"}),
 ] satisfies RouteConfig

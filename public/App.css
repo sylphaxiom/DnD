@@ -1,3 +1,22 @@
+.primary {
+  color: var(--mui-palette-primary-main);
+}
+.secondary {
+  color: var(--mui-palette-secondary-main);
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .dark img.svg {
   filter: hue-rotate(180deg) invert() contrast(90%)
 }
@@ -11,3 +30,40 @@ svg#kothisWorld {
   font-size: 5rem;
   line-height: 50%;
 }
+
+#stary_bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+}
+html.light #stary_bg {
+  background: #F2F7FC;
+  background-image: linear-gradient(15deg, rgba(242, 247, 252, 1) 0%, rgba(235, 244, 252, 1) 70%, rgba(176, 203, 232, 1) 100%);
+}
+
+#navHead {
+  backdrop-filter: blur(90px);
+  background-color: transparent;
+}
+
+/* #spinDaddy {
+  position:relative;
+  width: 250px;
+  height: 250px;
+  display:flex;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#logoBG {
+  position:absolute;
+  width:100px;
+  height:100px;
+  align-self: center;
+  margin-left: 75px;
+} */

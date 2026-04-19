@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router";
@@ -6,9 +7,11 @@ import { Link } from "react-router";
 export default function Portal() {
   return (
     <Box>
+      <Divider sx={{ my: 2 }} variant="middle" />
       <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
         The Kothis Portal
       </Typography>
+      <Divider sx={{ my: 2 }} variant="middle" />
       <Grid container spacing={3}>
         <Grid size={5} offset={1}>
           <Typography sx={{ mx: 1 }}>

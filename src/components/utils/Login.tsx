@@ -1,21 +1,17 @@
-import * as React from "react";
-import type { Route } from "./+types/Login";
-import { redirectDocument, useLocation, useNavigate } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import CloseIcon from "@mui/icons-material/Close";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import NoAccountsIcon from "@mui/icons-material/NoAccounts";
-import CloseIcon from "@mui/icons-material/Close";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 import Avatar from "@mui/material/Avatar";
-import { useColorScheme } from "@mui/material/styles";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import * as React from "react";
+import { redirectDocument, useLocation, useNavigate } from "react-router";
+import type { Route } from "./+types/Login";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -23,21 +19,21 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   if (path === "/login") {
     console.log("redirecting...");
     return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=http://localhost:5173/"
+      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/",
     );
   }
 }
 
 export default function Login() {
-  const { mode, setMode, systemMode } = useColorScheme();
-  if (!mode) {
-    return null;
-  }
-  const isDark = useMediaQuery("(prefers-color-scheme: dark)");
-  const [_color, setColor] = React.useState(
-    // This is only here to re-trigger the rendering.
-    systemMode?.toString()
-  );
+  // const { mode, setMode, systemMode } = useColorScheme();
+  // if (!mode) {
+  //   return null;
+  // }
+  // const isDark = useMediaQuery("(prefers-color-scheme: dark)");
+  // const [_color, setColor] = React.useState(
+  //   // This is only here to re-trigger the rendering.
+  //   systemMode?.toString()
+  // );
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
@@ -47,29 +43,27 @@ export default function Login() {
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
 
-  React.useEffect(() => {
-    if (mode === "system") {
-      isDark ? setMode("dark") : setMode("light");
-    }
-  }, [mode]);
+  // React.useEffect(() => {
+  //   if (mode === "system") {
+  //     isDark ? setMode("dark") : setMode("light");
+  //   }
+  // }, [mode]);
 
-  const ThemeMode = () => {
-    if (mode === "dark") {
-      return <DarkModeOutlinedIcon />;
-    } else {
-      return <LightModeOutlinedIcon />;
-    }
-  };
+  // const ThemeMode = () => {
+  //   if (mode === "dark") {
+  //     return <DarkModeOutlinedIcon />;
+  //   } else {
+  //     return <LightModeOutlinedIcon />;
+  //   }
+  // };
 
   const unauthed = [
     { icon: <LoginIcon />, name: "Log In" },
     { icon: <HowToRegIcon />, name: "Sign Up" },
-    { icon: <ThemeMode />, name: "Mode" },
   ];
   const authed = [
     { icon: <LogoutIcon />, name: "Log Out" },
     { icon: <ManageAccountsIcon />, name: "Profile" },
-    { icon: <ThemeMode />, name: "Mode" },
   ];
   const actions = isAuthenticated ? authed : unauthed;
 
@@ -94,10 +88,10 @@ export default function Login() {
       case "Profile":
         navigate("/notebook/profile");
         break;
-      case "Mode":
-        mode === "light" ? setMode("dark") : setMode("light");
-        setColor(mode.toString());
-        break;
+      // case "Mode":
+      //   mode === "light" ? setMode("dark") : setMode("light");
+      //   setColor(mode.toString());
+      //   break;
       default:
         console.log("Default reached, something probably went wrong.");
     }

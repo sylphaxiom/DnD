@@ -1,16 +1,15 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import Loading from "../Loading";
-import { fetchPlayer } from "../workhorse/Queries";
-import { useQuery } from "@tanstack/react-query";
+import Box from "@mui/material/Box";
+import { default as Tab, default as TabPanel } from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import TabPanel from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
+import * as React from "react";
+import Thinking from "../utils/Thinking";
+import { fetchPlayer } from "../workhorse/Queries";
 
 export default withAuthenticationRequired(VaultDoor, {
-  onRedirecting: () => <Loading />,
+  onRedirecting: () => <Thinking />,
   loginOptions: {
     authorizationParams: {
       connection: "con_yU9FSo3E7oXahH3x",
@@ -32,13 +31,13 @@ export function VaultDoor() {
     setValue(val);
   };
   if (isLoading) {
-    return <Loading />;
+    return <Thinking />;
   }
   if (error) {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(error.message),
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   }
   return (

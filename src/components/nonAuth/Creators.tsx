@@ -10,9 +10,11 @@ import { Link } from "react-router";
 export default function Creators() {
   return (
     <Box>
-      <Typography variant="h2" sx={{ textAlign: "center", width: 1, my: 4 }}>
+      <Divider sx={{ my: 2 }} variant="middle" />
+      <Typography variant="h2" sx={{ textAlign: "center", width: 1 }}>
         The Creators of Kothis
       </Typography>
+      <Divider sx={{ my: 2 }} variant="middle" />
       <Grid container spacing={3}>
         <Grid size={10} offset={1} sx={{ my: 2 }}>
           <Typography sx={{ mx: 1 }}>

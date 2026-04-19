@@ -1,4 +1,5 @@
 // import * as React from "react";
+
 import type { Route } from "./+types/Result";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
@@ -14,6 +15,5 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Result({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
   return <div>{JSON.stringify(loaderData)}</div>;
 }

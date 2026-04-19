@@ -1,14 +1,19 @@
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import InteractiveKothis from "../InteractiveKothis";
+import { useTheme } from "@mui/material";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Link } from "react-router";
+import InteractiveKothis from "../utils/InteractiveKothis";
 
 export default function PublicWorld() {
   // non-authenticated landing page for World tab
+  const theme = useTheme();
 
   let bps = {
     sm: useMediaQuery("(min-width: 600px)"),
@@ -18,19 +23,52 @@ export default function PublicWorld() {
   };
 
   return (
-    <Grid
-      container
-      spacing={3}
-      id="public_worldBody"
-      sx={{ alignItems: "center" }}
-    >
+    <Grid container id="public_worldBody" sx={{ textAlign: "center" }}>
       <Grid size={12} sx={{ textAlign: "center" }}>
         <Divider sx={{ my: 2 }} variant="middle" />
-        --- This is the public world page ---
-        <Divider sx={{ my: 2 }} variant="middle" />
+        <Typography variant="h2" sx={{ textAlign: "center", width: 1 }}>
+          {"The World of Kothis"}
+        </Typography>
+        <Divider sx={{ my: 1 }} variant="middle" />
       </Grid>
-      <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ mx: { xs: 2, md: 0 } }}>
-        <Typography variant="subtitle2" sx={{ textIndent: "3em", my: 2 }}>
+      <Grid size={{ xs: 12 }} offset={0}>
+        <Paper sx={{ mb: 4 }}>
+          <Typography variant="subtitle1">Quick Links</Typography>
+          <Link
+            to="/world/lore"
+            style={{
+              color: theme.palette.primary.main,
+              textDecoration: "none",
+              margin: "0 1em",
+            }}
+          >
+            Lore Hub
+          </Link>
+
+          <Link
+            to="/world/lore/creators"
+            style={{
+              color: theme.palette.primary.main,
+              textDecoration: "none",
+              margin: "0 1em",
+            }}
+          >
+            Creators
+          </Link>
+          <Link
+            to="/world/lore/portal"
+            style={{
+              color: theme.palette.primary.main,
+              textDecoration: "none",
+              margin: "0 1em",
+            }}
+          >
+            About the Site
+          </Link>
+        </Paper>
+      </Grid>
+      <Grid size={{ xs: 12 }} sx={{ px: { xs: 2, lg: 0 } }}>
+        <Typography variant="body1" sx={{ textIndent: "3em", my: 2 }}>
           The world of Kothis is a fantasy world of diversity, magic, and
           wonder. The nations of Kothis live in peace with one another, for the
           most part, but there is always something to threaten the status quo.
@@ -40,9 +78,23 @@ export default function PublicWorld() {
           world or to play in a Kothis campaign, log in or sign up and gain
           access to all that Kothis has to offer!
         </Typography>
+        <Divider sx={{ my: 2 }} variant="middle" />
+        <Typography variant="body1" sx={{ my: 2, textAlign: "center" }}>
+          {"Looking for the Lore page? It moved "}{" "}
+          <Button
+            component={Link}
+            sx={{ m: 2 }}
+            to="/world/lore"
+            variant="contained"
+            size="large"
+          >
+            {">>> here <<<"}
+          </Button>
+        </Typography>
+        <Divider sx={{ my: 2 }} variant="middle" />
         <Grid container>
-          <Grid size={6}>
-            <Typography variant="h6" sx={{ my: 1 }}>
+          <Grid size={6} sx={{ textAlign: "center" }}>
+            <Typography variant="body1" sx={{ my: 1 }}>
               Continents
             </Typography>
             <Typography variant="subtitle2" sx={{}}>
@@ -58,8 +110,8 @@ export default function PublicWorld() {
               Elandra
             </Typography>
           </Grid>
-          <Grid size={6}>
-            <Typography variant="h6" sx={{ my: 1 }}>
+          <Grid size={6} sx={{ textAlign: "center" }}>
+            <Typography variant="body1" sx={{ my: 1 }}>
               Nations
             </Typography>
             <Typography variant="subtitle2" sx={{}}>
@@ -83,7 +135,7 @@ export default function PublicWorld() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid size={{ xs: 12, md: 8 }}>
+      <Grid size={{ xs: 12 }} sx={{ px: { xs: 2, lg: 0 } }}>
         <Card
           id="interactive_map_card"
           sx={{ textAlign: "center", borderRadius: 3 }}
@@ -97,12 +149,9 @@ export default function PublicWorld() {
           </CardContent>
         </Card>
       </Grid>
-      <Divider
-        flexItem
-        orientation="horizontal"
-        sx={{ width: 0.87, my: 3 }}
-        variant={"middle"}
-      />
+      <Grid size={12}>
+        <Divider sx={{ my: 3 }} variant={"middle"} />
+      </Grid>
       <Grid container size={10} offset={1} sx={{ my: 2 }}>
         <Grid size={{ xs: 12, md: 2 }}>
           <Typography variant="h4">Borodir</Typography>

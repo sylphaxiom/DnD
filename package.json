@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite && react-router dev",
+    "dev": "react-router dev",
     "kill": "npx kill-port 5173",
     "clean": "tsc -b --clean",
     "demo": "tsc -b && vite build --base=/test/",
+    "tsbuild": "tsc -b",
+    "rrbuild": "react-router build",
     "build": "tsc -b && react-router build",
-    "api": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --API",
-    "prod": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --PROD && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --PROD",
-    "test": "py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --CHECK --DEV && tsc -b && react-router build && py C:\\users\\image\\code_projects\\py_scripts\\DevDeploy.py DnD-app --DEV --SKIP",
+    "api": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --API",
+    "prod": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --PROD",
+    "test": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --SKIP --DEV",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "react-router typegen && tsc"
@@ -19,6 +21,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.8.0",
     "@auth0/auth0-spa-js": "^2.8.0",
+    "@base-ui/react": "^1.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
@@ -39,8 +42,10 @@
     "react-big-calendar": "^1.19.4",
     "react-cookie": "^8.0.1",
     "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
     "react-router": "^7.9.4",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
@@ -48,7 +53,7 @@
     "@react-router/dev": "^7.9.1",
     "@tanstack/eslint-plugin-query": "^5.91.2",
     "@types/file-saver": "^2.0.7",
-    "@types/node": "^24.3.0",
+    "@types/node": "^24.12.2",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",

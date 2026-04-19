@@ -1,11 +1,13 @@
 // import * as React from "react";
+import { Divider, Paper, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import InteractiveKothis from "../InteractiveKothis";
-import Grid from "@mui/material/Grid";
-import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
+import InteractiveKothis from "../utils/InteractiveKothis";
 
 export async function clientLoader() {
   // Home page loader
@@ -13,25 +15,33 @@ export async function clientLoader() {
 
 export default function PublicHome() {
   // Home page
+  const theme = useTheme();
 
   return (
     <Box sx={{ width: 1, textAlign: "center" }}>
       <Grid container>
-        <Grid size={{ xs: 12, lg: 6 }} offset={0}>
-          <Typography variant="subtitle1" sx={{ px: { xs: 2, lg: 0 } }}>
-            <span className="punch-uation">“</span>
-            <br />
-            As a species we're fundamentally insane. Put more than two of us in
-            a room, we pick sides and start dreaming up reasons to kill one
-            another. Why do you think we invented politics and religion?
-            <br />
-            <span className="punch-uation">“</span>
-            <br />
-            <span className="punch-uation">-</span>Stephen King,{" "}
-            <span style={{ fontSize: "1.5rem" }}>The Mist</span>
+        <Grid size={{ xs: 12 }}>
+          <Divider variant="middle" sx={{ my: 2 }} />
+          <Typography variant="h2" sx={{ textAlign: "center", width: 1 }}>
+            The Setting
           </Typography>
+          <Divider variant="middle" sx={{ my: 1 }} />
         </Grid>
-        <Grid size={{ xs: 12, lg: 6 }} sx={{ alignContent: "center" }}>
+        <Grid size={{ xs: 12 }} offset={0}>
+          <Paper sx={{ justifyContent: "center", mb: 4 }}>
+            <Typography variant="subtitle1">Quick Links</Typography>
+            <Link
+              to="/world/lore"
+              style={{
+                color: theme.palette.primary.main,
+                textDecoration: "none",
+              }}
+            >
+              Lore Hub
+            </Link>
+          </Paper>
+        </Grid>
+        <Grid size={{ xs: 12 }} sx={{ alignContent: "center" }}>
           <Typography
             sx={{
               p: 4,
@@ -62,10 +72,10 @@ export default function PublicHome() {
           <Card>
             <CardHeader title="A Diverse and Evolving World..." />
             <CardContent component={Grid} container spacing={2}>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              <Grid size={{ xs: 12 }}>
                 <InteractiveKothis />
               </Grid>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              <Grid size={{ xs: 12 }}>
                 <Typography sx={{ textAlign: "justify", textIndent: "3em" }}>
                   The nations of Kothis are each unique in their own way. From
                   the mountain dwellings of the dwarves in the Herzog Kingdom,
