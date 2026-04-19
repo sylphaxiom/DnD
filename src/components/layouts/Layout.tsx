@@ -96,8 +96,15 @@ export default function Layout() {
   return (
     <>
       {bps.lg ? (
-        <Box sx={{ height: "100%", width: 1 }}>
-          <Container id="cont-main" sx={{ pl: "15vw" }}>
+        <Box
+          sx={{
+            height: "100%",
+            width: 1,
+            paddingLeft: { lg: "15vw", xl: "0" },
+            paddingRight: { lg: "5vw", xl: "0" },
+          }}
+        >
+          <Container id="cont-main">
             <Navbar bps={bps} />
             <Title />
             <Outlet />

@@ -281,9 +281,11 @@ export default function PublicLore() {
 
   return (
     <Grid container spacing={1}>
+      <Divider sx={{ my: 2 }} variant="middle" />
       <Typography variant="h3" sx={{ textAlign: "center", width: 1, py: 3 }}>
         The Lore of Kothis and Worlds Beyond...
       </Typography>
+      <Divider sx={{ my: 2 }} variant="middle" />
       <Typography
         variant="h6"
         sx={{ textAlign: "center", width: 0.8, mx: "auto", my: 4 }}

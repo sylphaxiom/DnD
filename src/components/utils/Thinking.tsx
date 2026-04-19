@@ -113,6 +113,7 @@ export default function Thinking(props: ThinkingProps) {
         src="/dragon_spinner.svg"
         style={{
           rotate: rotate,
+          overflow: "hidden",
         }}
       />
       <img src="/kothis.svg" id="logoBG" style={logo} />
