@@ -12,7 +12,7 @@
     "rrbuild": "react-router build",
     "build": "tsc -b && react-router build",
     "api": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --API",
-    "prod": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --PROD",
+    "prod": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --SKIP --PROD",
     "test": "py C:\\users\\image\\code_projects\\py_scripts\\Deployment\\DevDeploy.py DnD-app --SKIP --DEV",
     "lint": "eslint .",
     "preview": "vite preview",
