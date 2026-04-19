@@ -29,12 +29,9 @@ export default function ReferenceResults({ results }: DoProps) {
     display_name,
     name,
     desc,
-    type,
     author,
     publication_date,
     permalink,
-    distance_unit,
-    weight_unit,
   }: Reference) => {
     return (
       <Accordion
@@ -53,6 +50,12 @@ export default function ReferenceResults({ results }: DoProps) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails key={key + "-accDetail"}>
+          <Typography variant="body1" key={key + "-desc"}>
+            {desc}
+          </Typography>
+          <br key={key + "-br0"} />
+          <Divider key={key + "-div0"} />
+          <br key={key + "-br1"} />
           <Typography
             key={key + "-cited"}
             sx={{ textDecoration: "3em hanging" }}
@@ -61,6 +64,7 @@ export default function ReferenceResults({ results }: DoProps) {
             <Typography
               component={"i"}
               sx={{ textIndent: "unset", fontStyle: "italic", fontSize: "1em" }}
+              key={key + "-title"}
             >
               {name + ". "}
             </Typography>
@@ -79,8 +83,8 @@ export default function ReferenceResults({ results }: DoProps) {
                   {"Licenses:  "}
                   {license.name}
                 </Typography>
-                <Divider key={key + "-" + license + "-divider"} />
-                <br key={key + "-br"} />
+                <Divider key={key + "-" + license + "-div1"} />
+                <br key={key + "-br2"} />
               </List>
             );
           })}

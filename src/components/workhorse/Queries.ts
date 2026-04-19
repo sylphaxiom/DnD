@@ -384,6 +384,7 @@ export async function fetchReferences(
           page: page,
           ordering: ordering,
           key: key,
+          exclude: "type,distance_unit,weight_unit"
         },
       })
       .catch((error) => {

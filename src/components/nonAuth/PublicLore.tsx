@@ -340,7 +340,9 @@ export default function PublicLore() {
               Creatures
             </MenuItem>
             <MenuItem value="rules">Rules</MenuItem>
-            <MenuItem value="lookup">Lookup Lists</MenuItem>
+            <MenuItem value="lookup" disabled>
+              Lookup Lists
+            </MenuItem>
             <MenuItem value="references">References</MenuItem>
           </Select>
         </FormControl>
