@@ -1,19 +1,19 @@
-import * as React from "react";
-import * as motion from "motion/react-client";
-import * as motions from "motion/react";
-import { stagger } from "motion";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { data, useFetcher, useNavigate } from "react-router";
-import axios from "axios";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { stagger } from "motion";
+import * as motions from "motion/react";
+import * as motion from "motion/react-client";
+import * as React from "react";
+import { data, useFetcher, useNavigate } from "react-router";
 import Footer from "../layouts/Footer.tsx";
 import type { Route } from "./+types/Error.ts";
 
@@ -117,7 +117,6 @@ export default function Error({ loaderData }: Route.ComponentProps) {
       if (fetcher.data?.status === 200) {
         respMsg = fetcher.data?.msg;
         if (timer === 0) {
-          console.log("reset fetcher:");
           fetcher.reset();
           navigate("/");
         }
@@ -191,7 +190,11 @@ export default function Error({ loaderData }: Route.ComponentProps) {
                   data-aspect-ratio="1.02553"
                   data-width="100%"
                 >
-                  <a href="https://tenor.com/view/joke-missed-over-your-head-gif-8604199">
+                  <a
+                    href="https://tenor.com/view/joke-missed-over-your-head-gif-8604199"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Joke Missed GIF
                   </a>
                 </div>{" "}

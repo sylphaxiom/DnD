@@ -25,15 +25,6 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Login() {
-  // const { mode, setMode, systemMode } = useColorScheme();
-  // if (!mode) {
-  //   return null;
-  // }
-  // const isDark = useMediaQuery("(prefers-color-scheme: dark)");
-  // const [_color, setColor] = React.useState(
-  //   // This is only here to re-trigger the rendering.
-  //   systemMode?.toString()
-  // );
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
@@ -42,20 +33,6 @@ export default function Login() {
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
-
-  // React.useEffect(() => {
-  //   if (mode === "system") {
-  //     isDark ? setMode("dark") : setMode("light");
-  //   }
-  // }, [mode]);
-
-  // const ThemeMode = () => {
-  //   if (mode === "dark") {
-  //     return <DarkModeOutlinedIcon />;
-  //   } else {
-  //     return <LightModeOutlinedIcon />;
-  //   }
-  // };
 
   const unauthed = [
     { icon: <LoginIcon />, name: "Log In" },
@@ -88,12 +65,7 @@ export default function Login() {
       case "Profile":
         navigate("/notebook/profile");
         break;
-      // case "Mode":
-      //   mode === "light" ? setMode("dark") : setMode("light");
-      //   setColor(mode.toString());
-      //   break;
       default:
-        console.log("Default reached, something probably went wrong.");
     }
   };
 

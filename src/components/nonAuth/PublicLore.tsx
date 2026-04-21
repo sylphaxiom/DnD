@@ -241,28 +241,24 @@ export default function PublicLore() {
   const handleSearch = () => {
     switch (topic) {
       case "backgrounds":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setBgFilters(filter);
         }
         break;
       case "feats":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setFtFilters(filter);
         }
         break;
       case "rules":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setRuFilters(filter);
         }
         break;
       case "references":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setDoFilters(filter);

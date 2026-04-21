@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { link } from 'fs';
+import { expect, test } from '@playwright/test';
 
 // Tests for navigation through main pages
 [

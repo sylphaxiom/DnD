@@ -22,14 +22,7 @@ export default function BackgroundResults({ results }: BgProps) {
       setExpanded(newExpanded ? key : false);
     };
 
-  const accordian = ({
-    // url,
-    key,
-    benefits,
-    document,
-    name,
-    desc,
-  }: Background) => {
+  const accordian = ({ key, benefits, document, name, desc }: Background) => {
     return (
       <Accordion
         expanded={expanded === key}

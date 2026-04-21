@@ -1,12 +1,12 @@
-import * as React from "react";
-import * as motion from "motion/react-client";
-import * as motions from "motion/react";
-import { stagger } from "motion";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { useParams, Link } from "react-router";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { stagger } from "motion";
+import * as motions from "motion/react";
+import * as motion from "motion/react-client";
+import * as React from "react";
+import { Link, useParams } from "react-router";
 
 export default function Loading() {
   const [scope, animate] = motions.useAnimate();
@@ -78,15 +78,6 @@ export default function Loading() {
       <Typography variant="h2" component="div" sx={{ marginBottom: 10 }}>
         {subtitle}
       </Typography>
-      {/* {variant && (
-        <Button
-          size="large"
-          href={variant}
-          title=">>> PUSH ME <<<"
-          color="error"
-          sx={{ m: 5 }}
-        />
-      )} */}
       <Grid container sx={{ display: display }}>
         <Grid size={4} offset={2}>
           <Typography variant="h5">

@@ -1,10 +1,12 @@
 import * as React from "react";
-import { type Player } from "./Queries";
 import ErrorForm from "../forms/ErrorForm";
+import { type Player } from "./Queries";
+
 export interface FormProps {
   children: React.ReactNode;
   player: Player;
 }
+
 export function PlayerForm({ children, player }: FormProps) {
   const role = player.role;
   let authorized = false;

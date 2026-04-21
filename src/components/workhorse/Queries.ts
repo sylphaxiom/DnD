@@ -146,7 +146,6 @@ export async function fetchBackgrounds(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
-    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/backgrounds`, {
         headers: {
@@ -214,7 +213,6 @@ export async function fetchFeats(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
-    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/feats`, {
         headers: {
@@ -285,7 +283,6 @@ export async function fetchRules(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
-    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/rulesets`, {
         headers: {
@@ -309,8 +306,6 @@ export async function fetchRules(
     return response.data;
 }
 
-
-// NOTE: weight_unit is NOT an error, that is how it is in the docs 4/10/2026
 export interface Reference {
   key:string;
   licenses: {
@@ -370,7 +365,6 @@ export async function fetchReferences(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
-    console.log("input values are:\ndocument_key: %o | document_string: %s", document_key, documents)
     const response = await axios
       .get(`https://api.open5e.com/v2/documents`, {
         headers: {
@@ -388,9 +382,9 @@ export async function fetchReferences(
         },
       })
       .catch((error) => {
-        console.log("An error occurred fetching Rules: %s", error);
+        console.log("An error occurred fetching References: %s", error);
         throw error;
       });
-      console.log("Rules fetched: %i", response.data.count);
+      console.log("References fetched: %i", response.data.count);
     return response.data;
 }

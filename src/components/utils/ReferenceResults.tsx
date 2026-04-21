@@ -21,7 +21,6 @@ export default function ReferenceResults({ results }: DoProps) {
     };
 
   const accordian = ({
-    // url,
     key,
     licenses,
     publisher,

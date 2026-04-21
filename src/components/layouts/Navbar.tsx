@@ -1,13 +1,12 @@
-import * as React from "react";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Box from "@mui/material/Box";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import { NavLink } from "react-router";
-import { useLocation } from "react-router";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import * as React from "react";
+import { NavLink, useLocation } from "react-router";
 interface Props {
   bps: {
     sm: boolean;
@@ -92,8 +91,6 @@ export default function Navigation({ bps }: Props) {
               vertical: "bottom",
               horizontal: "left",
             }}
-            // disableScrollLock
-            // keepMounted
             transformOrigin={{
               vertical: "top",
               horizontal: "left",

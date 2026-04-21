@@ -9,22 +9,18 @@ interface ThinkingProps {
 }
 
 export default function Thinking(props: ThinkingProps) {
-  console.log("Passed sizing is: %o", props);
   const time = motions.useTime();
   const rotate = motions.useTransform(time, [0, 1500], [0, 360], {
     clamp: false,
   });
 
-  React.useEffect(() => {
-    console.log("inside useEffect: %s", props.sizing);
-  }, []);
+  React.useEffect(() => {}, []);
 
   let daddy: SxProps;
   let logo: React.CSSProperties;
 
   switch (props.sizing) {
     case "large":
-      console.log("reached large Thinking");
       daddy = {
         position: "relative",
         textAlign: "center",
@@ -45,7 +41,6 @@ export default function Thinking(props: ThinkingProps) {
       };
       break;
     case "medium":
-      console.log("reached medium Thinking");
       daddy = {
         position: "relative",
         textAlign: "center",
@@ -65,7 +60,6 @@ export default function Thinking(props: ThinkingProps) {
       };
       break;
     case "small":
-      console.log("reached small Thinking");
       daddy = {
         position: "relative",
         textAlign: "center",
@@ -85,7 +79,6 @@ export default function Thinking(props: ThinkingProps) {
       };
       break;
     default:
-      console.log("reached default Thinking");
       daddy = {
         position: "relative",
         width: "250px",
@@ -101,10 +94,7 @@ export default function Thinking(props: ThinkingProps) {
         alignSelf: "center",
         marginLeft: "75px",
       };
-      break;
   }
-
-  console.log("Styles as follows:\ndaddy: %o | logo: %o", daddy, logo);
 
   return (
     <Box id="spinDaddy" sx={daddy}>

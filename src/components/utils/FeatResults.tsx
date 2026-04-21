@@ -16,7 +16,6 @@ interface FtProps {
 
 export default function FeatResults({ results }: FtProps) {
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  console.log("Entered Feat component...");
 
   const handleChange =
     (key: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -24,7 +23,6 @@ export default function FeatResults({ results }: FtProps) {
     };
 
   const accordian = ({
-    // url,
     key,
     benefits,
     document,
