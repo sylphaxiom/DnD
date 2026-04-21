@@ -97,16 +97,22 @@ export default function Thinking(props: ThinkingProps) {
   }
 
   return (
-    <Box id="spinDaddy" sx={daddy}>
+    <Box id="spinDaddy" sx={daddy} role="status" aria-live="polite">
       <motion.img
         id="dragonSpinner"
         src="/dragon_spinner.svg"
+        alt="A rainbow dragon spinning around the Kothis logo."
         style={{
           rotate: rotate,
           overflow: "hidden",
         }}
       />
-      <img src="/kothis.svg" id="logoBG" style={logo} />
+      <img
+        src="/kothis.svg"
+        id="logoBG"
+        style={logo}
+        alt="Logo of Kothis which looks like a D20 with a fancy K in the middle and some designs to represent the classes of the original players."
+      />
     </Box>
   );
 }

@@ -9,7 +9,7 @@ export default function Pyrus() {
   // Pyrus page
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Typography variant="h1" sx={{ mx: "auto" }}>
         Pyrus of Draconia
       </Typography>

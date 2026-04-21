@@ -75,6 +75,7 @@ export default function Navigation({ bps }: Props) {
             size="large"
             sx={{}}
             aria-label="navigation"
+            role="navigation"
             aria-controls="menu-navigation"
             aria-haspopup="true"
             onClick={(event: React.MouseEvent<HTMLElement>) => {

@@ -18,6 +18,8 @@ export default function Utils() {
         top: 0,
       }}
       id="utilBox"
+      role="complementary"
+      aria-label="utility panel"
     >
       <ModeSwitch />
       <Login />

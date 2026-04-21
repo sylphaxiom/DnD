@@ -1,11 +1,11 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Tooltip, {
   tooltipClasses,
   type TooltipProps,
 } from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import * as React from "react";
 
 interface opacity {
   herzog: number;
@@ -66,7 +66,9 @@ export default function InteractiveKothis() {
           id="kothisWorld"
           viewBox="0 0 2048 1536"
           xmlns="http://www.w3.org/2000/svg"
+          role="presentation"
         >
+          <title id="kothisMapTitle">Kothis World Map</title>
           <defs id="worldDefs" />
           <g mode="layer" aria-label="Regions" id="regionsLayer">
             <image
@@ -74,6 +76,9 @@ export default function InteractiveKothis() {
               height="1536"
               preserveAspectRatio="none"
               href="/Kothis_interactive.svg"
+              role="presentation"
+              aria-label="kothisMapInteractive"
+              aria-labelledby="kothisMapTitle"
               id="image1"
               style={{ display: "inline" }}
             />
