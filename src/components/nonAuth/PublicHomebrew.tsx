@@ -7,7 +7,7 @@ export async function clientLoader() {
 
 export default function PublicHomebrew() {
   // Homebrew page
-  const txtHeading = "Homebrew";
+  const txtHeading = "Homebrewery";
   const txtBody = `Here is where you will, one day, find the homebrew items and rules we have created. Perhaps there will even be an item or feat builder on here. If we can ever agree on balancing rules, that is.`;
 
   return (
