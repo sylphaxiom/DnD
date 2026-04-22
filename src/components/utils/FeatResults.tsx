@@ -15,7 +15,6 @@ interface FtProps {
   results: Feat[];
   featType: fTypes[];
   prereqs: string[];
-  countMod?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function FeatResults({ results }: FtProps) {

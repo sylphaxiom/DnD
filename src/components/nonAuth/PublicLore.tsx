@@ -58,7 +58,6 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
-  const [countMod, setCountMod] = React.useState(0);
   const [topic, setTopic] = React.useState<
     | ""
     | "spells"
@@ -224,7 +223,8 @@ export default function PublicLore() {
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
-  const totalResults = query?.data?.count - countMod || 0;
+  const totalResults = query?.data?.count || 0;
+  console.log("returned count is %i", totalResults);
 
   // Component switch (because it uses results)
   switch (topic) {
@@ -233,12 +233,7 @@ export default function PublicLore() {
       break;
     case "feats":
       resultComponent = (
-        <FeatResults
-          results={results}
-          featType={ftType}
-          prereqs={ftPrereqs}
-          countMod={setCountMod}
-        />
+        <FeatResults results={results} featType={ftType} prereqs={ftPrereqs} />
       );
       break;
     case "rules":
@@ -396,7 +391,7 @@ export default function PublicLore() {
               width: 1,
             }}
           >
-            <Filters topic={topic} bgRef={filterRef} />
+            <Filters topic={topic} bgRef={filterRef} ftRef={filterRef} />
           </Paper>
         </Collapse>
       </Grid>

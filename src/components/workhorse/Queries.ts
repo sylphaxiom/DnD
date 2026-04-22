@@ -268,14 +268,17 @@ export async function fetchFeats(
           Filtered.push(...response.data.results.filter((feat: Feat) => prereqs.includes(feat.prerequisite)))
         }
         console.log("filtered data count is %i", Filtered.length)
-        return Filtered.length > 0 ? Filtered : response;
+        console.log("return is: %o", {...response.data, results: Filtered, count: Filtered.length})
+        console.log("normal response is: %o", response.data)
+        return Filtered.length > 0 ? {...response.data, results: Filtered, count: Filtered.length} : response.data;
       })
       .catch((error) => {
         console.log("An error occurred fetching Feats: %s", error);
         throw error;
       });
-      console.log("Feats fetched: %i", response.data.count);
-    return response.data;
+      // console.log("Feats fetched: %i", response.data.count);
+    console.log("final return: %o", response)
+    return response;
 }
 
 export interface Rule {
