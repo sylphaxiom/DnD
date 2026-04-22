@@ -58,6 +58,7 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
+  const [countMod, setCountMod] = React.useState(0);
   const [topic, setTopic] = React.useState<
     | ""
     | "spells"
@@ -74,7 +75,7 @@ export default function PublicLore() {
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
-  let resultCompnent;
+  let resultComponent;
 
   // Background query
   let bgName = bgFilters?.name || "";
@@ -110,6 +111,8 @@ export default function PublicLore() {
   let ftName = ftFilters?.name || "";
   let ftGameSystem = ftFilters?.gameSystem || [];
   let ftExact = ftFilters?.exact || false;
+  let ftType = ftFilters?.featType || [];
+  let ftPrereqs = ftFilters?.prereqs || [];
   const ftLimit = limit;
   const ftPage = page;
   const ftOrdering = sort;
@@ -119,12 +122,23 @@ export default function PublicLore() {
       ftName,
       ftGameSystem,
       ftExact,
+      ftType,
+      ftPrereqs,
       ftLimit,
       ftPage,
       ftOrdering,
     ],
     queryFn: () =>
-      fetchFeats(ftName, ftGameSystem, ftExact, ftLimit, ftPage, ftOrdering),
+      fetchFeats(
+        ftName,
+        ftGameSystem,
+        ftExact,
+        ftType,
+        ftPrereqs,
+        ftLimit,
+        ftPage,
+        ftOrdering,
+      ),
     enabled: false,
     placeholderData: keepPreviousData,
   });
@@ -151,6 +165,7 @@ export default function PublicLore() {
     enabled: false,
     placeholderData: keepPreviousData,
   });
+
   // Documents query
   let doName = doFilters?.name || "";
   let doGameSystem = doFilters?.gameSystem || [];
@@ -180,9 +195,6 @@ export default function PublicLore() {
     enabled: false,
     placeholderData: keepPreviousData,
   });
-  if (topic === "references") {
-    query = qReferences;
-  }
 
   // query and sort switch
   switch (topic) {
@@ -212,21 +224,28 @@ export default function PublicLore() {
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
-  const totalResults = query?.data?.count || 0;
+  const totalResults = query?.data?.count - countMod || 0;
 
   // Component switch (because it uses results)
   switch (topic) {
     case "backgrounds":
-      resultCompnent = <BackgroundResults results={results} />;
+      resultComponent = <BackgroundResults results={results} />;
       break;
     case "feats":
-      resultCompnent = <FeatResults results={results} />;
+      resultComponent = (
+        <FeatResults
+          results={results}
+          featType={ftType}
+          prereqs={ftPrereqs}
+          countMod={setCountMod}
+        />
+      );
       break;
     case "rules":
-      resultCompnent = <RuleResults results={results} />;
+      resultComponent = <RuleResults results={results} />;
       break;
     case "references":
-      resultCompnent = <ReferenceResults results={results} />;
+      resultComponent = <ReferenceResults results={results} />;
       break;
   }
 
@@ -249,6 +268,7 @@ export default function PublicLore() {
       case "feats":
         if (filterRef.current) {
           const filter = filterRef.current;
+          console.log("Feat filter is %o", filter);
           setFtFilters(filter);
         }
         break;
@@ -461,7 +481,7 @@ export default function PublicLore() {
                   <FormHelperText>per page</FormHelperText>
                 </FormControl>
               </Stack>
-              {resultCompnent}
+              {resultComponent}
             </>
           ) : (
             <Nothing />

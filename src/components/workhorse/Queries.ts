@@ -184,9 +184,37 @@ export interface Feat {
   prerequisite:string;
   type:
   | "GENERAL"
-  | "ORIGIN"
-  | "FIGHTING_STYLE"
-  | "EPIC_BOON"
+  | "Origin"
+  | "Fighting Style"
+  | "Epic Boon"
+}
+
+export interface FeatPrereq {
+  prerequisite: string;
+}
+
+export async function fetchFtPrereqs(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: FeatPrereq[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/feats`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          ordering: "prerequisite",
+          limit: 1000,
+          fields: "prerequisite",
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Feats: %s", error);
+        throw error;
+      });
+    return response.data;
 }
 
 
@@ -194,6 +222,8 @@ export async function fetchFeats(
   name: string = "",
   document_key: string[] = [],
   exact: boolean = false,
+  featType: string[] = [],
+  prereqs: string[] = [],
   limit: number = 20,
   page: number = 1,
   ordering: string = "name",
@@ -227,6 +257,18 @@ export async function fetchFeats(
           ordering: ordering,
           key: key,
         },
+      })
+      .then((response) => {
+        let Filtered: typeof response.data = []
+        console.log("Input is %o", {'featType': featType, 'prereqs': prereqs})
+        if (featType.length > 0) {
+          Filtered.push(...response.data.results.filter((feat: Feat) => featType.includes(feat.type)))
+        }
+        if (prereqs.length > 0) {
+          Filtered.push(...response.data.results.filter((feat: Feat) => prereqs.includes(feat.prerequisite)))
+        }
+        console.log("filtered data count is %i", Filtered.length)
+        return Filtered.length > 0 ? Filtered : response;
       })
       .catch((error) => {
         console.log("An error occurred fetching Feats: %s", error);

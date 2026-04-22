@@ -11,7 +11,11 @@ import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { fetchGameSystems, type GameSystem } from "../workhorse/Queries";
+import {
+  fetchFtPrereqs,
+  fetchGameSystems,
+  type GameSystem,
+} from "../workhorse/Queries";
 
 interface FilterProps {
   topic:
@@ -35,6 +39,8 @@ interface FilterProps {
     name: string;
     gameSystem: string[];
     exact: boolean;
+    featType: fTypes[];
+    prereqs: string[];
   }>;
   ruRef?: React.Ref<{
     name: string;
@@ -57,6 +63,8 @@ export interface FtFilter {
   name: string;
   gameSystem: string[];
   exact: boolean;
+  featType: fTypes[];
+  prereqs: string[];
 }
 export interface RuFilter {
   name: string;
@@ -69,6 +77,8 @@ export interface DoFilter {
   exact: boolean;
 }
 
+export type fTypes = "GENERAL" | "Origin" | "Fighting Style" | "Epic Boon";
+
 export default function Filters({
   topic,
   bgRef,
@@ -78,6 +88,8 @@ export default function Filters({
 }: FilterProps) {
   const [name, setName] = React.useState("");
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
+  const [featType, setFeatType] = React.useState<fTypes[]>([]);
+  const [prereq, setPrereq] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
 
   // Imperitive handle for Backgrounds.
@@ -87,8 +99,14 @@ export default function Filters({
 
   // Imperitive handle for Feats.
   React.useImperativeHandle(ftRef, () => {
-    return { name: name, gameSystem: gameSystem, exact: exact };
-  }, [name, gameSystem, exact]);
+    return {
+      name: name,
+      gameSystem: gameSystem,
+      exact: exact,
+      featType: featType,
+      prereqs: prereq,
+    };
+  }, [name, gameSystem, exact, featType, prereq]);
 
   // Imperitive handle for Rules.
   React.useImperativeHandle(ruRef, () => {
@@ -114,13 +132,71 @@ export default function Filters({
     );
   }
 
-  const handleChange = (event: SelectChangeEvent<typeof gameSystem>) => {
+  // get the Prerequisite list
+  const { data: ftPrereqData, error: ftPrereqError } = useQuery({
+    queryKey: ["getFtPrereqs"],
+    queryFn: () => fetchFtPrereqs(),
+  });
+  const ftRawPrereqs = ftPrereqData?.results;
+  let ftPrereqs: string[] = [];
+  if (ftRawPrereqs) {
+    ftRawPrereqs.map((prereq) =>
+      ftPrereqs.includes(prereq.prerequisite) ||
+      prereq.prerequisite === "*N/A*" ||
+      prereq.prerequisite === ""
+        ? null
+        : ftPrereqs.push(prereq.prerequisite),
+    );
+  }
+  if (ftPrereqError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(ftPrereqError.message),
+      JSON.stringify(ftPrereqData),
+    );
+  }
+
+  const fTypes: fTypes[] = ["GENERAL", "Origin", "Fighting Style", "Epic Boon"];
+
+  const handleGamesystemChange = (
+    event: SelectChangeEvent<typeof gameSystem>,
+  ) => {
     const {
       target: { value },
     } = event;
     setGameSystem(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value,
+    );
+  };
+
+  const handlePrereqChange = (event: SelectChangeEvent<typeof prereq>) => {
+    const {
+      target: { value },
+    } = event;
+    console.log(
+      "Prereq set to: %o",
+      typeof value === "string" ? value.split(",") : value!,
+    );
+    setPrereq(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value!,
+    );
+  };
+
+  const handleFeatChange = (event: SelectChangeEvent<typeof featType>) => {
+    const {
+      target: { value },
+    } = event;
+    console.log(
+      "Feat type set to: %o",
+      typeof value === "string" ? value.split(",") : value!,
+    );
+    setFeatType(
+      // On autofill we get a stringified value.
+      typeof value === "string"
+        ? (value.split(",") as fTypes[])
+        : (value as fTypes[]),
     );
   };
 
@@ -179,7 +255,7 @@ export default function Filters({
           id="gamesystem"
           multiple
           value={gameSystem}
-          onChange={handleChange}
+          onChange={handleGamesystemChange}
           label="Gamesystem"
           key="gamesystem-select"
           renderValue={(selected) => (
@@ -203,7 +279,92 @@ export default function Filters({
       </FormControl>
     </Grid>,
   ];
+
+  const featFilters = [
+    <Grid size={{ xs: 12 }} key="featType-grid">
+      <FormControl
+        variant="standard"
+        key="featType-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="featType-label" id="featType-label">
+          Feat Type
+        </InputLabel>
+        <Select
+          labelId="featType-label"
+          id="featType"
+          multiple
+          value={featType}
+          onChange={handleFeatChange}
+          label="Feat Type"
+          key="featType-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip
+                  key={value}
+                  label={
+                    value === "GENERAL"
+                      ? value.substring(0, 1) + value.slice(1).toLowerCase()
+                      : value
+                  }
+                />
+              ))}
+            </Box>
+          )}
+        >
+          {fTypes?.map((type) => {
+            return (
+              <MenuItem value={type} key={type + "-item"}>
+                {type === "GENERAL"
+                  ? type.substring(0, 1) + type.slice(1).toLowerCase()
+                  : type}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+    <Grid size={{ xs: 12 }} key="prereq-grid">
+      <FormControl
+        variant="standard"
+        key="prereq-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="prereq-label" id="prereq-label">
+          Prerequisites
+        </InputLabel>
+        <Select
+          labelId="prereq-label"
+          id="prereq"
+          multiple
+          value={prereq}
+          onChange={handlePrereqChange}
+          label="Feat Type"
+          key="prereq-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value.replaceAll("*", "")} />
+              ))}
+            </Box>
+          )}
+        >
+          <MenuItem value={""}>None</MenuItem>
+          {ftPrereqs?.map((prereq) => {
+            return (
+              <MenuItem value={prereq} key={prereq + "-item"}>
+                {prereq.replaceAll("*", "")}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+  ];
+
   let filters = [];
+
   switch (topic) {
     case "spells":
       // Use spell filters
@@ -219,6 +380,10 @@ export default function Filters({
       break;
     case "creatures":
       // Use creatures filters
+      break;
+    case "feats":
+      filters.push(...basicFilters);
+      filters.push(...featFilters);
       break;
     default:
       filters.push(basicFilters);
