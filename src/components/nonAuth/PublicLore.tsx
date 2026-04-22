@@ -316,13 +316,16 @@ export default function PublicLore() {
         API into the site.
       </Typography>
       <Divider variant="middle" sx={{ my: 4, width: 0.9, mx: "auto" }} />
-      <Grid size={{ xs: 12 }} sx={{ px: 3, mt: 3 }}>
+      <Grid
+        size={{ xs: 12, md: 6 }}
+        sx={{ px: 3, mt: 3, alignContent: "center" }}
+      >
         <Typography variant="body1">
           What do we want to look at today?
         </Typography>
       </Grid>
       {/* <div style={{ width: "100%" }}> */}
-      <Grid size={12} sx={{ px: 3, mt: 3 }}>
+      <Grid size={{ xs: 12, md: 6 }} sx={{ px: 3, mt: 3 }}>
         <FormControl variant="standard" sx={{ width: { xs: 1 } }}>
           <InputLabel id="search-topic-label">Topic</InputLabel>
           <Select
@@ -446,15 +449,25 @@ export default function PublicLore() {
                 {isFetching ? (
                   <Thinking sizing="small" />
                 ) : (
-                  <Pagination
-                    size="large"
-                    page={page}
-                    onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
-                      setPage(value)
-                    }
-                    count={Math.ceil(totalResults / limit)}
-                    sx={{ px: 2 }}
-                  />
+                  <Stack>
+                    <Pagination
+                      size="large"
+                      page={page}
+                      onChange={(
+                        _e: React.ChangeEvent<unknown>,
+                        value: number,
+                      ) => setPage(value)}
+                      count={Math.ceil(totalResults / limit)}
+                      sx={{ px: 2 }}
+                    />
+                    <Typography
+                      variant="body2"
+                      sx={{ textAlign: "center", my: 2 }}
+                    >
+                      Found {totalResults}{" "}
+                      {topic.charAt(0).toUpperCase() + topic.slice(1)}
+                    </Typography>
+                  </Stack>
                 )}
                 <FormControl size="small" sx={{ p: 2 }}>
                   <InputLabel id="limit-page-label" sx={{ pl: "11px" }}>

@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -9,6 +10,7 @@ import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import {
@@ -200,6 +202,14 @@ export default function Filters({
     );
   };
 
+  const handleClear = () => {
+    setName("");
+    setGameSystem([]);
+    setExact(false);
+    setFeatType([]);
+    setPrereq([]);
+  };
+
   // All can use order, search, page, limit
 
   // SPELLS: BASIC, classes, level, range, school, duration, concentration, verbal, somatic, material, material_consumed, casting_time
@@ -241,7 +251,7 @@ export default function Filters({
         label="Exact Match?"
       />
     </Grid>,
-    <Grid size={{ xs: 12 }} key="gamesystem-grid">
+    <Grid size={{ xs: 12, md: "grow" }} key="gamesystem-grid">
       <FormControl
         variant="standard"
         key="gamesystem-control"
@@ -281,7 +291,7 @@ export default function Filters({
   ];
 
   const featFilters = [
-    <Grid size={{ xs: 12 }} key="featType-grid">
+    <Grid size={{ xs: 12, md: "grow" }} key="featType-grid">
       <FormControl
         variant="standard"
         key="featType-control"
@@ -325,7 +335,7 @@ export default function Filters({
         </Select>
       </FormControl>
     </Grid>,
-    <Grid size={{ xs: 12 }} key="prereq-grid">
+    <Grid size={{ xs: 12, md: "grow" }} key="prereq-grid">
       <FormControl
         variant="standard"
         key="prereq-control"
@@ -345,16 +355,31 @@ export default function Filters({
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
-                <Chip key={value} label={value.replaceAll("*", "")} />
+                <Chip
+                  key={value}
+                  sx={{ maxWidth: "100px" }}
+                  label={value.replaceAll("*", "")}
+                />
               ))}
             </Box>
           )}
         >
-          <MenuItem value={""}>None</MenuItem>
           {ftPrereqs?.map((prereq) => {
             return (
               <MenuItem value={prereq} key={prereq + "-item"}>
-                {prereq.replaceAll("*", "")}
+                <Tooltip
+                  title={prereq.replaceAll("*", "")}
+                  key={prereq + "-tooltip"}
+                >
+                  <Typography
+                    component={"span"}
+                    sx={{ fontSize: "1em" }}
+                    noWrap
+                    key={prereq + "-type"}
+                  >
+                    {prereq.replaceAll("*", "")}
+                  </Typography>
+                </Tooltip>
               </MenuItem>
             );
           })}
@@ -403,6 +428,15 @@ export default function Filters({
       {filters.map((filter) => {
         return filter;
       })}
+      <Button
+        variant="contained"
+        fullWidth
+        color="secondary"
+        sx={{ mt: 2 }}
+        onClick={handleClear}
+      >
+        Clear Filters
+      </Button>
     </Grid>
   );
 }

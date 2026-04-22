@@ -252,32 +252,35 @@ export async function fetchFeats(
           name__iexact: name__iexact,
           name__icontains: name__icontains,
           document__gamesystem__key__in: documents,
-          limit: limit,
-          page: page,
+          limit: featType.length > 0 || prereqs.length > 0 ? 10000 : limit,
+          page: featType.length > 0 || prereqs.length > 0 ? 1 : page,
           ordering: ordering,
           key: key,
         },
       })
       .then((response) => {
         let Filtered: typeof response.data = []
-        console.log("Input is %o", {'featType': featType, 'prereqs': prereqs})
-        if (featType.length > 0) {
-          Filtered.push(...response.data.results.filter((feat: Feat) => featType.includes(feat.type)))
+        if (featType.length > 0 || prereqs.length > 0) {
+          Filtered.push(...response.data.results.filter((feat: Feat) => featType.includes(feat.type) || prereqs.includes(feat.prerequisite)))
+          // Filtered.push(...response.data.results.filter((feat: Feat) => prereqs.includes(feat.prerequisite)))
+          let totalLength = Filtered.length
+          console.log("Feats fetched: %i", totalLength);
+          if (Filtered.length > limit) {
+            totalLength = Filtered.length
+            const start = (page - 1) * limit
+            const end = start + limit
+            Filtered = Filtered.slice(start, end)
+            console.log("Fitered feats returned: %i", Filtered.length);
+          }
+          return {...response.data, results: Filtered, count: totalLength}
+        } else {
+          return response.data;
         }
-        if (prereqs.length > 0) {
-          Filtered.push(...response.data.results.filter((feat: Feat) => prereqs.includes(feat.prerequisite)))
-        }
-        console.log("filtered data count is %i", Filtered.length)
-        console.log("return is: %o", {...response.data, results: Filtered, count: Filtered.length})
-        console.log("normal response is: %o", response.data)
-        return Filtered.length > 0 ? {...response.data, results: Filtered, count: Filtered.length} : response.data;
       })
       .catch((error) => {
         console.log("An error occurred fetching Feats: %s", error);
         throw error;
       });
-      // console.log("Feats fetched: %i", response.data.count);
-    console.log("final return: %o", response)
     return response;
 }
 
