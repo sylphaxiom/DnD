@@ -52,6 +52,7 @@ export async function fetchPlayer(
   }
 /**************************/
 
+// Game Systems
 export interface GameSystem {
   key:string;
   name:string;
@@ -70,6 +71,7 @@ export async function fetchGameSystems(): Promise<{
           "Content-Type": "application/json",
         },
         params: {
+          limit: 10000,
           exclude: "content_prefix"
         }
       })
@@ -96,6 +98,7 @@ export interface DocumentSummary {
     permalink:string;
   }
 
+// Backgrounds
 export interface BackgroundBenefit {
     name:string;
     desc:string | null;
@@ -114,7 +117,6 @@ export interface BackgroundBenefit {
     | null
   }
 
-// Backgrounds
 export interface Background {
   key:string;
   benefits:BackgroundBenefit[];
@@ -169,11 +171,11 @@ export async function fetchBackgrounds(
     return response.data;
 }
 
+// Feats
 export interface FeatBenefit {
   desc:string;
 }
 
-// Feats
 export interface Feat {
   key:string;
   has_prerequisite:boolean;
@@ -216,7 +218,6 @@ export async function fetchFtPrereqs(): Promise<{
       });
     return response.data;
 }
-
 
 export async function fetchFeats(
   name: string = "",
@@ -284,6 +285,7 @@ export async function fetchFeats(
     return response;
 }
 
+// Rules
 export interface Rule {
   key:string;
   name:string;
@@ -307,7 +309,6 @@ export interface Ruleset {
   rules:Rule[];
 }
 
-// Rules
 export async function fetchRules(
   name: string = "",
   document_key: string[] = [],
@@ -354,6 +355,7 @@ export async function fetchRules(
     return response.data;
 }
 
+// References
 export interface Reference {
   key:string;
   licenses: {
@@ -389,11 +391,12 @@ export interface Reference {
   | null
 }
 
-// References
 export async function fetchReferences(
   name: string = "",
   document_key: string[] = [],
   exact: boolean = false,
+  publisher: string[] = [],
+  license: string[] = [],
   limit: number = 20,
   page: number = 1,
   ordering: string = "name",
@@ -413,26 +416,85 @@ export async function fetchReferences(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
+    const params = new URLSearchParams();
+    params.append("name__iexact", name__iexact);
+    params.append("name__icontains", name__icontains);
+    params.append("document__gamesystem__key__in", documents);
+    publisher.forEach((pub) => params.append("publisher", pub));
+    license.forEach((lic) => params.append("license", lic));
+    params.append("limit", String(limit));
+    params.append("page", String(page));
+    params.append("ordering", ordering);
+    params.append("key", key);
+    params.append("exclude", "type,distance_unit,weight_unit");
     const response = await axios
       .get(`https://api.open5e.com/v2/documents`, {
         headers: {
           "Content-Type": "application/json",
         },
-        params: {
-          name__iexact: name__iexact,
-          name__icontains: name__icontains,
-          document__gamesystem__key__in: documents,
-          limit: limit,
-          page: page,
-          ordering: ordering,
-          key: key,
-          exclude: "type,distance_unit,weight_unit"
-        },
+        params,
       })
       .catch((error) => {
         console.log("An error occurred fetching References: %s", error);
         throw error;
       });
       console.log("References fetched: %i", response.data.count);
+    return response.data;
+}
+
+export interface License {
+  key:string;
+  name:string;
+  desc:string; // MD
+}
+
+export async function fetchLicenses(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: License[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/licenses`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          limit: 10000,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Licenses: %s", error);
+        throw error;
+      });
+      console.log("Licenses fetched: %i", response.data.count);
+    return response.data;
+}
+
+export interface Publisher {
+  key:string;
+  name:string;
+}
+
+export async function fetchPublishers(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Publisher[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/publishers`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          limit: 10000,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Publishers: %s", error);
+        throw error;
+      });
+      console.log("Publishers fetched: %i", response.data.count);
     return response.data;
 }

@@ -20,6 +20,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import Filters, {
   type BgFilter,
+  type DoFilter,
   type FtFilter,
   type RuFilter,
 } from "../forms/Filters";
@@ -50,7 +51,7 @@ export default function PublicLore() {
   const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
-  const [doFilters, setDoFilters] = React.useState<RuFilter | undefined>(
+  const [doFilters, setDoFilters] = React.useState<DoFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -169,6 +170,8 @@ export default function PublicLore() {
   let doName = doFilters?.name || "";
   let doGameSystem = doFilters?.gameSystem || [];
   let doExact = doFilters?.exact || false;
+  let doPublisher = doFilters?.publisher || [];
+  let doLicense = doFilters?.license || [];
   const doLimit = limit;
   const doPage = page;
   const doOrdering = sort;
@@ -178,6 +181,8 @@ export default function PublicLore() {
       doName,
       doGameSystem,
       doExact,
+      doPublisher,
+      doLicense,
       doLimit,
       doPage,
       doOrdering,
@@ -187,6 +192,8 @@ export default function PublicLore() {
         doName,
         doGameSystem,
         doExact,
+        doPublisher,
+        doLicense,
         doLimit,
         doPage,
         doOrdering,
@@ -207,7 +214,7 @@ export default function PublicLore() {
       break;
     case "rules":
       query = qRules;
-      sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
+      sorts = ["name", "document"];
       break;
     case "references":
       query = qReferences;
@@ -276,6 +283,7 @@ export default function PublicLore() {
       case "references":
         if (filterRef.current) {
           const filter = filterRef.current;
+          console.log("Document filter is %o", filter);
           setDoFilters(filter);
         }
         break;

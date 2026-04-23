@@ -16,7 +16,11 @@ import React from "react";
 import {
   fetchFtPrereqs,
   fetchGameSystems,
+  fetchLicenses,
+  fetchPublishers,
   type GameSystem,
+  type License,
+  type Publisher,
 } from "../workhorse/Queries";
 
 interface FilterProps {
@@ -53,6 +57,8 @@ interface FilterProps {
     name: string;
     gameSystem: string[];
     exact: boolean;
+    publisher: string[];
+    license: string[];
   }>;
 }
 
@@ -77,6 +83,8 @@ export interface DoFilter {
   name: string;
   gameSystem: string[];
   exact: boolean;
+  publisher: string[];
+  license: string[];
 }
 
 export type fTypes = "GENERAL" | "Origin" | "Fighting Style" | "Epic Boon";
@@ -92,6 +100,8 @@ export default function Filters({
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
   const [featType, setFeatType] = React.useState<fTypes[]>([]);
   const [prereq, setPrereq] = React.useState<string[]>([]);
+  const [publisher, setPublisher] = React.useState<string[]>([]);
+  const [license, setLicense] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
 
   // Imperitive handle for Backgrounds.
@@ -117,8 +127,14 @@ export default function Filters({
 
   // Imperitive handle for Documents
   React.useImperativeHandle(doRef, () => {
-    return { name: name, gameSystem: gameSystem, exact: exact };
-  }, [name, gameSystem, exact]);
+    return {
+      name: name,
+      gameSystem: gameSystem,
+      exact: exact,
+      publisher: publisher,
+      license: license,
+    };
+  }, [name, gameSystem, exact, publisher, license]);
 
   // get the Game Systems list
   const { data, error } = useQuery({
@@ -155,6 +171,35 @@ export default function Filters({
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(ftPrereqError.message),
       JSON.stringify(ftPrereqData),
+    );
+  }
+
+  // get the License list
+  const { data: licenseData, error: licenseError } = useQuery({
+    queryKey: ["getLicenses"],
+    queryFn: () => fetchLicenses(),
+  });
+  const licenses = licenseData?.results;
+  if (licenseError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(licenseError.message),
+      JSON.stringify(licenseData),
+    );
+  }
+
+  // get the publisher list
+  const { data: publisherData, error: publisherError } = useQuery({
+    queryKey: ["getPublishers"],
+    queryFn: () => fetchPublishers(),
+  });
+  const publishers = publisherData?.results;
+  const publisherKeys = publishers?.map((publisher) => publisher.key);
+  if (publisherError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(publisherError.message),
+      JSON.stringify(publisherData),
     );
   }
 
@@ -199,6 +244,28 @@ export default function Filters({
       typeof value === "string"
         ? (value.split(",") as fTypes[])
         : (value as fTypes[]),
+    );
+  };
+
+  const handlePublisherChange = (
+    event: SelectChangeEvent<typeof publisherKeys>,
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setPublisher(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value!,
+    );
+  };
+
+  const handleLicenseChange = (event: SelectChangeEvent<typeof license>) => {
+    const {
+      target: { value },
+    } = event;
+    setLicense(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value!,
     );
   };
 
@@ -251,7 +318,7 @@ export default function Filters({
         label="Exact Match?"
       />
     </Grid>,
-    <Grid size={{ xs: 12, md: "grow" }} key="gamesystem-grid">
+    <Grid size={{ xs: 12, md: 4 }} key="gamesystem-grid">
       <FormControl
         variant="standard"
         key="gamesystem-control"
@@ -291,7 +358,7 @@ export default function Filters({
   ];
 
   const featFilters = [
-    <Grid size={{ xs: 12, md: "grow" }} key="featType-grid">
+    <Grid size={{ xs: 12, md: 4 }} key="featType-grid">
       <FormControl
         variant="standard"
         key="featType-control"
@@ -335,7 +402,7 @@ export default function Filters({
         </Select>
       </FormControl>
     </Grid>,
-    <Grid size={{ xs: 12, md: "grow" }} key="prereq-grid">
+    <Grid size={{ xs: 12, md: 4 }} key="prereq-grid">
       <FormControl
         variant="standard"
         key="prereq-control"
@@ -388,6 +455,79 @@ export default function Filters({
     </Grid>,
   ];
 
+  const referenceFilters = [
+    <Grid size={{ xs: 12, md: 4 }} key="publisher-grid">
+      <FormControl
+        variant="standard"
+        key="publisher-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="publisher-label" id="publisher-label">
+          Publisher
+        </InputLabel>
+        <Select
+          labelId="publisher-label"
+          id="publisher"
+          multiple
+          value={publisher}
+          onChange={handlePublisherChange}
+          label="publisher"
+          key="publisher-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected?.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {publishers?.map(({ key, name }: Publisher) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                {name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+    <Grid size={{ xs: 12, md: 4 }} key="license-grid">
+      <FormControl
+        variant="standard"
+        key="license-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="license-label" id="license-label">
+          License
+        </InputLabel>
+        <Select
+          labelId="license-label"
+          id="license"
+          multiple
+          value={license}
+          onChange={handleLicenseChange}
+          label="license"
+          key="license-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected?.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {licenses?.map(({ key, name }: License) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                {name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+  ];
+
   let filters = [];
 
   switch (topic) {
@@ -409,6 +549,10 @@ export default function Filters({
     case "feats":
       filters.push(...basicFilters);
       filters.push(...featFilters);
+      break;
+    case "references":
+      filters.push(...basicFilters);
+      filters.push(...referenceFilters);
       break;
     default:
       filters.push(basicFilters);
