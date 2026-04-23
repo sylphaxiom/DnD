@@ -19,7 +19,6 @@ interface FtProps {
 
 export default function FeatResults({ results }: FtProps) {
   const [expanded, setExpanded] = React.useState<string | false>(false);
-
   const handleChange =
     (key: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? key : false);

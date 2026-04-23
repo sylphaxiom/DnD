@@ -61,8 +61,7 @@ export default [
             ...prefix("wildlands", [
                 route("pon", "./components/world/Pon.tsx",),
             ]),
-            route("lore/:topic?", "./components/Lore.tsx", [
-                index("./components/nonAuth/PublicLore.tsx"),
+            route("lore", "./components/nonAuth/PublicLore.tsx", [
             ]),
             ...prefix("lore", [            
                 route("portal", "./components/nonAuth/Portal.tsx"),

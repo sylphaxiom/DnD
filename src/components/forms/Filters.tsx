@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import type { Topics } from "../nonAuth/PublicLore";
 import {
   fetchFtPrereqs,
   fetchGameSystems,
@@ -24,18 +25,7 @@ import {
 } from "../workhorse/Queries";
 
 interface FilterProps {
-  topic:
-    | ""
-    | "spells"
-    | "items"
-    | "species"
-    | "classes"
-    | "backgrounds"
-    | "feats"
-    | "creatures"
-    | "rules"
-    | "lookup"
-    | "references";
+  topic: Topics;
   bgRef?: React.Ref<{
     name: string;
     gameSystem: string[];

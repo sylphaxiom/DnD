@@ -18,6 +18,7 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
+import { useSearchParams } from "react-router-dom";
 import Filters, {
   type BgFilter,
   type DoFilter,
@@ -38,7 +39,7 @@ import {
 } from "../workhorse/Queries";
 import type { Route } from "./+types/PublicLore";
 
-export type Topic =
+export type Topics =
   | ""
   | "spells"
   | "items"
@@ -48,14 +49,22 @@ export type Topic =
   | "feats"
   | "creatures"
   | "rules"
+  | "lookup"
   | "references";
 
 export async function clientLoader() {
   // Lore page loader
 }
 
-export default function PublicLore({ params }: Route.ComponentProps) {
-  const topic: Topic = params.topic as Topic;
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const formData = await request.formData();
+  const topic = formData.get("topic") as Topics;
+  return topic;
+}
+
+export default function PublicLore() {
+  const [params, setParams] = useSearchParams();
+  const topic = (params.get("topic") as Topics) || "";
   const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
     undefined,
   );
@@ -104,7 +113,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
         bgPage,
         bgOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "backgrounds"),
     placeholderData: keepPreviousData,
   });
 
@@ -140,7 +149,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
         ftPage,
         ftOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "feats"),
     placeholderData: keepPreviousData,
   });
 
@@ -163,7 +172,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
     ],
     queryFn: () =>
       fetchRules(ruName, ruGameSystem, ruExact, ruLimit, ruPage, ruOrdering),
-    enabled: false,
+    enabled: !!(topic === "rules"),
     placeholderData: keepPreviousData,
   });
 
@@ -199,7 +208,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
         doPage,
         doOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "references"),
     placeholderData: keepPreviousData,
   });
 
@@ -232,7 +241,6 @@ export default function PublicLore({ params }: Route.ComponentProps) {
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
   const totalResults = query?.data?.count || 0;
-  console.log("returned count is %i", totalResults);
 
   // Component switch (because it uses results)
   switch (topic) {
@@ -250,13 +258,18 @@ export default function PublicLore({ params }: Route.ComponentProps) {
     case "references":
       resultComponent = <ReferenceResults results={results} />;
       break;
+    default:
+      resultComponent = (
+        <Typography>No component for topic: {topic}</Typography>
+      );
+      break;
   }
 
   React.useEffect(() => {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, ruFilters, doFilters, page, sort, limit]);
+  }, [bgFilters, ftFilters, ruFilters, doFilters, page, sort, limit, topic]);
 
   const filterRef = React.useRef(null);
 
@@ -341,9 +354,9 @@ export default function PublicLore({ params }: Route.ComponentProps) {
             labelId="search-topic-label"
             id="search-topic"
             value={topic}
-            onChange={(e) =>
-              (params.topic = (e.target.value as string) ? e.target.value : "")
-            }
+            onChange={(e) => {
+              setParams({ topic: e.target.value });
+            }}
             label="Topic"
           >
             <MenuItem value="">Select a topic...</MenuItem>
@@ -372,7 +385,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
           type="button"
           variant="contained"
           sx={{ mt: 2, width: 1 }}
-          onClick={() => handleSearch()}
+          onClick={handleSearch}
         >
           Search
         </Button>
