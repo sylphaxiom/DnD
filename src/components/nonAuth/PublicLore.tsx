@@ -36,12 +36,26 @@ import {
   fetchReferences,
   fetchRules,
 } from "../workhorse/Queries";
+import type { Route } from "./+types/PublicLore";
+
+export type Topic =
+  | ""
+  | "spells"
+  | "items"
+  | "species"
+  | "classes"
+  | "backgrounds"
+  | "feats"
+  | "creatures"
+  | "rules"
+  | "references";
 
 export async function clientLoader() {
   // Lore page loader
 }
 
-export default function PublicLore() {
+export default function PublicLore({ params }: Route.ComponentProps) {
+  const topic: Topic = params.topic as Topic;
   const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
     undefined,
   );
@@ -59,19 +73,6 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
-  const [topic, setTopic] = React.useState<
-    | ""
-    | "spells"
-    | "items"
-    | "species"
-    | "classes"
-    | "backgrounds"
-    | "feats"
-    | "creatures"
-    | "rules"
-    | "lookup"
-    | "references"
-  >("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
@@ -341,7 +342,7 @@ export default function PublicLore() {
             id="search-topic"
             value={topic}
             onChange={(e) =>
-              setTopic((e.target.value as string) ? e.target.value : "")
+              (params.topic = (e.target.value as string) ? e.target.value : "")
             }
             label="Topic"
           >
@@ -364,9 +365,6 @@ export default function PublicLore() {
               Creatures
             </MenuItem>
             <MenuItem value="rules">Rules</MenuItem>
-            <MenuItem value="lookup" disabled>
-              Lookup Lists
-            </MenuItem>
             <MenuItem value="references">References</MenuItem>
           </Select>
         </FormControl>
