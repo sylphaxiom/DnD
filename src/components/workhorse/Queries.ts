@@ -500,3 +500,20 @@ export async function fetchPublishers(): Promise<{
       console.log("Publishers fetched: %i", response.data.count);
     return response.data;
 }
+
+export interface Trait {
+  name:string;
+  desc:string;
+  type: 
+    | "SIZE"
+    | "SPEED"
+    | "ABILITY_MODS"
+    | null
+}
+
+export interface Species {
+  key:string;
+  is_subspecies:boolean;
+  document: DocumentSummary;
+  traits: Trait[]
+}
