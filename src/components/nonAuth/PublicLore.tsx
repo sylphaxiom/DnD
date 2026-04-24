@@ -18,8 +18,10 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
+import { useSearchParams } from "react-router";
 import Filters, {
   type BgFilter,
+  type DoFilter,
   type FtFilter,
   type RuFilter,
 } from "../forms/Filters";
@@ -36,11 +38,28 @@ import {
   fetchRules,
 } from "../workhorse/Queries";
 
+export type Topics =
+  | ""
+  | "spells"
+  | "items"
+  | "species"
+  | "classes"
+  | "backgrounds"
+  | "feats"
+  | "creatures"
+  | "rules"
+  | "references";
+
 export async function clientLoader() {
   // Lore page loader
 }
 
 export default function PublicLore() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  if (!searchParams) {
+    setSearchParams({ topic: "" });
+  }
+  const topic = searchParams.get("topic") as Topics;
   const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
     undefined,
   );
@@ -50,7 +69,7 @@ export default function PublicLore() {
   const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
-  const [doFilters, setDoFilters] = React.useState<RuFilter | undefined>(
+  const [doFilters, setDoFilters] = React.useState<DoFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -58,19 +77,7 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
-  const [topic, setTopic] = React.useState<
-    | ""
-    | "spells"
-    | "items"
-    | "species"
-    | "classes"
-    | "backgrounds"
-    | "feats"
-    | "creatures"
-    | "rules"
-    | "lookup"
-    | "references"
-  >("");
+  // const [topic, setTopic] = React.useState<Topics>("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
@@ -102,7 +109,7 @@ export default function PublicLore() {
         bgPage,
         bgOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "backgrounds"),
     placeholderData: keepPreviousData,
   });
 
@@ -138,7 +145,7 @@ export default function PublicLore() {
         ftPage,
         ftOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "feats"),
     placeholderData: keepPreviousData,
   });
 
@@ -161,7 +168,7 @@ export default function PublicLore() {
     ],
     queryFn: () =>
       fetchRules(ruName, ruGameSystem, ruExact, ruLimit, ruPage, ruOrdering),
-    enabled: false,
+    enabled: !!(topic === "rules"),
     placeholderData: keepPreviousData,
   });
 
@@ -169,6 +176,8 @@ export default function PublicLore() {
   let doName = doFilters?.name || "";
   let doGameSystem = doFilters?.gameSystem || [];
   let doExact = doFilters?.exact || false;
+  let doLicense = doFilters?.license || [];
+  let doPublisher = doFilters?.publisher || [];
   const doLimit = limit;
   const doPage = page;
   const doOrdering = sort;
@@ -178,6 +187,8 @@ export default function PublicLore() {
       doName,
       doGameSystem,
       doExact,
+      doPublisher,
+      doLicense,
       doLimit,
       doPage,
       doOrdering,
@@ -187,11 +198,13 @@ export default function PublicLore() {
         doName,
         doGameSystem,
         doExact,
+        doPublisher,
+        doLicense,
         doLimit,
         doPage,
         doOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "references"),
     placeholderData: keepPreviousData,
   });
 
@@ -211,20 +224,12 @@ export default function PublicLore() {
       break;
     case "references":
       query = qReferences;
-      sorts = [
-        "name",
-        "licenses",
-        "publisher",
-        "gamesystem",
-        "author",
-        "publication_date",
-      ];
+      sorts = ["name", "gamesystem", "publisher", "licenses"];
       break;
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
   const totalResults = query?.data?.count || 0;
-  console.log("returned count is %i", totalResults);
 
   // Component switch (because it uses results)
   switch (topic) {
@@ -263,7 +268,6 @@ export default function PublicLore() {
       case "feats":
         if (filterRef.current) {
           const filter = filterRef.current;
-          console.log("Feat filter is %o", filter);
           setFtFilters(filter);
         }
         break;
@@ -333,7 +337,9 @@ export default function PublicLore() {
             id="search-topic"
             value={topic}
             onChange={(e) =>
-              setTopic((e.target.value as string) ? e.target.value : "")
+              setSearchParams({
+                topic: (e.target.value as string) ? e.target.value : "",
+              })
             }
             label="Topic"
           >
@@ -356,9 +362,6 @@ export default function PublicLore() {
               Creatures
             </MenuItem>
             <MenuItem value="rules">Rules</MenuItem>
-            <MenuItem value="lookup" disabled>
-              Lookup Lists
-            </MenuItem>
             <MenuItem value="references">References</MenuItem>
           </Select>
         </FormControl>
@@ -394,7 +397,13 @@ export default function PublicLore() {
               width: 1,
             }}
           >
-            <Filters topic={topic} bgRef={filterRef} ftRef={filterRef} />
+            <Filters
+              topic={topic}
+              bgRef={filterRef}
+              ftRef={filterRef}
+              ruRef={filterRef}
+              doRef={filterRef}
+            />
           </Paper>
         </Collapse>
       </Grid>

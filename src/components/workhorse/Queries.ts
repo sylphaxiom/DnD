@@ -394,6 +394,8 @@ export async function fetchReferences(
   name: string = "",
   document_key: string[] = [],
   exact: boolean = false,
+  publisher: string[] = [],
+  license: string[] = [],
   limit: number = 20,
   page: number = 1,
   ordering: string = "name",
@@ -413,26 +415,88 @@ export async function fetchReferences(
     }
     let documents = ""
     document_key.map((key)=>{documents += (key+",")})
+    const params = new URLSearchParams();
+    params.append("name__iexact", name__iexact);
+    params.append("name__icontains", name__icontains);
+    params.append("document__gamesystem__key__in", documents);
+    publisher.forEach((pub) => params.append("publisher", pub));
+    license.forEach((lic) => params.append("licenses", lic));
+    params.append("limit", String(limit));
+    params.append("page", String(page));
+    params.append("ordering", ordering);
+    params.append("key", key);
+    params.append("exclude", "type,distance_unit,weight_unit");
+    console.log("Publisher and license are: %o | %o",publisher,license)
+    console.log("Full params are: %s", params.toString())
     const response = await axios
       .get(`https://api.open5e.com/v2/documents`, {
         headers: {
           "Content-Type": "application/json",
         },
-        params: {
-          name__iexact: name__iexact,
-          name__icontains: name__icontains,
-          document__gamesystem__key__in: documents,
-          limit: limit,
-          page: page,
-          ordering: ordering,
-          key: key,
-          exclude: "type,distance_unit,weight_unit"
-        },
+        params: params
       })
       .catch((error) => {
         console.log("An error occurred fetching References: %s", error);
         throw error;
       });
       console.log("References fetched: %i", response.data.count);
+      console.log("Query is: %o", response.request)
+    return response.data;
+}
+
+export interface License {
+  key:string;
+  name:string;
+  desc:string; // MD
+}
+
+export async function fetchLicenses(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: License[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/licenses`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          limit: 10000,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Licenses: %s", error);
+        throw error;
+      });
+      console.log("Licenses fetched: %i", response.data.count);
+    return response.data;
+}
+
+export interface Publisher {
+  key:string;
+  name:string;
+}
+
+export async function fetchPublishers(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Publisher[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/publishers`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          limit: 10000,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Publishers: %s", error);
+        throw error;
+      });
+      console.log("Publishers fetched: %i", response.data.count);
     return response.data;
 }

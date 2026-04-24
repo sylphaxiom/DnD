@@ -13,25 +13,19 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import type { Topics } from "../nonAuth/PublicLore";
 import {
   fetchFtPrereqs,
   fetchGameSystems,
+  fetchLicenses,
+  fetchPublishers,
   type GameSystem,
+  type License,
+  type Publisher,
 } from "../workhorse/Queries";
 
 interface FilterProps {
-  topic:
-    | ""
-    | "spells"
-    | "items"
-    | "species"
-    | "classes"
-    | "backgrounds"
-    | "feats"
-    | "creatures"
-    | "rules"
-    | "lookup"
-    | "references";
+  topic: Topics;
   bgRef?: React.Ref<{
     name: string;
     gameSystem: string[];
@@ -53,6 +47,8 @@ interface FilterProps {
     name: string;
     gameSystem: string[];
     exact: boolean;
+    license: string[];
+    publisher: string[];
   }>;
 }
 
@@ -77,6 +73,8 @@ export interface DoFilter {
   name: string;
   gameSystem: string[];
   exact: boolean;
+  license: string[];
+  publisher: string[];
 }
 
 export type fTypes = "GENERAL" | "Origin" | "Fighting Style" | "Epic Boon";
@@ -93,6 +91,8 @@ export default function Filters({
   const [featType, setFeatType] = React.useState<fTypes[]>([]);
   const [prereq, setPrereq] = React.useState<string[]>([]);
   const [exact, setExact] = React.useState(false);
+  const [license, setLicense] = React.useState<string[]>([]);
+  const [publisher, setPublisher] = React.useState<string[]>([]);
 
   // Imperitive handle for Backgrounds.
   React.useImperativeHandle(bgRef, () => {
@@ -117,15 +117,21 @@ export default function Filters({
 
   // Imperitive handle for Documents
   React.useImperativeHandle(doRef, () => {
-    return { name: name, gameSystem: gameSystem, exact: exact };
-  }, [name, gameSystem, exact]);
+    return {
+      name: name,
+      gameSystem: gameSystem,
+      exact: exact,
+      license: license,
+      publisher: publisher,
+    };
+  }, [name, gameSystem, exact, license, publisher]);
 
   // get the Game Systems list
   const { data, error } = useQuery({
     queryKey: ["getGamesystem"],
     queryFn: () => fetchGameSystems(),
   });
-  const gameSystems = data?.results;
+  const gameSystems: GameSystem[] = data?.results || [];
   if (error) {
     console.log(
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
@@ -158,6 +164,34 @@ export default function Filters({
     );
   }
 
+  // get the Publisher list
+  const { data: publisherData, error: publisherError } = useQuery({
+    queryKey: ["getPublishers"],
+    queryFn: () => fetchPublishers(),
+  });
+  const publishers: Publisher[] = publisherData?.results || [];
+  if (publisherError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(publisherError.message),
+      JSON.stringify(publisherData),
+    );
+  }
+
+  // get the License list
+  const { data: licenseData, error: licenseError } = useQuery({
+    queryKey: ["getLicenses"],
+    queryFn: () => fetchLicenses(),
+  });
+  const licenses: License[] = licenseData?.results || [];
+  if (licenseError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(licenseError.message),
+      JSON.stringify(licenseData),
+    );
+  }
+
   const fTypes: fTypes[] = ["GENERAL", "Origin", "Fighting Style", "Epic Boon"];
 
   const handleGamesystemChange = (
@@ -166,39 +200,48 @@ export default function Filters({
     const {
       target: { value },
     } = event;
-    setGameSystem(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value,
-    );
+    setGameSystem(typeof value === "string" ? value.split(",") : value);
   };
 
   const handlePrereqChange = (event: SelectChangeEvent<typeof prereq>) => {
     const {
       target: { value },
     } = event;
-    console.log(
-      "Prereq set to: %o",
-      typeof value === "string" ? value.split(",") : value!,
-    );
-    setPrereq(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value!,
-    );
+    setPrereq(typeof value === "string" ? value.split(",") : value!);
   };
 
   const handleFeatChange = (event: SelectChangeEvent<typeof featType>) => {
     const {
       target: { value },
     } = event;
-    console.log(
-      "Feat type set to: %o",
-      typeof value === "string" ? value.split(",") : value!,
-    );
     setFeatType(
-      // On autofill we get a stringified value.
       typeof value === "string"
         ? (value.split(",") as fTypes[])
         : (value as fTypes[]),
+    );
+  };
+
+  const handleLicenseChange = (event: SelectChangeEvent<typeof license>) => {
+    const {
+      target: { value },
+    } = event;
+    setLicense(
+      typeof value === "string"
+        ? (value.split(",") as typeof license)
+        : (value as typeof license),
+    );
+  };
+  const handlePublisherChange = (
+    event: SelectChangeEvent<typeof publisher>,
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    console.log("Publisher info is: %s", value);
+    setPublisher(
+      typeof value === "string"
+        ? (value.split(",") as typeof publisher)
+        : (value as typeof publisher),
     );
   };
 
@@ -208,6 +251,8 @@ export default function Filters({
     setExact(false);
     setFeatType([]);
     setPrereq([]);
+    setLicense([]);
+    setPublisher([]);
   };
 
   // All can use order, search, page, limit
@@ -388,6 +433,79 @@ export default function Filters({
     </Grid>,
   ];
 
+  const referenceFilters = [
+    <Grid size={{ xs: 12, md: "grow" }} key="license-grid">
+      <FormControl
+        variant="standard"
+        key="license-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="license-label" id="license-label">
+          License
+        </InputLabel>
+        <Select
+          labelId="license-label"
+          id="license"
+          multiple
+          value={license}
+          onChange={handleLicenseChange}
+          label="license"
+          key="license-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {licenses?.map(({ key, name }: License) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                {name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+    <Grid size={{ xs: 12, md: "grow" }} key="publisher-grid">
+      <FormControl
+        variant="standard"
+        key="publisher-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="publisher-label" id="publisher-label">
+          Publisher
+        </InputLabel>
+        <Select
+          labelId="publisher-label"
+          id="publisher"
+          multiple
+          value={publisher}
+          onChange={handlePublisherChange}
+          label="Publisher"
+          key="publisher-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {publishers?.map(({ key, name }: Publisher) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                {name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+  ];
+
   let filters = [];
 
   switch (topic) {
@@ -409,6 +527,10 @@ export default function Filters({
     case "feats":
       filters.push(...basicFilters);
       filters.push(...featFilters);
+      break;
+    case "references":
+      filters.push(...basicFilters);
+      filters.push(...referenceFilters);
       break;
     default:
       filters.push(basicFilters);
