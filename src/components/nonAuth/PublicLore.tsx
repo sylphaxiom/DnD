@@ -72,6 +72,9 @@ export default function PublicLore() {
   const [doFilters, setDoFilters] = React.useState<DoFilter | undefined>(
     undefined,
   );
+  const [spFilters, setSpFilters] = React.useState<SpFilter | undefined>(
+    undefined,
+  );
   const [filtered, setFiltered] = React.useState(false);
   // Used for pagination.
   const [page, setPage] = React.useState(1);

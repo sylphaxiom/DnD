@@ -50,6 +50,13 @@ interface FilterProps {
     license: string[];
     publisher: string[];
   }>;
+  spRef?: React.Ref<{
+    name: string;
+    gameSystem: string[];
+    exact: boolean;
+    hasSubspecies: boolean;
+    subspecies: string[];
+  }>;
 }
 
 export interface BgFilter {
@@ -77,6 +84,14 @@ export interface DoFilter {
   publisher: string[];
 }
 
+export interface SpFilter {
+  name: string;
+  gameSystem: string[];
+  exact: boolean;
+  hasSubspecies: boolean;
+  subspecies: string[];
+}
+
 export type fTypes = "GENERAL" | "Origin" | "Fighting Style" | "Epic Boon";
 
 export default function Filters({
@@ -85,6 +100,7 @@ export default function Filters({
   ftRef,
   ruRef,
   doRef,
+  spRef,
 }: FilterProps) {
   const [name, setName] = React.useState("");
   const [gameSystem, setGameSystem] = React.useState<string[]>([]);
@@ -93,6 +109,8 @@ export default function Filters({
   const [exact, setExact] = React.useState(false);
   const [license, setLicense] = React.useState<string[]>([]);
   const [publisher, setPublisher] = React.useState<string[]>([]);
+  const [hasSubspecies, setHasSubspecies] = React.useState(false);
+  const [subspecies, setSubspecies] = React.useState<string[]>([]);
 
   // Imperitive handle for Backgrounds.
   React.useImperativeHandle(bgRef, () => {
@@ -123,6 +141,17 @@ export default function Filters({
       exact: exact,
       license: license,
       publisher: publisher,
+    };
+  }, [name, gameSystem, exact, license, publisher]);
+
+  // Imperitive handle for Species
+  React.useImperativeHandle(spRef, () => {
+    return {
+      name: name,
+      gameSystem: gameSystem,
+      exact: exact,
+      hasSubspecies: hasSubspecies,
+      subspecies: subspecies,
     };
   }, [name, gameSystem, exact, license, publisher]);
 
@@ -231,6 +260,7 @@ export default function Filters({
         : (value as typeof license),
     );
   };
+
   const handlePublisherChange = (
     event: SelectChangeEvent<typeof publisher>,
   ) => {
@@ -253,23 +283,10 @@ export default function Filters({
     setPrereq([]);
     setLicense([]);
     setPublisher([]);
+    setHasSubspecies(false);
+    setSubspecies([]);
   };
 
-  // All can use order, search, page, limit
-
-  // SPELLS: BASIC, classes, level, range, school, duration, concentration, verbal, somatic, material, material_consumed, casting_time
-  // ITEMS: BASIC, desc, cost, weight, rarity, attunement, category, magic, weapon, armor, light, versatile, thown, finesse, two_handed
-  // SPECIES: BASIC, subspecies_of__isnull, subspecies_of
-  // CLASSES: BASIC, subclass_of, subclass?
-  // + BACKGROUNDS: BASIC
-  // + FEATS: BASIC
-  // CREATURES: BASIC, size, category, subcategory, type, cr, ac, ability_score, saving_throw, skill_bonus, passive_perception
-  // + RULES: BASIC
-  // LOOKUP: - static no filter -
-  // + REFERENCES: BASIC
-
-  // Types:
-  // Basic: name, document (gamesystem/source)
   const basicFilters = [
     <Grid size={{ xs: 12, sm: 8 }} key="name-grid">
       <TextField
@@ -498,6 +515,64 @@ export default function Filters({
             return (
               <MenuItem value={key} key={key + "-item"}>
                 {name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Grid>,
+  ];
+
+  const speciesFilters = [
+    <Grid
+      size={{ xs: 12, sm: 4 }}
+      sx={{ alignSelf: "end" }}
+      key="hasSubspecies-grid"
+    >
+      <FormControlLabel
+        labelPlacement="start"
+        key="hasSubspecies-label"
+        control={
+          <Switch
+            checked={hasSubspecies}
+            key="hasSubspecies-switch"
+            onChange={(e) => setHasSubspecies(e.currentTarget.checked)}
+          />
+        }
+        label="Sub-Species?"
+      />
+    </Grid>,
+    <Grid size={{ xs: 12, md: "grow" }} key="gamesystem-grid">
+      <FormControl
+        variant="standard"
+        key="gamesystem-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="gamesystem-label" id="gamesystem-label">
+          Gamesystem
+        </InputLabel>
+        <Select
+          labelId="gamesystem-label"
+          id="gamesystem"
+          multiple
+          value={gameSystem}
+          onChange={handleGamesystemChange}
+          label="Gamesystem"
+          key="gamesystem-select"
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+        >
+          {gameSystems?.map(({ key, name, desc }: GameSystem) => {
+            return (
+              <MenuItem value={key} key={key + "-item"}>
+                <Tooltip title={desc} key={key}>
+                  <div key={key + "-" + name}>{name}</div>
+                </Tooltip>
               </MenuItem>
             );
           })}

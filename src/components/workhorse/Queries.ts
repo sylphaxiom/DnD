@@ -504,16 +504,74 @@ export async function fetchPublishers(): Promise<{
 export interface Trait {
   name:string;
   desc:string;
-  type: 
-    | "SIZE"
-    | "SPEED"
-    | "ABILITY_MODS"
-    | null
+  type: string | null;
+  order: number;
 }
 
 export interface Species {
   key:string;
   is_subspecies:boolean;
   document: DocumentSummary;
-  traits: Trait[]
+  traits: Trait[];
+  name: string;
+  desc: string; //MD
+  subspecies_of: string;
+}
+
+export type HasSubspecies =
+  | "unknown"
+  | "true"
+  | "false"
+
+// Rules
+export async function fetchSpecies(
+  name: string = "",
+  document_key: string[] = [],
+  exact: boolean = false,
+  hasSubspecies: HasSubspecies = "unknown",
+  subspecies_of: string[],
+  limit: number = 20,
+  page: number = 1,
+  ordering: string = "name",
+  key: string = "",
+): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Rule[]
+  } | null> {
+    let name__iexact = ""
+    let name__icontains = ""
+    if (exact) {
+      name__iexact = name
+    } else {
+      name__icontains = name
+    }
+    let documents = ""
+    let subspecies_list = ""
+    document_key.map((key)=>{documents += (key+",")})
+    subspecies_of.map((key)=>{subspecies_list += (key+",")})
+    const response = await axios
+      .get(`https://api.open5e.com/v2/species`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          name__iexact: name__iexact,
+          name__icontains: name__icontains,
+          document__gamesystem__key__in: documents,
+          subspecies_of__isnull: hasSubspecies,
+          subspecies_of__key__in: subspecies_list,
+          limit: limit,
+          page: page,
+          ordering: ordering,
+          key: key,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Rules: %s", error);
+        throw error;
+      });
+      console.log("Rules fetched: %i", response.data.count);
+    return response.data;
 }
