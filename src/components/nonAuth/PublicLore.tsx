@@ -20,7 +20,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import Filters, {
   type BgFilter,
-  type DoFilter,
   type FtFilter,
   type RuFilter,
 } from "../forms/Filters";
@@ -65,7 +64,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
   const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
-  const [doFilters, setDoFilters] = React.useState<DoFilter | undefined>(
+  const [doFilters, setDoFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -171,8 +170,6 @@ export default function PublicLore({ params }: Route.ComponentProps) {
   let doName = doFilters?.name || "";
   let doGameSystem = doFilters?.gameSystem || [];
   let doExact = doFilters?.exact || false;
-  let doPublisher = doFilters?.publisher || [];
-  let doLicense = doFilters?.license || [];
   const doLimit = limit;
   const doPage = page;
   const doOrdering = sort;
@@ -182,8 +179,6 @@ export default function PublicLore({ params }: Route.ComponentProps) {
       doName,
       doGameSystem,
       doExact,
-      doPublisher,
-      doLicense,
       doLimit,
       doPage,
       doOrdering,
@@ -193,8 +188,6 @@ export default function PublicLore({ params }: Route.ComponentProps) {
         doName,
         doGameSystem,
         doExact,
-        doPublisher,
-        doLicense,
         doLimit,
         doPage,
         doOrdering,
@@ -215,7 +208,7 @@ export default function PublicLore({ params }: Route.ComponentProps) {
       break;
     case "rules":
       query = qRules;
-      sorts = ["name", "document"];
+      sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
       break;
     case "references":
       query = qReferences;
@@ -284,7 +277,6 @@ export default function PublicLore({ params }: Route.ComponentProps) {
       case "references":
         if (filterRef.current) {
           const filter = filterRef.current;
-          console.log("Document filter is %o", filter);
           setDoFilters(filter);
         }
         break;
