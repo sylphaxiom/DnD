@@ -277,9 +277,12 @@ export default function PublicLore() {
   const results = query?.data?.results || [];
   let totalResults = query?.data?.count || 0;
   if (topic === "species" && results) {
-    totalResults = results.filter(
+    const newTotal = results.filter(
       (species: Species) => !species.subspecies_of,
     ).length;
+    if (!(totalResults && !newTotal)) {
+      totalResults = newTotal;
+    }
   }
   const pageCount = Math.ceil(totalResults / limit);
 

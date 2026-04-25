@@ -17,7 +17,7 @@ interface SpProps {
 }
 
 interface ParentSpecies extends Species {
-  subspecies: Species[];
+  subspecies?: Species[];
 }
 
 export default function SpeciesResults({ results, page, limit }: SpProps) {
@@ -46,7 +46,8 @@ export default function SpeciesResults({ results, page, limit }: SpProps) {
   const start = (page - 1) * limit;
   const end = start + limit;
   parentSpecies = parentSpecies.slice(start, end);
-  console.log("Fitered feats returned: %i", parentSpecies.length);
+  console.log("Fitered species returned: %i", parentSpecies.length);
+  console.log("Regular species returned: %i", results.length);
 
   const accordian = ({
     key,
@@ -102,56 +103,62 @@ export default function SpeciesResults({ results, page, limit }: SpProps) {
               );
             })}
           <Divider key={key + "-sub-top-div"} />
-          {subspecies.map(({ key, traits, name, desc }: Species) => {
-            return (
-              <Accordion
-                expanded={subExpanded === key}
-                key={key + "-acc"}
-                onChange={handleSubChange(key)}
-              >
-                <AccordionSummary
-                  aria-controls={key + "-content"}
-                  id={key + "-header"}
-                  key={key + "-header"}
-                  expandIcon={<ExpandMoreIcon key={key + "-ico"} />}
+          {subspecies &&
+            subspecies.map(({ key, traits, name, desc }: Species) => {
+              return (
+                <Accordion
+                  expanded={subExpanded === key}
+                  key={key + "-acc"}
+                  onChange={handleSubChange(key)}
                 >
-                  <Typography component="h3" key={key + "-name"}>
-                    {name + " (" + document.gamesystem.key + ")"}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key={key + "-accDetail"}>
-                  <Markdown remarkPlugins={[remarkGfm]} key={key + "-desc-md"}>
-                    {desc}
-                  </Markdown>
-                  {traits
-                    .sort((a, b) => a.order - b.order)
-                    .map((trait: Trait) => {
-                      const description = trait.desc;
-                      return (
-                        <React.Fragment key={trait.name + "-frag"}>
-                          <Typography
-                            component="span"
-                            variant="h4"
-                            key={key + "-" + trait.name}
-                          >
-                            {trait.name}
-                            {trait.type ? " (" + trait.type + ")" : null}
-                          </Typography>
-                          <Divider key={key + "-" + trait.name + "-divider"} />
-                          <Markdown
-                            remarkPlugins={[remarkGfm]}
-                            key={key + "-" + trait.name + "-md"}
-                          >
-                            {description}
-                          </Markdown>
-                          <br key={key + "-br"} />
-                        </React.Fragment>
-                      );
-                    })}
-                </AccordionDetails>
-              </Accordion>
-            );
-          })}
+                  <AccordionSummary
+                    aria-controls={key + "-content"}
+                    id={key + "-header"}
+                    key={key + "-header"}
+                    expandIcon={<ExpandMoreIcon key={key + "-ico"} />}
+                  >
+                    <Typography component="h3" key={key + "-name"}>
+                      {name + " (" + document.gamesystem.key + ")"}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key={key + "-accDetail"}>
+                    <Markdown
+                      remarkPlugins={[remarkGfm]}
+                      key={key + "-desc-md"}
+                    >
+                      {desc}
+                    </Markdown>
+                    {traits
+                      .sort((a, b) => a.order - b.order)
+                      .map((trait: Trait) => {
+                        const description = trait.desc;
+                        return (
+                          <React.Fragment key={trait.name + "-frag"}>
+                            <Typography
+                              component="span"
+                              variant="h4"
+                              key={key + "-" + trait.name}
+                            >
+                              {trait.name}
+                              {trait.type ? " (" + trait.type + ")" : null}
+                            </Typography>
+                            <Divider
+                              key={key + "-" + trait.name + "-divider"}
+                            />
+                            <Markdown
+                              remarkPlugins={[remarkGfm]}
+                              key={key + "-" + trait.name + "-md"}
+                            >
+                              {description}
+                            </Markdown>
+                            <br key={key + "-br"} />
+                          </React.Fragment>
+                        );
+                      })}
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })}
           <Divider key={key + "-sub-bot-div"} />
           <Typography variant="body2" key={key + "-refSection"}>
             <a href={document.permalink} key={key + "-refA"}>
@@ -167,7 +174,9 @@ export default function SpeciesResults({ results, page, limit }: SpProps) {
 
   return (
     <Box sx={{ px: 3 }} key={"species_box"}>
-      {parentSpecies?.map((item: ParentSpecies) => accordian(item))}
+      {parentSpecies.length > 0
+        ? parentSpecies?.map((item: ParentSpecies) => accordian(item))
+        : results?.map((item: Species) => accordian(item))}
     </Box>
   );
 }

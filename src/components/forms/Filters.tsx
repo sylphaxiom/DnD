@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import type { Topics } from "../nonAuth/PublicLore";
 import {
+  fetchAllSpecies,
   fetchFtPrereqs,
   fetchGameSystems,
   fetchLicenses,
@@ -23,6 +24,7 @@ import {
   type HasSubspecies,
   type License,
   type Publisher,
+  type Species,
 } from "../workhorse/Queries";
 
 interface FilterProps {
@@ -220,6 +222,36 @@ export default function Filters({
       "Something went wrong here.\nError message: %s\nReturned Data: %s",
       JSON.stringify(licenseError.message),
       JSON.stringify(licenseData),
+    );
+  }
+
+  // get the Subspecies list
+  const { data: speciesData, error: speciesError } = useQuery({
+    queryKey: ["getAllSpecies"],
+    queryFn: () => fetchAllSpecies(),
+  });
+  const allSpecies: Species[] = speciesData?.results || [];
+  allSpecies
+    .filter((a) => a.is_subspecies)
+    .concat(allSpecies.filter((a) => !a.is_subspecies));
+  let specKeys: string[] = [];
+  let specList: { key: string; name: string }[] = [];
+  for (const species of allSpecies) {
+    if (species.subspecies_of) {
+      if (!specKeys.includes(species.subspecies_of)) {
+        specKeys.push(species.subspecies_of);
+      }
+    } else {
+      if (specKeys.includes(species.key)) {
+        specList.push({ key: species.key, name: species.name });
+      }
+    }
+  }
+  if (speciesError) {
+    console.log(
+      "Something went wrong here.\nError message: %s\nReturned Data: %s",
+      JSON.stringify(speciesError.message),
+      JSON.stringify(speciesData),
     );
   }
 
@@ -566,8 +598,8 @@ export default function Filters({
           key="hasSubspecies-select"
         >
           <MenuItem value="unknown">Huh?</MenuItem>
-          <MenuItem value="yes">Yes</MenuItem>
-          <MenuItem value="no">No</MenuItem>
+          <MenuItem value="false">Yes</MenuItem>
+          <MenuItem value="true">No</MenuItem>
         </Select>
       </FormControl>
     </Grid>,
@@ -596,10 +628,10 @@ export default function Filters({
             </Box>
           )}
         >
-          {subspecies?.map((subspecies: string) => {
+          {specList?.map((spec) => {
             return (
-              <MenuItem value={subspecies} key={subspecies + "-item"}>
-                {subspecies}
+              <MenuItem value={spec.key} key={spec.key + "-item"}>
+                {spec.name}
               </MenuItem>
             );
           })}

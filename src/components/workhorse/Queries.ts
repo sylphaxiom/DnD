@@ -523,7 +523,7 @@ export type HasSubspecies =
   | "true"
   | "false"
 
-// Rules
+// Species
 export async function fetchSpecies(
   name: string = "",
   document_key: string[] = [],
@@ -538,7 +538,7 @@ export async function fetchSpecies(
   count: number;
   next: string | null;
   previous: string | null;
-  results: Rule[]
+  results: Species[]
   } | null> {
     let name__iexact = ""
     let name__icontains = ""
@@ -568,9 +568,32 @@ export async function fetchSpecies(
         },
       })
       .catch((error) => {
-        console.log("An error occurred fetching Rules: %s", error);
+        console.log("An error occurred fetching Species: %s", error);
         throw error;
       });
-      console.log("Rules fetched: %i", response.data.count);
+      console.log("Species fetched: %i", response.data.count);
+    return response.data;
+}
+
+export async function fetchAllSpecies(): Promise<{
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Species[]
+  } | null> {
+    const response = await axios
+      .get(`https://api.open5e.com/v2/species`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          limit: 10000,
+        },
+      })
+      .catch((error) => {
+        console.log("An error occurred fetching Subspecies: %s", error);
+        throw error;
+      });
+      console.log("Subspecies fetched: %i", response.data.count);
     return response.data;
 }
