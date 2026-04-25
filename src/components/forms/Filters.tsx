@@ -20,6 +20,7 @@ import {
   fetchLicenses,
   fetchPublishers,
   type GameSystem,
+  type HasSubspecies,
   type License,
   type Publisher,
 } from "../workhorse/Queries";
@@ -54,7 +55,7 @@ interface FilterProps {
     name: string;
     gameSystem: string[];
     exact: boolean;
-    hasSubspecies: boolean;
+    hasSubspecies: HasSubspecies;
     subspecies: string[];
   }>;
 }
@@ -88,7 +89,7 @@ export interface SpFilter {
   name: string;
   gameSystem: string[];
   exact: boolean;
-  hasSubspecies: boolean;
+  hasSubspecies: HasSubspecies;
   subspecies: string[];
 }
 
@@ -109,7 +110,8 @@ export default function Filters({
   const [exact, setExact] = React.useState(false);
   const [license, setLicense] = React.useState<string[]>([]);
   const [publisher, setPublisher] = React.useState<string[]>([]);
-  const [hasSubspecies, setHasSubspecies] = React.useState(false);
+  const [hasSubspecies, setHasSubspecies] =
+    React.useState<HasSubspecies>("unknown");
   const [subspecies, setSubspecies] = React.useState<string[]>([]);
 
   // Imperitive handle for Backgrounds.
@@ -153,7 +155,7 @@ export default function Filters({
       hasSubspecies: hasSubspecies,
       subspecies: subspecies,
     };
-  }, [name, gameSystem, exact, license, publisher]);
+  }, [name, gameSystem, exact, hasSubspecies, subspecies]);
 
   // get the Game Systems list
   const { data, error } = useQuery({
@@ -275,6 +277,28 @@ export default function Filters({
     );
   };
 
+  const handleHasSubspeciesChange = (
+    event: SelectChangeEvent<typeof hasSubspecies>,
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setHasSubspecies(value as typeof hasSubspecies);
+  };
+
+  const handleSubspeciesChange = (
+    event: SelectChangeEvent<typeof subspecies>,
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setSubspecies(
+      typeof value === "string"
+        ? (value.split(",") as typeof subspecies)
+        : (value as typeof subspecies),
+    );
+  };
+
   const handleClear = () => {
     setName("");
     setGameSystem([]);
@@ -283,7 +307,7 @@ export default function Filters({
     setPrereq([]);
     setLicense([]);
     setPublisher([]);
-    setHasSubspecies(false);
+    setHasSubspecies("unknown");
     setSubspecies([]);
   };
 
@@ -524,41 +548,46 @@ export default function Filters({
   ];
 
   const speciesFilters = [
-    <Grid
-      size={{ xs: 12, sm: 4 }}
-      sx={{ alignSelf: "end" }}
-      key="hasSubspecies-grid"
-    >
-      <FormControlLabel
-        labelPlacement="start"
-        key="hasSubspecies-label"
-        control={
-          <Switch
-            checked={hasSubspecies}
-            key="hasSubspecies-switch"
-            onChange={(e) => setHasSubspecies(e.currentTarget.checked)}
-          />
-        }
-        label="Sub-Species?"
-      />
-    </Grid>,
-    <Grid size={{ xs: 12, md: "grow" }} key="gamesystem-grid">
+    <Grid size={{ xs: 12, md: "grow" }} key="hasSubspecies-grid">
       <FormControl
         variant="standard"
-        key="gamesystem-control"
+        key="hasSubspecies-control"
         sx={{ p: 1, minWidth: "100%" }}
       >
-        <InputLabel key="gamesystem-label" id="gamesystem-label">
-          Gamesystem
+        <InputLabel key="hasSubspecies-label" id="hasSubspecies-label">
+          Is it a Subspecies?
         </InputLabel>
         <Select
-          labelId="gamesystem-label"
-          id="gamesystem"
+          labelId="hasSubspecies-label"
+          id="hasSubspecies"
+          value={hasSubspecies}
+          onChange={handleHasSubspeciesChange}
+          label="hasSubspecies"
+          key="hasSubspecies-select"
+        >
+          <MenuItem value="unknown">Huh?</MenuItem>
+          <MenuItem value="yes">Yes</MenuItem>
+          <MenuItem value="no">No</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>,
+    <Grid size={{ xs: 12, md: "grow" }} key="subspecies-grid">
+      <FormControl
+        variant="standard"
+        key="subspecies-control"
+        sx={{ p: 1, minWidth: "100%" }}
+      >
+        <InputLabel key="subspecies-label" id="subspecies-label">
+          Sub-Species
+        </InputLabel>
+        <Select
+          labelId="subspecies-label"
+          id="subspecies"
           multiple
-          value={gameSystem}
-          onChange={handleGamesystemChange}
-          label="Gamesystem"
-          key="gamesystem-select"
+          value={subspecies}
+          onChange={handleSubspeciesChange}
+          label="subspecies"
+          key="subspecies-select"
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
@@ -567,12 +596,10 @@ export default function Filters({
             </Box>
           )}
         >
-          {gameSystems?.map(({ key, name, desc }: GameSystem) => {
+          {subspecies?.map((subspecies: string) => {
             return (
-              <MenuItem value={key} key={key + "-item"}>
-                <Tooltip title={desc} key={key}>
-                  <div key={key + "-" + name}>{name}</div>
-                </Tooltip>
+              <MenuItem value={subspecies} key={subspecies + "-item"}>
+                {subspecies}
               </MenuItem>
             );
           })}
@@ -581,7 +608,7 @@ export default function Filters({
     </Grid>,
   ];
 
-  let filters = [];
+  let filters = [...basicFilters];
 
   switch (topic) {
     case "spells":
@@ -592,6 +619,7 @@ export default function Filters({
       break;
     case "species":
       // Use species filters
+      filters.push(...speciesFilters);
       break;
     case "classes":
       // Use classes filters
@@ -600,15 +628,13 @@ export default function Filters({
       // Use creatures filters
       break;
     case "feats":
-      filters.push(...basicFilters);
       filters.push(...featFilters);
       break;
     case "references":
-      filters.push(...basicFilters);
       filters.push(...referenceFilters);
       break;
     default:
-      filters.push(basicFilters);
+      // There isn't really anything here since I added it at initialization
       break;
   }
 

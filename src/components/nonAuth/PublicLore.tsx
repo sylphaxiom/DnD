@@ -24,18 +24,21 @@ import Filters, {
   type DoFilter,
   type FtFilter,
   type RuFilter,
+  type SpFilter,
 } from "../forms/Filters";
 import BackgroundResults from "../utils/BackgroundResults";
 import FeatResults from "../utils/FeatResults";
 import Nothing from "../utils/Nothing";
 import ReferenceResults from "../utils/ReferenceResults";
 import RuleResults from "../utils/RuleResults";
+import SpeciesResults from "../utils/SpeciesReuslts";
 import Thinking from "../utils/Thinking";
 import {
   fetchBackgrounds,
   fetchFeats,
   fetchReferences,
   fetchRules,
+  fetchSpecies,
 } from "../workhorse/Queries";
 
 export type Topics =
@@ -211,8 +214,48 @@ export default function PublicLore() {
     placeholderData: keepPreviousData,
   });
 
+  // Species query
+  let spName = spFilters?.name || "";
+  let spGameSystem = spFilters?.gameSystem || [];
+  let spExact = spFilters?.exact || false;
+  let spHasSubspecies = spFilters?.hasSubspecies || "unknown";
+  let spSubspecies = spFilters?.subspecies || [];
+  const spLimit = limit;
+  const spPage = page;
+  const spOrdering = sort;
+  const qSpecies = useQuery({
+    queryKey: [
+      "fetchSpecies",
+      spName,
+      spGameSystem,
+      spExact,
+      spHasSubspecies,
+      spSubspecies,
+      spLimit,
+      spPage,
+      spOrdering,
+    ],
+    queryFn: () =>
+      fetchSpecies(
+        spName,
+        spGameSystem,
+        spExact,
+        spHasSubspecies,
+        spSubspecies,
+        spLimit,
+        spPage,
+        spOrdering,
+      ),
+    enabled: !!(topic === "species"),
+    placeholderData: keepPreviousData,
+  });
+
   // query and sort switch
   switch (topic) {
+    case "species":
+      query = qSpecies;
+      sorts = ["name", "document", "description"];
+      break;
     case "backgrounds":
       query = qBackgrounds;
       sorts = ["name", "document"];
@@ -223,7 +266,7 @@ export default function PublicLore() {
       break;
     case "rules":
       query = qRules;
-      sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
+      sorts = ["name", "document", "rules"];
       break;
     case "references":
       query = qReferences;
@@ -236,6 +279,9 @@ export default function PublicLore() {
 
   // Component switch (because it uses results)
   switch (topic) {
+    case "species":
+      resultComponent = <SpeciesResults results={results} />;
+      break;
     case "backgrounds":
       resultComponent = <BackgroundResults results={results} />;
       break;
@@ -256,12 +302,27 @@ export default function PublicLore() {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, ruFilters, doFilters, page, sort, limit]);
+  }, [
+    bgFilters,
+    ftFilters,
+    ruFilters,
+    doFilters,
+    spFilters,
+    page,
+    sort,
+    limit,
+  ]);
 
   const filterRef = React.useRef(null);
 
   const handleSearch = () => {
     switch (topic) {
+      case "species":
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          setSpFilters(filter);
+        }
+        break;
       case "backgrounds":
         if (filterRef.current) {
           const filter = filterRef.current;
@@ -353,9 +414,7 @@ export default function PublicLore() {
             <MenuItem value="items" disabled>
               Items
             </MenuItem>
-            <MenuItem value="species" disabled>
-              Species
-            </MenuItem>
+            <MenuItem value="species">Species</MenuItem>
             <MenuItem value="classes" disabled>
               Classes
             </MenuItem>
@@ -406,6 +465,7 @@ export default function PublicLore() {
               ftRef={filterRef}
               ruRef={filterRef}
               doRef={filterRef}
+              spRef={filterRef}
             />
           </Paper>
         </Collapse>
