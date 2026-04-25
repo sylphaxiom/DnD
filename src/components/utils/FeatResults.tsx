@@ -8,13 +8,11 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { fTypes } from "../forms/Filters";
+// import type { fTypes } from "../forms/Filters";
 import type { Feat, FeatBenefit } from "../workhorse/Queries";
 
 interface FtProps {
   results: Feat[];
-  featType: fTypes[];
-  prereqs: string[];
 }
 
 export default function FeatResults({ results }: FtProps) {

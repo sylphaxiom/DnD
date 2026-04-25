@@ -39,6 +39,7 @@ import {
   fetchReferences,
   fetchRules,
   fetchSpecies,
+  type Species,
 } from "../workhorse/Queries";
 
 export type Topics =
@@ -83,7 +84,6 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
-  // const [topic, setTopic] = React.useState<Topics>("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
@@ -275,20 +275,26 @@ export default function PublicLore() {
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
-  const totalResults = query?.data?.count || 0;
+  let totalResults = query?.data?.count || 0;
+  if (topic === "species" && results) {
+    totalResults = results.filter(
+      (species: Species) => !species.subspecies_of,
+    ).length;
+  }
+  const pageCount = Math.ceil(totalResults / limit);
 
   // Component switch (because it uses results)
   switch (topic) {
     case "species":
-      resultComponent = <SpeciesResults results={results} />;
+      resultComponent = (
+        <SpeciesResults results={results} page={page} limit={limit} />
+      );
       break;
     case "backgrounds":
       resultComponent = <BackgroundResults results={results} />;
       break;
     case "feats":
-      resultComponent = (
-        <FeatResults results={results} featType={ftType} prereqs={ftPrereqs} />
-      );
+      resultComponent = <FeatResults results={results} />;
       break;
     case "rules":
       resultComponent = <RuleResults results={results} />;
@@ -528,8 +534,10 @@ export default function PublicLore() {
                       onChange={(
                         _e: React.ChangeEvent<unknown>,
                         value: number,
-                      ) => setPage(value)}
-                      count={Math.ceil(totalResults / limit)}
+                      ) => {
+                        setPage(value);
+                      }}
+                      count={pageCount}
                       sx={{ px: 2 }}
                     />
                     <Typography
@@ -550,7 +558,9 @@ export default function PublicLore() {
                     id="limit-page"
                     variant="outlined"
                     value={limit}
-                    onChange={(e) => setLimit(e.target.value)}
+                    onChange={(e) => {
+                      setLimit(e.target.value);
+                    }}
                     label="Results"
                   >
                     <MenuItem value="10">10</MenuItem>
