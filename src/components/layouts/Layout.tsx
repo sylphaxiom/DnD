@@ -63,7 +63,6 @@ export default function Layout() {
         });
         break;
       default:
-        console.log("Default reached, something probably went wrong.");
     }
   };
 

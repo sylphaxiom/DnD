@@ -18,29 +18,52 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import * as React from "react";
+import { useSearchParams } from "react-router";
 import Filters, {
   type BgFilter,
+  type DoFilter,
   type FtFilter,
   type RuFilter,
+  type SpFilter,
 } from "../forms/Filters";
 import BackgroundResults from "../utils/BackgroundResults";
 import FeatResults from "../utils/FeatResults";
 import Nothing from "../utils/Nothing";
 import ReferenceResults from "../utils/ReferenceResults";
 import RuleResults from "../utils/RuleResults";
+import SpeciesResults from "../utils/SpeciesReuslts";
 import Thinking from "../utils/Thinking";
 import {
   fetchBackgrounds,
   fetchFeats,
   fetchReferences,
   fetchRules,
+  fetchSpecies,
+  type Species,
 } from "../workhorse/Queries";
+
+export type Topics =
+  | ""
+  | "spells"
+  | "items"
+  | "species"
+  | "classes"
+  | "backgrounds"
+  | "feats"
+  | "creatures"
+  | "rules"
+  | "references";
 
 export async function clientLoader() {
   // Lore page loader
 }
 
 export default function PublicLore() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  if (!searchParams) {
+    setSearchParams({ topic: "" });
+  }
+  const topic = searchParams.get("topic") as Topics;
   const [bgFilters, setBgFilters] = React.useState<BgFilter | undefined>(
     undefined,
   );
@@ -50,7 +73,10 @@ export default function PublicLore() {
   const [ruFilters, setRuFilters] = React.useState<RuFilter | undefined>(
     undefined,
   );
-  const [doFilters, setDoFilters] = React.useState<RuFilter | undefined>(
+  const [doFilters, setDoFilters] = React.useState<DoFilter | undefined>(
+    undefined,
+  );
+  const [spFilters, setSpFilters] = React.useState<SpFilter | undefined>(
     undefined,
   );
   const [filtered, setFiltered] = React.useState(false);
@@ -58,23 +84,10 @@ export default function PublicLore() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(20);
   const [sort, setSort] = React.useState("name");
-  const [topic, setTopic] = React.useState<
-    | ""
-    | "spells"
-    | "items"
-    | "species"
-    | "classes"
-    | "backgrounds"
-    | "feats"
-    | "creatures"
-    | "rules"
-    | "lookup"
-    | "references"
-  >("");
   const display = topic === "" ? "none" : "flex";
   let query: any;
   let sorts: string[] = [];
-  let resultCompnent;
+  let resultComponent;
 
   // Background query
   let bgName = bgFilters?.name || "";
@@ -102,7 +115,7 @@ export default function PublicLore() {
         bgPage,
         bgOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "backgrounds"),
     placeholderData: keepPreviousData,
   });
 
@@ -110,6 +123,8 @@ export default function PublicLore() {
   let ftName = ftFilters?.name || "";
   let ftGameSystem = ftFilters?.gameSystem || [];
   let ftExact = ftFilters?.exact || false;
+  let ftType = ftFilters?.featType || [];
+  let ftPrereqs = ftFilters?.prereqs || [];
   const ftLimit = limit;
   const ftPage = page;
   const ftOrdering = sort;
@@ -119,13 +134,24 @@ export default function PublicLore() {
       ftName,
       ftGameSystem,
       ftExact,
+      ftType,
+      ftPrereqs,
       ftLimit,
       ftPage,
       ftOrdering,
     ],
     queryFn: () =>
-      fetchFeats(ftName, ftGameSystem, ftExact, ftLimit, ftPage, ftOrdering),
-    enabled: false,
+      fetchFeats(
+        ftName,
+        ftGameSystem,
+        ftExact,
+        ftType,
+        ftPrereqs,
+        ftLimit,
+        ftPage,
+        ftOrdering,
+      ),
+    enabled: !!(topic === "feats"),
     placeholderData: keepPreviousData,
   });
 
@@ -148,13 +174,16 @@ export default function PublicLore() {
     ],
     queryFn: () =>
       fetchRules(ruName, ruGameSystem, ruExact, ruLimit, ruPage, ruOrdering),
-    enabled: false,
+    enabled: !!(topic === "rules"),
     placeholderData: keepPreviousData,
   });
+
   // Documents query
   let doName = doFilters?.name || "";
   let doGameSystem = doFilters?.gameSystem || [];
   let doExact = doFilters?.exact || false;
+  let doLicense = doFilters?.license || [];
+  let doPublisher = doFilters?.publisher || [];
   const doLimit = limit;
   const doPage = page;
   const doOrdering = sort;
@@ -164,6 +193,8 @@ export default function PublicLore() {
       doName,
       doGameSystem,
       doExact,
+      doPublisher,
+      doLicense,
       doLimit,
       doPage,
       doOrdering,
@@ -173,19 +204,58 @@ export default function PublicLore() {
         doName,
         doGameSystem,
         doExact,
+        doPublisher,
+        doLicense,
         doLimit,
         doPage,
         doOrdering,
       ),
-    enabled: false,
+    enabled: !!(topic === "references"),
     placeholderData: keepPreviousData,
   });
-  if (topic === "references") {
-    query = qReferences;
-  }
+
+  // Species query
+  let spName = spFilters?.name || "";
+  let spGameSystem = spFilters?.gameSystem || [];
+  let spExact = spFilters?.exact || false;
+  let spHasSubspecies = spFilters?.hasSubspecies || "unknown";
+  let spSubspecies = spFilters?.subspecies || [];
+  const spLimit = limit;
+  const spPage = page;
+  const spOrdering = sort;
+  const qSpecies = useQuery({
+    queryKey: [
+      "fetchSpecies",
+      spName,
+      spGameSystem,
+      spExact,
+      spHasSubspecies,
+      spSubspecies,
+      spLimit,
+      spPage,
+      spOrdering,
+    ],
+    queryFn: () =>
+      fetchSpecies(
+        spName,
+        spGameSystem,
+        spExact,
+        spHasSubspecies,
+        spSubspecies,
+        spLimit,
+        spPage,
+        spOrdering,
+      ),
+    enabled: !!(topic === "species"),
+    placeholderData: keepPreviousData,
+  });
 
   // query and sort switch
   switch (topic) {
+    case "species":
+      query = qSpecies;
+      sorts = ["name", "document", "description"];
+      break;
     case "backgrounds":
       query = qBackgrounds;
       sorts = ["name", "document"];
@@ -196,37 +266,44 @@ export default function PublicLore() {
       break;
     case "rules":
       query = qRules;
-      sorts = ["name", "document", "index", "initialHeaderLevel", "ruleset"];
+      sorts = ["name", "document", "rules"];
       break;
     case "references":
       query = qReferences;
-      sorts = [
-        "name",
-        "licenses",
-        "publisher",
-        "gamesystem",
-        "author",
-        "publication_date",
-      ];
+      sorts = ["name", "gamesystem", "publisher", "licenses"];
       break;
   }
   const { isLoading, data, error, refetch, isFetching } = query || {};
   const results = query?.data?.results || [];
-  const totalResults = query?.data?.count || 0;
+  let totalResults = query?.data?.count || 0;
+  if (topic === "species" && results) {
+    const newTotal = results.filter(
+      (species: Species) => !species.subspecies_of,
+    ).length;
+    if (!(totalResults && !newTotal)) {
+      totalResults = newTotal;
+    }
+  }
+  const pageCount = Math.ceil(totalResults / limit);
 
   // Component switch (because it uses results)
   switch (topic) {
+    case "species":
+      resultComponent = (
+        <SpeciesResults results={results} page={page} limit={limit} />
+      );
+      break;
     case "backgrounds":
-      resultCompnent = <BackgroundResults results={results} />;
+      resultComponent = <BackgroundResults results={results} />;
       break;
     case "feats":
-      resultCompnent = <FeatResults results={results} />;
+      resultComponent = <FeatResults results={results} />;
       break;
     case "rules":
-      resultCompnent = <RuleResults results={results} />;
+      resultComponent = <RuleResults results={results} />;
       break;
     case "references":
-      resultCompnent = <ReferenceResults results={results} />;
+      resultComponent = <ReferenceResults results={results} />;
       break;
   }
 
@@ -234,35 +311,46 @@ export default function PublicLore() {
     if (refetch) {
       refetch();
     }
-  }, [bgFilters, ftFilters, ruFilters, doFilters, page, sort, limit]);
+  }, [
+    bgFilters,
+    ftFilters,
+    ruFilters,
+    doFilters,
+    spFilters,
+    page,
+    sort,
+    limit,
+  ]);
 
   const filterRef = React.useRef(null);
 
   const handleSearch = () => {
     switch (topic) {
+      case "species":
+        if (filterRef.current) {
+          const filter = filterRef.current;
+          setSpFilters(filter);
+        }
+        break;
       case "backgrounds":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setBgFilters(filter);
         }
         break;
       case "feats":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setFtFilters(filter);
         }
         break;
       case "rules":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setRuFilters(filter);
         }
         break;
       case "references":
-        // const { name, gameSystem, exact } = filterRef.current;
         if (filterRef.current) {
           const filter = filterRef.current;
           setDoFilters(filter);
@@ -305,13 +393,16 @@ export default function PublicLore() {
         API into the site.
       </Typography>
       <Divider variant="middle" sx={{ my: 4, width: 0.9, mx: "auto" }} />
-      <Grid size={{ xs: 12 }} sx={{ px: 3, mt: 3 }}>
+      <Grid
+        size={{ xs: 12, md: 6 }}
+        sx={{ px: 3, mt: 3, alignContent: "center" }}
+      >
         <Typography variant="body1">
           What do we want to look at today?
         </Typography>
       </Grid>
       {/* <div style={{ width: "100%" }}> */}
-      <Grid size={12} sx={{ px: 3, mt: 3 }}>
+      <Grid size={{ xs: 12, md: 6 }} sx={{ px: 3, mt: 3 }}>
         <FormControl variant="standard" sx={{ width: { xs: 1 } }}>
           <InputLabel id="search-topic-label">Topic</InputLabel>
           <Select
@@ -319,7 +410,9 @@ export default function PublicLore() {
             id="search-topic"
             value={topic}
             onChange={(e) =>
-              setTopic((e.target.value as string) ? e.target.value : "")
+              setSearchParams({
+                topic: (e.target.value as string) ? e.target.value : "",
+              })
             }
             label="Topic"
           >
@@ -330,9 +423,7 @@ export default function PublicLore() {
             <MenuItem value="items" disabled>
               Items
             </MenuItem>
-            <MenuItem value="species" disabled>
-              Species
-            </MenuItem>
+            <MenuItem value="species">Species</MenuItem>
             <MenuItem value="classes" disabled>
               Classes
             </MenuItem>
@@ -342,9 +433,6 @@ export default function PublicLore() {
               Creatures
             </MenuItem>
             <MenuItem value="rules">Rules</MenuItem>
-            <MenuItem value="lookup" disabled>
-              Lookup Lists
-            </MenuItem>
             <MenuItem value="references">References</MenuItem>
           </Select>
         </FormControl>
@@ -380,7 +468,14 @@ export default function PublicLore() {
               width: 1,
             }}
           >
-            <Filters topic={topic} bgRef={filterRef} />
+            <Filters
+              topic={topic}
+              bgRef={filterRef}
+              ftRef={filterRef}
+              ruRef={filterRef}
+              doRef={filterRef}
+              spRef={filterRef}
+            />
           </Paper>
         </Collapse>
       </Grid>
@@ -435,15 +530,27 @@ export default function PublicLore() {
                 {isFetching ? (
                   <Thinking sizing="small" />
                 ) : (
-                  <Pagination
-                    size="large"
-                    page={page}
-                    onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
-                      setPage(value)
-                    }
-                    count={Math.ceil(totalResults / limit)}
-                    sx={{ px: 2 }}
-                  />
+                  <Stack>
+                    <Pagination
+                      size="large"
+                      page={page}
+                      onChange={(
+                        _e: React.ChangeEvent<unknown>,
+                        value: number,
+                      ) => {
+                        setPage(value);
+                      }}
+                      count={pageCount}
+                      sx={{ px: 2 }}
+                    />
+                    <Typography
+                      variant="body2"
+                      sx={{ textAlign: "center", my: 2 }}
+                    >
+                      Found {totalResults}{" "}
+                      {topic.charAt(0).toUpperCase() + topic.slice(1)}
+                    </Typography>
+                  </Stack>
                 )}
                 <FormControl size="small" sx={{ p: 2 }}>
                   <InputLabel id="limit-page-label" sx={{ pl: "11px" }}>
@@ -454,7 +561,9 @@ export default function PublicLore() {
                     id="limit-page"
                     variant="outlined"
                     value={limit}
-                    onChange={(e) => setLimit(e.target.value)}
+                    onChange={(e) => {
+                      setLimit(e.target.value);
+                    }}
                     label="Results"
                   >
                     <MenuItem value="10">10</MenuItem>
@@ -465,7 +574,7 @@ export default function PublicLore() {
                   <FormHelperText>per page</FormHelperText>
                 </FormControl>
               </Stack>
-              {resultCompnent}
+              {resultComponent}
             </>
           ) : (
             <Nothing />

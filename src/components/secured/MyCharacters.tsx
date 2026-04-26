@@ -9,7 +9,7 @@ export default function PublicCharacter() {
 
   return (
     <Typography variant="h3" sx={{ textAlign: "center", width: 1 }}>
-      My Characters
+      {"My Characters (secured)"}
     </Typography>
   );
 }

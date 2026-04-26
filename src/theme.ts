@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles';
 import type { ThemeOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 export const dark: ThemeOptions = {
   palette: {
@@ -111,6 +111,15 @@ const theme = createTheme({
         noSsr: true,
       },
     },
+    MuiSelect: {
+      defaultProps: {
+        MenuProps:{
+          slotProps: {
+            paper: { style: { maxHeight: "35vh", maxWidth:"50%" } },
+          },
+        }
+      }
+    }
   }
 });
 

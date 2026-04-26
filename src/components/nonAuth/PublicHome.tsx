@@ -18,7 +18,7 @@ export default function PublicHome() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Grid container>
         <Grid size={{ xs: 12 }}>
           <Divider variant="middle" sx={{ my: 2 }} />

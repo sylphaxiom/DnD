@@ -14,23 +14,15 @@ interface RuProps {
   results: Ruleset[];
 }
 
-export default function FeatResults({ results }: RuProps) {
+export default function RuleResults({ results }: RuProps) {
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  console.log("Entered Feat component...");
 
   const handleChange =
     (key: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? key : false);
     };
 
-  const accordian = ({
-    // url,
-    key,
-    document,
-    name,
-    desc,
-    rules,
-  }: Ruleset) => {
+  const accordian = ({ key, document, name, desc, rules }: Ruleset) => {
     return (
       <Accordion
         expanded={expanded === key}

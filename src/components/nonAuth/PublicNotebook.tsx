@@ -6,7 +6,7 @@ export async function clientLoader() {
 }
 
 export default function PublicNotebook() {
-  // Character page
+  // Notebook page
   const txtHeading = "Notebook";
   const txtBody = `Here is where players will be able to keep their notes and whatever they want really. There won't be much use for this page if you haven't signed up, but maybe we can put some public session notes or audio clips up here. Who knows?`;
 

@@ -37,6 +37,5 @@ export default function Landing() {
       );
     }
   }
-  // const player = data?.message[0];
   return isAuthenticated ? <Outlet /> : <PublicHome />;
 }

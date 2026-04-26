@@ -9,7 +9,7 @@ export default function Elandir() {
   // Elandir page
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Typography variant="h1" sx={{ mx: "auto" }}>
         Elandir of Kothis
       </Typography>

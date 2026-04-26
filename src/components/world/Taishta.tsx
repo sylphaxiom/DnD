@@ -9,7 +9,7 @@ export default function Taishta() {
   // Taishta page
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Typography variant="h1" sx={{ mx: "auto" }}>
         Ta'ishta of Elandir
       </Typography>

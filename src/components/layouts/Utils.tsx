@@ -10,7 +10,7 @@ export default function Utils() {
     <Box
       sx={{
         height: "100%",
-        minWidth: "15%",
+        minWidth: "8%",
         display: "flex",
         flexDirection: "column",
         position: "fixed",
@@ -18,6 +18,8 @@ export default function Utils() {
         top: 0,
       }}
       id="utilBox"
+      role="complementary"
+      aria-label="utility panel"
     >
       <ModeSwitch />
       <Login />

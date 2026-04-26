@@ -9,7 +9,7 @@ export default function HalfHall() {
   // HalfHall page
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Typography variant="h1" sx={{ mx: "auto" }}>
         Half-Hall of the Praetorian Empire
       </Typography>

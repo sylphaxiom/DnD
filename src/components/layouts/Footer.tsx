@@ -1,19 +1,20 @@
-import Typography from "@mui/material/Typography";
+import { faDiceD20, faDragon } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Copyright from "@mui/icons-material/Copyright";
 import Facebook from "@mui/icons-material/Facebook";
 import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDragon, faDiceD20 } from "@fortawesome/free-solid-svg-icons";
-import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-import { NavLink } from "react-router";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import { NavLink } from "react-router";
 
 export default function Footer() {
   return (
     <Grid
       container
       id="footRoot"
+      role="footer"
       sx={{
         maxWidth: { xs: "100vw", lg: "80vw" },
         mx: "auto",

@@ -1,12 +1,12 @@
 //import * as React from "react"
-import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 export default function Title() {
   return (
-    <Grid container px={3} width={1} py={1} maxHeight={300}>
+    <Grid role="banner" container px={3} width={1} py={1} maxHeight={300}>
       <Grid size={{ xs: 0, lg: 3, xl: 4 }}>
         <Avatar
           alt="Emblem of Kothis"

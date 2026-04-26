@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+// import type { fTypes } from "../forms/Filters";
 import type { Feat, FeatBenefit } from "../workhorse/Queries";
 
 interface FtProps {
@@ -16,7 +17,6 @@ interface FtProps {
 
 export default function FeatResults({ results }: FtProps) {
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  console.log("Entered Feat component...");
 
   const handleChange =
     (key: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -24,7 +24,6 @@ export default function FeatResults({ results }: FtProps) {
     };
 
   const accordian = ({
-    // url,
     key,
     benefits,
     document,
@@ -52,7 +51,7 @@ export default function FeatResults({ results }: FtProps) {
         </AccordionSummary>
         <AccordionDetails key={key + "-accDetail"}>
           <Typography
-            key={key + "-desc"}
+            key={key + "-prereq-desc"}
             sx={{ display: has_prerequisite ? "flex" : "none" }}
           >
             {"Prequisite: " + prerequisite}
@@ -65,10 +64,10 @@ export default function FeatResults({ results }: FtProps) {
           {benefits.map((benefit: FeatBenefit) => {
             const description = benefit.desc;
             return (
-              <React.Fragment key={key + "-" + benefit + "-frag"}>
+              <React.Fragment key={key + "-" + benefit.desc + "-frag"}>
                 <Markdown
                   remarkPlugins={[remarkGfm]}
-                  key={key + "-" + benefit + "-md"}
+                  key={key + "-" + benefit.desc + "-md"}
                 >
                   {description}
                 </Markdown>
@@ -89,7 +88,7 @@ export default function FeatResults({ results }: FtProps) {
   };
 
   return (
-    <Box sx={{ px: 3 }} key={"benefit_box"}>
+    <Box sx={{ px: 3 }} key={"feat_box"}>
       {results?.map((item: Feat) => accordian(item))}
     </Box>
   );

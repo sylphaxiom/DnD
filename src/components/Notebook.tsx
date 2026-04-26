@@ -25,7 +25,6 @@ export default function Notebook() {
     queryFn: () =>
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
-  // const player = data?.message[0];
 
   if (isLoading) {
     return <Thinking />;

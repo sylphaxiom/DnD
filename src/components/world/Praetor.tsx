@@ -9,7 +9,7 @@ export default function Praetor() {
   // Praetor page
 
   return (
-    <Box sx={{ width: 1, textAlign: "center" }}>
+    <Box sx={{ width: 1, textAlign: "center" }} tabIndex={0} role="main">
       <Typography variant="h1" sx={{ mx: "auto" }}>
         The Praetorian Empire of Kothis
       </Typography>

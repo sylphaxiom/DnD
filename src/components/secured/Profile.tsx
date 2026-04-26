@@ -1,16 +1,14 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPlayer } from "../workhorse/Queries";
-// import ListItem from "@mui/material/ListItem";
-// import { Link } from "react-router";
-import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
 import ProfileDataForm from "../forms/ProfileDataForm";
 import Thinking from "../utils/Thinking";
+import { fetchPlayer } from "../workhorse/Queries";
 import { PlayerForm } from "../workhorse/SecureForms";
 
 export default withAuthenticationRequired(Profile, {
@@ -27,8 +25,8 @@ export function Profile() {
       fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
   });
   const player = data?.message[0];
-  // let prefs = {};
   let profImg = "Arris_fallback.jpg";
+  // let prefs = {};
 
   // if (player?.prefs) {
   //   prefs = JSON.parse(player?.prefs);
