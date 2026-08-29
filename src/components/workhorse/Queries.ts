@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SAGE_SECRET } from "../../config/auth";
 
 // Custom API calls for Player interactions
 
@@ -13,6 +14,7 @@ export interface Player {
 
 export async function fetchPlayer(
   isAuthenticated: boolean,
+  getAccessTokenSilently: () => Promise<string>,
   username?: string,
   email?: string,
 ): Promise<{
@@ -20,10 +22,12 @@ export async function fetchPlayer(
   message: Player[];
 } | null> {
   if(isAuthenticated){
+    const token = await getAccessTokenSilently();
     const response = await axios
       .get(`https://kothis.sylphaxiom.com/api/v1/player.php`, {
         headers: {
-          Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
+          Authorization: `Bearer ${token}`,
+          Sage: SAGE_SECRET,
         },
         params: { username: username, email: email },
       })

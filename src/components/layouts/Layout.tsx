@@ -13,6 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import * as React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import ModeSwitch from "../utils/ModeSwitch";
+import { type AuthAction, useAuthActions } from "../utils/useAuthActions";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Title from "./Title";
@@ -25,7 +26,7 @@ interface bps {
 }
 
 export default function Layout() {
-  const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,29 +42,11 @@ export default function Layout() {
   };
 
   const domain = "http://localhost:5173";
+  const handleAuthAction = useAuthActions(domain);
 
-  const handleLogin = (_e: React.MouseEvent, clk: string) => {
-    switch (clk) {
-      case "Log In":
-        handleClose();
-        loginWithRedirect({
-          appState: { returnTo: domain + location.pathname },
-        });
-        break;
-      case "Log Out":
-        handleClose();
-        localStorage.clear();
-        logout({ logoutParams: { returnTo: domain + location.pathname } });
-        break;
-      case "Sign Up":
-        handleClose();
-        loginWithRedirect({
-          appState: { returnTo: domain + location.pathname },
-          authorizationParams: { screen_hint: "signup" },
-        });
-        break;
-      default:
-    }
+  const handleLogin = (_e: React.MouseEvent, clk: AuthAction) => {
+    handleClose();
+    handleAuthAction(clk);
   };
 
   let bps: bps = {

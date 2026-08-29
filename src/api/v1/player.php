@@ -8,6 +8,7 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     die();
 }
 require_once "/home2/xikihgmy/includes/bucket.php";
+require_once __DIR__ . "/auth.php";
 $headers = apache_request_headers();
 $dropError = <<<HTML
         <html>
@@ -33,6 +34,16 @@ if (!Bucket::sageDance($sageHead)) {
 // connect to the DB dbConn($user, $db)
 $conn = Bucket::dbConn("web","kothis");
 
+// TODO(jacob): require_auth0_token() currently enforces (401s on a bad/missing
+// token) — flip it back to log-only in auth.php if you want to soft-launch
+// this first. $claims is the caller's verified identity; every case below
+// should check it (require_permission(...) for "can this token holder do X
+// at all", plus an explicit match against $claims['email']/['sub'] for "is
+// this THEIR row" — Auth0 permissions alone don't know about your player
+// table) instead of trusting whatever username/email the client sent — that's
+// the IDOR the plan doc flags: today ANY caller can read/write ANY player row.
+$claims = require_auth0_token();
+
 header("Content-Type: application/json");
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -40,19 +51,13 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 switch($method) {
     case 'GET':
-        // GET info like SELECT statements or queries go here
-        $search_user = $_GET['username'] ?? null;
-        $search_email = $_GET['email'] ?? null;
-        $stmt = null;
-        if(isset($search_user) && $search_user != '') {
-            $stmt = $conn->prepare("SELECT * FROM player WHERE username = ?");
-            $stmt->bind_param('s', $search_user);
-        } elseif (isset($search_email) && $search_email != '') {
-            $stmt = $conn->prepare("SELECT * FROM player WHERE email = ?");
-            $stmt->bind_param('s', $search_email);
-        } else {
-            $stmt = $conn->prepare("SELECT * FROM player");
-        }
+        // Self-only, no exception: the target is always the caller's own
+        // verified identity. Client-supplied username/email query params
+        // are ignored entirely — there's no code path left that can look up
+        // (or list) anyone else's record.
+        $callerEmail = $claims['email'] ?? null;
+        $stmt = $conn->prepare("SELECT * FROM player WHERE email = ?");
+        $stmt->bind_param('s', $callerEmail);
         try {
             $stmt->execute();
             $stmt->bind_result($uname,$fname,$lname,$email,$role,$prefs,$is_verified);
@@ -83,7 +88,7 @@ switch($method) {
             http_response_code(200);
             echo json_encode([
                 "result"=>"success",
-                "message"=>"no user matching the username ".$search_user." was found",
+                "message"=>"no player record matching the authenticated user (".$callerEmail.") was found",
             ]);
         }
         break;
@@ -196,22 +201,27 @@ switch($method) {
         break;
 
     case 'PATCH':
-        // PATCH info like updates to profile or settings that want immediate feedback
-
         $first_name = $input['fname'] ?? '';
         $last_name = $input['lname'] ?? '';
         $email = $input['email'] ?? '';
-        $username = $input['username'] ?? '';
         $image = $_FILES['profile_image'] ?? '';
 
-        if (!isset($username)) {
-            http_response_code(400);
+        // Self-only, no exception: the row being edited is always resolved
+        // from the caller's own verified identity — the client no longer
+        // supplies (or can override) which username gets updated.
+        $callerEmail = $claims['email'] ?? null;
+        $ownUsernameStmt = $conn->prepare("SELECT username FROM player WHERE email = ?");
+        $ownUsernameStmt->bind_param('s', $callerEmail);
+        $ownUsernameStmt->execute();
+        $ownUsernameStmt->bind_result($username);
+        if (!$ownUsernameStmt->fetch()) {
+            http_response_code(404);
             echo json_encode([
                 "result"=>"failure",
-                "message"=>"username is required"
+                "message"=>"no player record matching the authenticated user was found"
             ]);
             exit(1);
-        }   // Now assume username is populated
+        }
 
         if (isset($first_name)){
             $query = $conn->prepare("UPDATE player 

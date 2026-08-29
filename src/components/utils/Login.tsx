@@ -10,26 +10,13 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import * as React from "react";
-import { redirectDocument, useLocation, useNavigate } from "react-router";
-import type { Route } from "./+types/Login";
-
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
-  const path = url.pathname;
-  if (path === "/login") {
-    console.log("redirecting...");
-    return redirectDocument(
-      "https://auth.kothis.sylphaxiom.com/authorize?audience=https://dev-t7637rzyxd0qsbu0.us.auth0.com/api/v2/&response_type=code&scope=openid%20profile%20email%20offline_access&client_id=nsCWH91VQeP8M9RQ6a4clk4xp6DsNkhB&redirect_uri=https://test.sylphaxiom.com/",
-    );
-  }
-}
+import { type AuthAction, useAuthActions } from "./useAuthActions";
 
 export default function Login() {
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const [open, setOpen] = React.useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
   const domain = "http://localhost:5173";
+  const handleAuthAction = useAuthActions(domain);
 
   const handleOpen = () => setOpen(false);
   const handleClose = () => setOpen(true);
@@ -44,29 +31,8 @@ export default function Login() {
   ];
   const actions = isAuthenticated ? authed : unauthed;
 
-  const handleLogin = async (_e: React.MouseEvent, clk: string) => {
-    switch (clk) {
-      case "Log In":
-        await loginWithRedirect({
-          appState: { returnTo: domain + location.pathname },
-        });
-        break;
-      case "Log Out":
-        await logout({
-          logoutParams: { returnTo: domain + "/" },
-        });
-        break;
-      case "Sign Up":
-        await loginWithRedirect({
-          appState: { returnTo: domain + location.pathname },
-          authorizationParams: { screen_hint: "signup" },
-        });
-        break;
-      case "Profile":
-        navigate("/notebook/profile");
-        break;
-      default:
-    }
+  const handleLogin = (_e: React.MouseEvent, clk: string) => {
+    handleAuthAction(clk as AuthAction);
   };
 
   return (

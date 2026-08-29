@@ -1,29 +1,23 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import { Outlet } from "react-router";
-import type { Route } from "./+types/Landing";
 import PublicHome from "./nonAuth/PublicHome";
 import Thinking from "./utils/Thinking";
 import { fetchPlayer } from "./workhorse/Queries";
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
-  const query = decodeURIComponent(url.search);
-  const bits = query.slice(1).split("&");
-  let params: { [key: string]: string } = {};
-  bits.forEach((v) => {
-    const pair = v.split("=");
-    params[pair[0]] = pair[1];
-  });
-  return params;
-}
+export { searchParamsLoader as clientLoader } from "./utils/searchParams";
 
 export default function Landing() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () =>
-      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
+      fetchPlayer(
+        isAuthenticated,
+        getAccessTokenSilently,
+        user?.preferred_username,
+        user?.email,
+      ),
   });
   if (isAuthenticated) {
     if (isLoading) {

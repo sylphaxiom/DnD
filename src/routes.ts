@@ -73,7 +73,7 @@ export default [
             index("./components/secured/VaultDoor.tsx"),
         ]),
     ]),
-    route("login", "./components/utils/Login.tsx", {id:"login"}),
+    route("login", "./components/utils/LoginRedirect.tsx", {id:"login"}),
     route("result", "./components/utils/Result.tsx", {id:"result"}),
     route("*?", "./components/utils/Loading.tsx", {id:"catchall"}),
     route("error", "./components/utils/Error.tsx", {id:"error"}),

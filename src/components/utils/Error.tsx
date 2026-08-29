@@ -14,20 +14,10 @@ import * as motions from "motion/react";
 import * as motion from "motion/react-client";
 import * as React from "react";
 import { data, useFetcher, useNavigate } from "react-router";
+import { SAGE_SECRET } from "../../config/auth";
 import Footer from "../layouts/Footer.tsx";
 import type { Route } from "./+types/Error.ts";
-
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
-  const query = decodeURIComponent(url.search);
-  const bits = query.slice(1).split("&");
-  const params: { [key: string]: string } = {};
-  bits.forEach((v) => {
-    const pair = v.split("=");
-    params[pair[0]] = pair[1];
-  });
-  return params;
-}
+export { searchParamsLoader as clientLoader } from "./searchParams";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
@@ -53,7 +43,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   const API = axios.create({
     baseURL: "https://kothis.sylphaxiom.com/api/v1",
     headers: {
-      Sage: import.meta.env.VITE_SAGE,
+      Sage: SAGE_SECRET,
       "Content-Type": "application/json",
     },
   });

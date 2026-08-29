@@ -38,6 +38,7 @@ tests/example.spec.ts
 *.d.ts
 build/
 *bucket.php
+src/api/v1/vendor/
 src/resources/player_images
 src/resources/character_images
 .env

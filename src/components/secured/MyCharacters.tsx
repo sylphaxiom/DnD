@@ -1,10 +1,11 @@
 import Typography from "@mui/material/Typography";
+import { withSecured } from "../utils/withSecured";
 
 export async function clientLoader() {
   // Character page loader
 }
 
-export default function PublicCharacter() {
+function PublicCharacter() {
   // Character page
 
   return (
@@ -13,3 +14,5 @@ export default function PublicCharacter() {
     </Typography>
   );
 }
+
+export default withSecured(PublicCharacter);

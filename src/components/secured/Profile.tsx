@@ -1,4 +1,4 @@
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
@@ -8,21 +8,25 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import ProfileDataForm from "../forms/ProfileDataForm";
 import Thinking from "../utils/Thinking";
+import { withSecured } from "../utils/withSecured";
 import { fetchPlayer } from "../workhorse/Queries";
 import { PlayerForm } from "../workhorse/SecureForms";
 
-export default withAuthenticationRequired(Profile, {
-  onRedirecting: () => <Thinking />,
-});
+export default withSecured(Profile);
 
 export async function clientLoader() {}
 
 export function Profile() {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () =>
-      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
+      fetchPlayer(
+        isAuthenticated,
+        getAccessTokenSilently,
+        user?.preferred_username,
+        user?.email,
+      ),
   });
   const player = data?.message[0];
   let profImg = "Arris_fallback.jpg";
