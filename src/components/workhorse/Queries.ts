@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// Custom API calls for Player interactions
+
 export interface Player {
   first_name: string;
   last_name: string;
@@ -51,6 +53,8 @@ export async function fetchPlayer(
     );
   }
 /**************************/
+
+// Open5e API calls
 
 export interface GameSystem {
   key:string;
@@ -530,8 +534,6 @@ export async function fetchSpecies(
   exact: boolean = false,
   hasSubspecies: HasSubspecies = "unknown",
   subspecies_of: string[],
-  _limit: number = 20,
-  _page: number = 1,
   ordering: string = "name",
   key: string = "",
 ): Promise<{

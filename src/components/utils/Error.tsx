@@ -21,7 +21,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const query = decodeURIComponent(url.search);
   const bits = query.slice(1).split("&");
-  let params: { [key: string]: string } = {};
+  const params: { [key: string]: string } = {};
   bits.forEach((v) => {
     const pair = v.split("=");
     params[pair[0]] = pair[1];
@@ -30,7 +30,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
-  let formData = await request.formData();
+  const formData = await request.formData();
   const errClient = decodeURI(String(formData.get("errClient")));
   const errConn = decodeURI(String(formData.get("errConn")));
   const errLang = decodeURI(String(formData.get("errLang")));
@@ -38,7 +38,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   const errDesc = decodeURI(String(formData.get("errDesc")));
   const errTrack = decodeURI(String(formData.get("errTrack")));
   let status: number | null = null;
-  let msg: Object | String = "";
+  let msg: object | string = "";
 
   // Form the API call and await the response
   const body = {
@@ -53,7 +53,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   const API = axios.create({
     baseURL: "https://kothis.sylphaxiom.com/api/v1",
     headers: {
-      Sage: "wVizRhmx0Ufhr8k3xvTQh5kQK2HDqXb3xdbjdawlxXiYiYWcw2YTTWoYMIVjtIH6",
+      Sage: import.meta.env.VITE_SAGE,
       "Content-Type": "application/json",
     },
   });
@@ -76,11 +76,11 @@ export default function Error({ loaderData }: Route.ComponentProps) {
   const [timer, setTimer] = React.useState(10);
   const [ignored, setIgnored] = React.useState(false);
   const [realError, setRealError] = React.useState(false);
-  let fetcher = useFetcher();
-  let navigate = useNavigate();
+  const fetcher = useFetcher();
+  const navigate = useNavigate();
   let respMsg = fetcher.data?.msg || "";
-  let title = "Oops!";
-  let subtitle = "Looks like an error occurred:";
+  const title = "Oops!";
+  const subtitle = "Looks like an error occurred:";
   let errCode: string | undefined;
   let errDesc: string | undefined;
   let errTrack: string | undefined;
