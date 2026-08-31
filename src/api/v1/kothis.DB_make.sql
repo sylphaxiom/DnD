@@ -565,6 +565,7 @@ CREATE TABLE if NOT EXISTS `player` (
     `first_name` varchar(25) NOT NULL,
     `last_name` varchar(25) NOT NULL,
     `email` varchar(150) NOT NULL,
+    `auth0_sub` varchar(255) DEFAULT NULL COMMENT 'Auth0 user_id (the sub claim) — durable identity link, unlike email which the player can change',
     `role` enum(
         'player',
         'dm',
@@ -574,7 +575,8 @@ CREATE TABLE if NOT EXISTS `player` (
     `preferences` text COMMENT 'string dict of user preferences.',
     `is_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag for email verification',
     PRIMARY KEY (`username`),
-    UNIQUE KEY `UNIQUE_email` (`email`)
+    UNIQUE KEY `UNIQUE_email` (`email`),
+    UNIQUE KEY `UNIQUE_auth0_sub` (`auth0_sub`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
 CREATE TABLE IF NOT EXISTS `session` (

@@ -18,7 +18,7 @@ export async function fetchPlayer(
   username?: string,
   email?: string,
 ): Promise<{
-  status: string;
+  result: string;
   message: Player[];
 } | null> {
   if(isAuthenticated){
@@ -35,8 +35,44 @@ export async function fetchPlayer(
         console.log("An error occurred fetching Player: %s", error);
         throw error;
       });
+    // player.php returns `message` as a string (not a Player[]) whenever
+    // `result` isn't "success" — e.g. no matching player row. Normalize
+    // that to null here so every call site's `data?.message[0]` stays safe,
+    // instead of each one needing to guard against message sometimes being
+    // a string.
+    if (response.data?.result !== "success") {
+      return null;
+    }
     return response.data;
   } else return null;
+}
+
+export async function updatePlayer(
+  getAccessTokenSilently: () => Promise<string>,
+  formData: FormData,
+): Promise<{ result: string; message: string }> {
+  const token = await getAccessTokenSilently();
+  // player.php's PATCH resolves the row from the caller's own verified
+  // identity now (see the IDOR fix) — it no longer accepts/needs a
+  // client-supplied username, and profile_image isn't handled server-side
+  // yet, so only these three fields are sent.
+  const body = {
+    fname: formData.get("first_name")?.toString() ?? "",
+    lname: formData.get("last_name")?.toString() ?? "",
+    email: formData.get("email")?.toString() ?? "",
+  };
+  const response = await axios
+    .patch(`https://kothis.sylphaxiom.com/api/v1/player.php`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Sage: SAGE_SECRET,
+      },
+    })
+    .catch((error) => {
+      console.log("An error occurred updating Player: %s", error);
+      throw error;
+    });
+  return response.data;
 }
 
 /* ^^^ Implementation ^^^ */

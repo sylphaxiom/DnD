@@ -10,6 +10,32 @@ use Auth0\SDK\Exception\InvalidTokenException;
 
 const AUTH0_DOMAIN = "auth.kothis.sylphaxiom.com"; // must match VITE_AUTH0_DOMAIN
 const AUTH0_API_AUDIENCE = "https://kothis.sylphaxiom.com/api/v1/"; // must match entry.client.tsx's Auth0Provider audience
+const AUTH0_CLAIM_NAMESPACE = "https://kothis.sylphaxiom.com"; // must match the namespace used in the Post-Login Action's setCustomClaim() calls
+
+/**
+ * Access tokens don't carry plain profile claims like `email` by default —
+ * only custom (namespaced) claims an Action explicitly adds. This reads the
+ * `email` claim the Post-Login Action attaches (sourced from the `player`
+ * DB table, not from Auth0's own copy of the user's email — the DB is the
+ * source of truth here).
+ */
+function claim_email(array $claims): ?string
+{
+    return $claims[AUTH0_CLAIM_NAMESPACE . '/email'] ?? null;
+}
+
+/**
+ * `sub` is a standard OIDC claim present on every access token automatically
+ * — no Action/custom-claim setup needed, unlike claim_email() above. It's
+ * also durable: unlike email, a user can't change it. Use this (matched
+ * against a player.auth0_sub column) for identity linking instead of email
+ * wherever possible — email should only be used for display/uniqueness
+ * checks, not as the join key back to a player row.
+ */
+function claim_sub(array $claims): ?string
+{
+    return $claims['sub'] ?? null;
+}
 
 $auth0 = new Auth0([
     'strategy' => SdkConfiguration::STRATEGY_API,

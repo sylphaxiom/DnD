@@ -1,8 +1,8 @@
 <?php
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Max-Age:3600');
-header('Access-Control-Allow-Headers:Content-type,Sage');
-header('Access-Control-Allow-Methods:POST,GET,OPTIONS');
+header('Access-Control-Allow-Headers:Content-type,Sage,Authorization');
+header('Access-Control-Allow-Methods:POST,GET,PATCH,OPTIONS');
 if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     die();
@@ -55,9 +55,9 @@ switch($method) {
         // verified identity. Client-supplied username/email query params
         // are ignored entirely — there's no code path left that can look up
         // (or list) anyone else's record.
-        $callerEmail = $claims['email'] ?? null;
-        $stmt = $conn->prepare("SELECT * FROM player WHERE email = ?");
-        $stmt->bind_param('s', $callerEmail);
+        $callerSub = claim_sub($claims);
+        $stmt = $conn->prepare("SELECT username, first_name, last_name, email, role, preferences, is_verified FROM player WHERE auth0_sub = ?");
+        $stmt->bind_param('s', $callerSub);
         try {
             $stmt->execute();
             $stmt->bind_result($uname,$fname,$lname,$email,$role,$prefs,$is_verified);
@@ -70,11 +70,11 @@ switch($method) {
         }
         while ($stmt->fetch()) {
             $outArr[] = [
-                'username' => $uname, 
-                'first_name' => $fname, 
-                'last_name' => $lname, 
-                'email' => $email, 
-                'role' => $role, 
+                'username' => $uname,
+                'first_name' => $fname,
+                'last_name' => $lname,
+                'email' => $email,
+                'role' => $role,
                 'preferences' => $prefs
             ];
         }
@@ -85,10 +85,14 @@ switch($method) {
                 "message" => $outArr,
             ]);
         } else {
-            http_response_code(200);
+            // "failure" (not "success") and message stays a string here on
+            // purpose — callers must check `result` before assuming
+            // `message` is an array. See Queries.ts's fetchPlayer(), which
+            // now does exactly that.
+            http_response_code(404);
             echo json_encode([
-                "result"=>"success",
-                "message"=>"no player record matching the authenticated user (".$callerEmail.") was found",
+                "result"=>"failure",
+                "message"=>"no player record matching the authenticated user (".$callerSub.") was found",
             ]);
         }
         break;
@@ -204,17 +208,18 @@ switch($method) {
         $first_name = $input['fname'] ?? '';
         $last_name = $input['lname'] ?? '';
         $email = $input['email'] ?? '';
-        $image = $_FILES['profile_image'] ?? '';
 
         // Self-only, no exception: the row being edited is always resolved
         // from the caller's own verified identity — the client no longer
         // supplies (or can override) which username gets updated.
-        $callerEmail = $claims['email'] ?? null;
-        $ownUsernameStmt = $conn->prepare("SELECT username FROM player WHERE email = ?");
-        $ownUsernameStmt->bind_param('s', $callerEmail);
+        $callerSub = claim_sub($claims);
+        $ownUsernameStmt = $conn->prepare("SELECT username FROM player WHERE auth0_sub = ?");
+        $ownUsernameStmt->bind_param('s', $callerSub);
         $ownUsernameStmt->execute();
         $ownUsernameStmt->bind_result($username);
-        if (!$ownUsernameStmt->fetch()) {
+        $ownUsernameFound = $ownUsernameStmt->fetch();
+        $ownUsernameStmt->close(); // must close before $conn is reused for another prepare() below
+        if (!$ownUsernameFound) {
             http_response_code(404);
             echo json_encode([
                 "result"=>"failure",
@@ -240,15 +245,19 @@ switch($method) {
         }
 
         if (isset($email)){
-            $search = $conn->prepare("SELECT email 
-                                    FROM player 
-                                    WHERE email = ?");
-            $search->bind_param('s', $email);
+            // Only a *different* row owning this email should block the
+            // update — otherwise resubmitting your own unchanged email
+            // always (incorrectly) looked "already taken".
+            $search = $conn->prepare("SELECT email
+                                    FROM player
+                                    WHERE email = ? AND username != ?");
+            $search->bind_param('ss', $email, $username);
             $search->execute();
             $search->bind_result($resp_email);
             $result = $search->fetch();
+            $search->close(); // must close before $conn is reused for another prepare() below
 
-            if ($result && $resp_email == $email) {
+            if ($result) {
                 http_response_code(400);
                 echo json_encode([
                     "result"=>"failure",
@@ -264,16 +273,16 @@ switch($method) {
             }
         }
 
-        if (isset($image)){
-            // Here I need to place the image into the directory and return the path
-            // Then update Prefs with the new path ref.
+        // TODO: profile image upload isn't implemented. PHP doesn't
+        // populate $_FILES for PATCH requests the way it does for POST, so
+        // this needs a manual multipart parser (or switching this action to
+        // POST) before it can work at all — see the plan doc.
 
-            $imageName = $image['name'];
-            $imageTmpName = $image['tmp_name'];
-            $imageSize = $image['size'];
-            $imageError = $image['error'];
-            // default dir ~/web_images/intake/
-        }
+        http_response_code(200);
+        echo json_encode([
+            "result"=>"success",
+            "message"=>"profile updated",
+        ]);
         break;
         
     case 'DELETE':

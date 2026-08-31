@@ -8,11 +8,16 @@ import { fetchPlayer } from "./workhorse/Queries";
 export { searchParamsLoader as clientLoader } from "./utils/searchParams";
 
 export default function Homebrew() {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { isLoading, data, error } = useQuery({
     queryKey: ["getPlayer", user?.preferred_username, user?.email],
     queryFn: () =>
-      fetchPlayer(isAuthenticated, user?.preferred_username, user?.email),
+      fetchPlayer(
+        isAuthenticated,
+        getAccessTokenSilently,
+        user?.preferred_username,
+        user?.email,
+      ),
   });
 
   if (isLoading) {

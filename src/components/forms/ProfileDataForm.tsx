@@ -1,6 +1,8 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import Box from "@mui/material/Box";
-import { useFetcher } from "react-router";
-import type { Player } from "../workhorse/Queries";
+import { useQueryClient } from "@tanstack/react-query";
+import * as React from "react";
+import { updatePlayer, type Player } from "../workhorse/Queries";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -14,24 +16,42 @@ interface ProfileDataFormProps {
   player: Player;
 }
 export default function ProfileDataForm({ player }: ProfileDataFormProps) {
-  const { first_name, last_name, username, email, role, prefs } = player;
-  const fetcher = useFetcher({ key: "profileUpdate" });
+  const { first_name, last_name, email } = player;
+  const { getAccessTokenSilently } = useAuth0();
+  const queryClient = useQueryClient();
+  const [submitting, setSubmitting] = React.useState(false);
   const fnmHelper = "";
   const lnmHelper = "";
   const emlHelper = "";
+
+  // Submitted directly here (not via a React Router fetcher/clientAction) —
+  // a clientAction runs outside React component context, so it has no way
+  // to call useAuth0()'s getAccessTokenSilently() to get a real token to
+  // send. Handling it in the component keeps that available.
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitting(true);
+    try {
+      const formData = new FormData(event.currentTarget);
+      await updatePlayer(getAccessTokenSilently, formData);
+      await queryClient.invalidateQueries({ queryKey: ["getPlayer"] });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Box>
       <Typography sx={{ my: 2 }}>
         Need to make a couple changes to your information? You can do so here!
       </Typography>
-      <fetcher.Form method="patch">
+      <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid size={3}>
             <TextField
               label="First Name"
               name="first_name"
-              value={first_name}
+              defaultValue={first_name}
               helperText={fnmHelper}
             />
           </Grid>
@@ -39,7 +59,7 @@ export default function ProfileDataForm({ player }: ProfileDataFormProps) {
             <TextField
               label="Last Name"
               name="last_name"
-              value={last_name}
+              defaultValue={last_name}
               helperText={lnmHelper}
             />
           </Grid>
@@ -47,7 +67,7 @@ export default function ProfileDataForm({ player }: ProfileDataFormProps) {
             <TextField
               label="Email"
               name="email"
-              value={email}
+              defaultValue={email}
               helperText={emlHelper}
             />
           </Grid>
@@ -58,37 +78,26 @@ export default function ProfileDataForm({ player }: ProfileDataFormProps) {
                 type="file"
                 name="profile_image"
                 inputProps={{ accept: "image/*" }}
+                disabled
               />
               <FormHelperText>
-                Upload a new profile image (optional)
+                Upload a new profile image (optional) — not yet wired up on
+                the backend
               </FormHelperText>
             </FormControl>
           </Grid>
-          <Input
-            type="hidden"
-            name="username"
-            value={username}
-            sx={{ display: "none" }}
-          />
-          <Input
-            type="hidden"
-            name="role"
-            value={role}
-            sx={{ display: "none" }}
-          />
-          <Input
-            type="hidden"
-            name="prefs"
-            value={prefs}
-            sx={{ display: "none" }}
-          />
           <Grid size={4}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={submitting}
+            >
               Update Me
             </Button>
           </Grid>
         </Grid>
-      </fetcher.Form>
+      </Box>
     </Box>
   );
 }
